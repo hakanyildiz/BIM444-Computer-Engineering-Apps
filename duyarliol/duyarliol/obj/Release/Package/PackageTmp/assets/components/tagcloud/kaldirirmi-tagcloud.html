@@ -1,0 +1,106 @@
+﻿<link rel="import" href="../polymer/polymer.html" />
+<script src="jquery.svg3dtagcloud.min.js"></script>
+<dom-module id="kaldirirmi-tagcloud">
+    <template>
+        <iron-ajax auto id="gettagsofcontent" debounce="3000" url="/h/main?fm=get-tags-of-content&a=[[contenttitle]]&b=[[contenttable]]" handle-as="json" on-response="_response" loading="{{loadinggames}}"></iron-ajax>
+        <style is="custom-style">
+            /* Desktops and laptops ----------- */
+            #tag-cloud{
+                display:none;
+            }
+            
+            @media only screen and (min-width : 1024px) { /* zoom %175 */
+                #tag-cloud {
+                    margin-left: -90px;
+                    display: block;
+                }
+            }
+
+            @media only screen and (min-width : 1224px) { /* zoom %150 */
+                #tag-cloud {
+                    margin-left: -70px;
+                }
+            }
+
+            @media only screen and (min-width : 1440px) { /* zoom % 125*/
+                #tag-cloud {
+                    margin-left: -30px;
+                }
+            }
+
+            @media only screen and (min-width : 1640px) { /* zoom %110*/
+                #tag-cloud {
+                    margin-left: 0px;
+                }
+            }
+            /* Large screens ----------- */
+            @media only screen and (min-width : 1824px) {
+                #tag-cloud {
+                    margin-left: 0px;
+                }
+            }
+        </style>
+        <!-- dom elements here-->
+        <div id='tag-cloud'></div>
+
+    </template>
+    <script>
+        Polymer({
+            is: "kaldirirmi-tagcloud",
+            properties: {
+                contenttitle: {
+                    type: String,
+                    value: "",
+                    notify: true
+                },
+                contenttable: {
+                    type: String,
+                    value: "",
+                    notify: true
+                },
+                contents: {
+                    type: Array,
+                    value: [],
+                    notify: true
+                }
+            },
+            ready: function () {
+
+            },
+            _response: function (a) {
+                if (a.detail.response.length > 0) {
+                    a.detail.response.forEach(function (content) {
+                        //console.log(content);
+                        this.push('contents', content);
+                    }, this);   
+                }
+                //devamında tagcloud basıcam.
+                var settings = {
+                    entries: this.contents,
+                    width: 400,
+                    height: 300,
+                    radius: '65%',
+                    radiusMin: 75,
+                    bgDraw: true,
+                    bgColor: '#222',
+                    opacityOver: 1.00,
+                    opacityOut: 0.05,
+                    opacitySpeed: 6,
+                    fov: 800,
+                    speed: 1,
+                    fontFamily: 'Roboto, Arial, sans-serif',
+                    fontSize: 'calc(0.3em + 1vmin)',
+                    fontColor: '#fff',
+                    fontWeight: 'normal',//bold
+                    fontStyle: 'normal',//italic
+                    fontStretch: 'normal',//wider, narrower, ultra-condensed, extra-condensed, condensed, semi-condensed, semi-expanded, expanded, extra-expanded, ultra-expanded
+                    fontToUpperCase: true
+                };
+                $('#tag-cloud').svg3DTagCloud(settings);
+
+            }
+
+        });
+    </script>
+
+</dom-module>

@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "core", "core\core.csproj", "{6800E4C1-EE88-4319-8427-28E42A996F1F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "duyarliol", "duyarliol\duyarliol.csproj", "{68992DA0-ABBD-40EA-905A-579B2EF757DB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6800E4C1-EE88-4319-8427-28E42A996F1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6800E4C1-EE88-4319-8427-28E42A996F1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6800E4C1-EE88-4319-8427-28E42A996F1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6800E4C1-EE88-4319-8427-28E42A996F1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68992DA0-ABBD-40EA-905A-579B2EF757DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68992DA0-ABBD-40EA-905A-579B2EF757DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68992DA0-ABBD-40EA-905A-579B2EF757DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68992DA0-ABBD-40EA-905A-579B2EF757DB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

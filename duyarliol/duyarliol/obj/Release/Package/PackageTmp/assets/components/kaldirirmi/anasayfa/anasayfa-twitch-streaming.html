@@ -1,0 +1,85 @@
+﻿<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../streaming-list/streaming-list.html"/>
+<dom-module id="anasayfa-twitch-streaming">
+    <template>
+        <style is="custom-style">
+            .default-card {
+                height: auto;
+                width: 100%;
+                display: inline-block;
+                position: relative;
+                border-radius: 3px;
+                margin-bottom: 30px;
+                border-top: 3px solid #222222;
+                border-bottom: 3px solid #222222;
+                background: #222;
+            }
+
+                .default-card .default-card-header {
+                   background: #E65100;
+                }
+
+                    .default-card .default-card-header h4 {
+                       font-family: inherit;
+                        text-transform: uppercase;
+                        color: #222;
+                        letter-spacing: 3px;
+                        margin: 0;
+                        padding: 15px;
+                        justify-content: center;
+                        text-align: center;
+                        font-size: calc(0.4em + 1vmin);
+                    }
+
+                .default-card .default-card-content {
+                     width: 100%;
+                    padding-top: 10px;
+                    border-top: 3px solid #222;
+                    display: flex;
+                }
+        </style>
+        <paper-material elevation="4" class="default-card">
+            <paper-material class="default-card-header">
+                <h4>Twitch Türkiye Canlı</h4>
+            </paper-material>
+            <div class="default-card-content">
+                <streaming-list lang="{{language}}"
+                                width="{{size}}"
+                                client-id="{{clientId}}"
+                                key="{{key}}"
+                                service="{{service}}"
+                                limit=15>
+                </streaming-list>    
+             </div>
+        </paper-material>
+    </template>
+    <script>
+    Polymer({
+      is: "anasayfa-twitch-streaming",
+      properties: {
+          language: {
+              type: String,
+              value: "tr"
+          },
+          size: {
+              type: Number,
+              value: 250
+          },
+          service: {
+              type: String,
+              value: "twitch"
+          },
+          clientId: {
+              type: String,
+              value: "573me5izesw34qm13u7j1h8km5fnpwz"
+          },
+          key: {
+              type: String,
+              value: "AIzaSyDMAAk08_eOgNAj12gQ3wb3liY0KJgb5kI"
+          },
+      },
+    });
+
+    </script>
+
+</dom-module>

@@ -1,0 +1,167 @@
+﻿<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../haberler/shared-styles.html">
+<link rel="import" href="../../kaldirirmi-styles/gallery/gallery-animated-grid-styles.html">
+
+<dom-module id="gallery-animated-grid">
+    <template itemscope itemtype="http://schema.org/Article">
+        <style include="shared-styles"></style>
+        <style is="custom-style" include="gallery-animated-grid-styles"></style>
+        <iron-ajax id="getgameshavegallery" url="/h/main?fm=get-games-have-gallery&a=[[page]]&b=[[itemperpage]]&c=[[query]]" handle-as="json" on-response="_response" loading="{{loadinggames}}"></iron-ajax>
+        <iron-scroll-threshold lower-threshold="25" on-lower-threshold="_loadmoregame" id="gallerythreshold">
+            <template is="dom-repeat" items="{{games}}">
+                <div class="tile" id="part{{index}}" itemprop="articleBody">
+                    <iron-image background src="//cdn.kaldirirmi.com/images/games/[[item.background]]" sizing="cover" alt="[[item.name]]" preload fade></iron-image>
+                    <img style="display:none" src="//cdn.kaldirirmi.com/images/games/[[item.background]]" alt="[[item.name]]" itemprop="image"/>
+                    <div class="game-title"><span>[[item.name]] Oyun Galerisi</span></div>
+                    <a style="display:none" href="[[item.url]]" itemprop="url"></a>
+                    <h4 itemprop="publisher" hidden>Kaldırırmı</h4>
+                    <h5 itemprop="author" hidden>Hakke</h5>
+                 </div>
+            </template>
+        </iron-scroll-threshold>
+
+    </template>
+</dom-module>
+<script>
+
+    Polymer({
+
+        is: 'gallery-animated-grid',
+
+        behaviors: [
+          Polymer.NeonSharedElementAnimatableBehavior
+        ],
+
+        properties: {
+            gamename: {
+                type: String,
+                notify: true
+            },
+            page: {
+                type: Number,
+                value: 0
+            },
+            itemperpage: {
+                type: Number,
+                value: 6
+            },
+            query: {
+                type: String,
+                value: ''
+            },
+            loadinggames: {
+                type: Boolean,
+                value: false
+            },
+            games: {
+                type: Array,
+                value: []
+            },
+            config: {
+                type: Array,
+                value: function () {
+                    return [
+                      { value: 1, color: 'blue' },
+                      { value: 2, color: 'red' },
+                      { value: 3, color: 'blue' },
+                      { value: 4, color: 'green' },
+                      { value: 5, color: 'yellow' },
+                      { value: 6, color: 'blue' },
+                      { value: 7, color: 'red' },
+                      { value: 8, color: 'green' },
+                      { value: 9, color: 'yellow' },
+                      { value: 10, color: 'red' },
+                      { value: 11, color: 'yellow' },
+                      { value: 12, color: 'blue' },
+                      { value: 13, color: 'red' },
+                      { value: 14, color: 'red' },
+                      { value: 15, color: 'yellow' },
+                      { value: 16, color: 'red' },
+                      { value: 17, color: 'yellow' },
+                      { value: 18, color: 'red' },
+                      { value: 19, color: 'green' },
+                      { value: 20, color: 'yellow' },
+                      { value: 21, color: 'red' },
+                      { value: 22, color: 'yellow' },
+                      { value: 23, color: 'blue' },
+                      { value: 24, color: 'red' },
+                      { value: 25, color: 'green' },
+                      { value: 26, color: 'yellow' },
+                      { value: 27, color: 'red' },
+                    ]
+                }
+            },
+
+            animationConfig: {
+                type: Object,
+                value: function () {
+                    return {
+                        'exit': [{
+                            name: 'ripple-animation',
+                            id: 'ripple',
+                            fromPage: this
+                        }, {
+                            name: 'hero-animation',
+                            id: 'hero',
+                            fromPage: this
+                        }]
+                    }
+                }
+            }
+
+        },
+
+        listeners: {
+            click: '_onClick'
+        },
+        _loadmoregame: function () {
+            console.log('_loadmoregame');
+
+            if (this.$.getgameshavegallery.lastRequest) {
+                this.$.getgameshavegallery.lastRequest.abort();
+            }
+
+            this.page++;
+            this.$.getgameshavegallery.generateRequest();
+        },
+        _response: function (a) {
+            console.log('_response');
+            if (a.detail.response.length > 0) {
+                a.detail.response.forEach(function (game) {
+                    this.push('games', game);
+                }, this);
+                this.$.gallerythreshold.clearTriggers();
+            }
+        },
+        _computeTileClass: function (color) {
+            return 'tile ' + color + '-300';
+        },
+
+        _onClick: function (event) {
+            console.log('_onClick');
+            var target = event.target;
+            while (target !== this && !target._templateInstance) {
+                target = target.parentNode;
+            }
+
+            console.log(target._templateInstance.item.name);
+            this.gamename = target._templateInstance.item.name;
+            // configure the page animation
+            this.sharedElements = {
+                'hero': target,
+                'ripple': target
+            };
+            this.animationConfig['exit'][0].gesture = {
+                x: event.x || event.pageX,
+                y: event.y || event.pageY
+            };
+
+            this.fire('tile-click', {
+                tile: target,
+                data: target._templateInstance.item
+            });
+        }
+
+    });
+
+</script>

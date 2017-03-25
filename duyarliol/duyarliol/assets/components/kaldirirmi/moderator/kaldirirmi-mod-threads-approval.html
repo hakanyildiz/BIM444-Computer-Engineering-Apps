@@ -1,0 +1,215 @@
+﻿<link rel="import" href="../../polymer/polymer.html">
+
+<dom-module id="kaldirirmi-mod-threads-approval">
+  <template>
+    <style>
+      paper-item[heading] {
+        /*background: rgba(255,120,0,.8);*/
+        color: white;
+        font-size: 20px;
+        border: 1px solid;
+      }
+
+      paper-item[attributes] {
+        /*background: rgba(255,120,0,.8);*/
+        color: white;
+        font-size: 16px;
+      }
+
+      paper-item[heading] paper-button {
+        font-size: 14px;
+      }
+
+      paper-item[empty-info], paper-item[info] {
+        /*background: rgba(255,120,0,.6);*/
+        color: white;
+        font-size: 16px;
+        padding: 20px;
+      }
+
+      paper-item[attributes] >p{
+        /*@apply(--layout-horizontal);*/
+      }
+
+   
+
+      .piInfoButtons {
+        @apply(--layout-vertical);
+        @apply(--layout-center);
+      }
+
+
+      table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      td, th {
+        text-align: left;
+        padding: 8px;
+      }
+
+      tr:nth-child(even) {
+        background-color: #dddddd;
+      }
+      #listbox{
+        background-color:inherit;
+        padding:0;
+      }
+
+    </style>
+    <iron-ajax auto id="getThreadsWaitForApproval" url="/h/main?fm=get-threads-wait-for-approval" method="get" handle-as="json" on-response="_response"></iron-ajax>
+
+    <paper-listbox id="listbox">
+      <paper-item heading>
+        <div style="flex-grow: 2;">Onay Bekleyen Konular</div>
+        <div>
+          <!-- <paper-button onclick="load(); location.href='/uye/sistemini-tanimla';">Tümünü Onayla</paper-button>-->
+        </div>
+      </paper-item>
+
+      <template is="dom-if" if="[[isWaitingSubject]]">
+
+        <paper-item attributes>
+          <p>Kullanıcı</p>
+          <p style="margin-left:15px">Kategori</p>
+          <p style="margin-left:18px">Konu Başlığı</p>
+          <p style="margin-left:45px">Tarih</p>
+        </paper-item>
+        <template is="dom-repeat" items="{{threads}}" as="thread">
+          <paper-item info mypath="[[thread.username]]">
+            <div id="piInfo" style="width:100%; display:flex;">
+              <div style="width:20%"><p>[[thread.username]]</p></div>
+              <div style="width:23%"><p>[[thread.category]]</p></div>
+              <div style="width:23%"><p>[[thread.title]]</p></div>
+              <div style="width:24%"><p style="padding-left:45px;">[[thread.date]]</p></div>
+              <div class="piInfoButtons" style="width:10%; margin-left:50px;">
+                <form is="iron-form" id="formAccept" method="post" action="/h/main">
+                  <input type="hidden" name="fm" value="accept-waiting-thread" />
+                  <paper-input type="number" id="threadid" name="threadid" value="[[currentThreadId]]" hidden></paper-input>
+                  <paper-icon-button icon="icons:done" style="color:blue" name="{{thread.threadid}}" on-click="_acceptItem"></paper-icon-button>
+                </form>
+                <form is="iron-form" id="formDelete" method="post" action="/h/main">
+                  <input type="hidden" name="fm" value="delete-waiting-thread" />
+                  <paper-input type="number" id="threadid" name="threadid" value="[[currentThreadId]]" hidden></paper-input>
+                  <paper-icon-button icon="icons:delete" style="color:red" name="{{thread.threadid}}"  on-click="_deleteItem"></paper-icon-button>
+                </form>
+              </div>
+            </div>
+          </paper-item>
+        </template>
+       </template>
+      <template is="dom-if" if="[[!isWaitingSubject]]">
+
+        <paper-item empty>
+          <div>Şuanda onay bekleyen bir konu bulunmamaktadır.</div>
+        </paper-item>
+   
+      </template>
+
+
+
+</paper-listbox><!-- paper-listbox-->
+
+    <paper-toast id="systemAlert" duration="4000" class="fit-bottom"></paper-toast>
+
+
+
+    <!--query => select titles.name as category ,threads.title, threads.lastpostdate from forumthreads as threads
+          inner join forumtitles as titles on  threads.forumtitleid = titles.id where threads.status = 0 -->
+    <!-- waitForApprovalThreads
+      public string username { get; set; }
+      public string category { get; set; }
+      public string title { get; set; }
+      public string date { get; set; }
+    }-->
+  </template>
+  <script>
+    Polymer({
+      is: "kaldirirmi-mod-threads-approval",
+      properties: {
+        threads: {
+          type: Array,
+          value: []
+        },
+        currentThreadId: {
+          type: String,
+          value: "",
+          notify: true
+        },
+        isWaitingSubject: {
+          type: Boolean,
+          value: false,
+          notify: true
+        }
+      },
+      created: function () {
+
+      },
+      
+      _response: function (a) {
+        this.threads = [];
+        if (a.detail.response.length > 0) {
+          this.isWaitingSubject = true;
+          a.detail.response.forEach(function (thread) {
+
+            this.push('threads', thread);
+          }, this);
+        }
+        else
+          this.isWaitingSubject = false;
+
+      },
+      _acceptItem: function (e) {
+        console.log('_acceptItem clic');
+        var form = document.querySelector("#formAccept");
+        form.$$('#threadid').value = e.currentTarget.name;
+
+        var ajax = this.$.getThreadsWaitForApproval;
+        var alert = this.$.systemAlert;
+        load();
+        setTimeout(function () { form.submit(); }, 1000);
+
+        form.addEventListener('iron-form-response', function (e) {
+          unload();
+          alert.removeAttribute('opened');
+          alert.setAttribute('text', e.detail.response.message);
+          alert.setAttribute('opened', '');
+
+          if (ajax.lastRequest) {
+            ajax.lastRequest.abort();
+          }
+          ajax.generateRequest();
+        });
+      },
+      _deleteItem: function (e) {
+        console.log('_deleteItem clic');
+        var form = document.querySelector("#formDelete");
+
+        form.$$('#threadid').value = e.currentTarget.name;
+        var ajax = this.$.getThreadsWaitForApproval;
+        var alert = this.$.systemAlert;
+        load();
+        setTimeout(function () { form.submit(); }, 1000);
+
+        form.addEventListener('iron-form-response', function (e) {
+          unload();
+          alert.removeAttribute('opened');
+          alert.setAttribute('text', e.detail.response.message);
+          alert.setAttribute('opened', '');
+
+          if (ajax.lastRequest) {
+            ajax.lastRequest.abort();
+          }
+          ajax.generateRequest();
+        });
+      },
+     
+
+    });
+
+  </script>
+
+</dom-module>
+s

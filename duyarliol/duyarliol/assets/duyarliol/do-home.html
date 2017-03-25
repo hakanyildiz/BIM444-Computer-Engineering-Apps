@@ -1,0 +1,25 @@
+﻿<dom-module id="do-home">
+    <template>
+        <style is="custom-style">
+
+        </style>
+
+        Home
+    </template>
+    <script>
+        Polymer({
+            is: 'do-home',
+            properties: {
+                uid: {
+                    type: Number,
+                    value: 111111,
+                    notify: true
+                },
+            },
+            ready: function () {
+                console.log('do-home is ready now!');
+            }
+        });
+    </script>
+
+</dom-module>

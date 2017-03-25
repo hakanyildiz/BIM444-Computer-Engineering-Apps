@@ -1,0 +1,58 @@
+﻿<link rel="import" href="../../polymer/polymer.html" />
+<link rel="import" href="../../kaldirirmi-styles/forum/kaldirirmi-forum-title-styles.html"/>
+<dom-module id="kaldirirmi-forumtitles">
+    <template>
+        <style is="custom-style" include="kaldirirmi-forum-title-styles"></style>
+     
+        <iron-ajax auto id="getforumtitles" debounce="3000" url="/h/main?fm=get-forum-titles" handle-as="json" last-response="{{forumtitles}}"></iron-ajax>
+        <div id="forum">
+            <div id="forumheader">
+                <h1>Kategoriler</h1>
+            </div>
+            <div id="forumtitles" itemscope itemtype="http://schema.org/ItemList">
+                <paper-material id="titlesholder" elevation="1">
+                    <template is="dom-repeat" items="{{forumtitles}}" as="item">
+                        <link itemprop="itemListOrder" href="http://schema.org/ItemListOrderAscending" />
+                        <a href="/forum/[[item.url]]" class="forum-title" tabindex="-1"  itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                            <div>
+                                <iron-icon itemprop="image" icon="{{_getIconOfCategory(item.url)}}"></iron-icon>
+                            </div>
+                            <div class="title">
+                                <div class="name" itemprop="name">[[item.name]]</div>
+                                <div class="description" itemprop="description">[[item.description]]</div>
+                                <h5 itemprop="url" hidden>/forum/[[item.url]]</h5>
+                                <h6 itemprop="position" hidden>[[index]]</h6>
+                            </div>
+                            <div>
+                                {{_checkThreadCount(item.threadcount)}}
+                            </div>
+                            <meta itemprop="numberOfItems" content$="{{_checkThreadCount(item.threadcount)}}" />
+                        </a>
+                    </template>
+                </paper-material>
+            </div>
+        </div>
+
+
+    </template>
+    <script>
+        Polymer({
+            is: "kaldirirmi-forumtitles",
+            properties: {
+
+            },
+            _getIconOfCategory: function (url) {
+                if (url == 'donanim') return 'hardware:developer-board';
+                else if (url == 'genel-tartisma') return 'assignment';
+                else if (url == 'oyun') return 'hardware:videogame-asset';
+                else if (url == 'site-hakkinda') return 'question-answer';
+                else if (url == 'yazilim') return 'code';
+                else return 'label-outline';
+            },
+            _checkThreadCount: function (count) {
+                if (count > 0) return count + ' konu';  
+                else '';
+            }
+        });
+    </script>
+</dom-module>

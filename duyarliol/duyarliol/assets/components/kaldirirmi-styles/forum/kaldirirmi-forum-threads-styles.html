@@ -1,0 +1,115 @@
+﻿<dom-module id="kaldirirmi-forum-threads-styles">
+    <template>
+        <style>
+               #forum {
+                   width: 100%;
+                   height: calc(100vh - 64px);
+                   overflow-y: auto;
+            }
+
+    #forumheader {
+      @apply(--layout-horizontal);
+      @apply(--layout-center);
+      background: #222;
+      height: 45px;
+      padding: 0 30px;
+      left: 0;
+      right: 0;
+    @apply(--shadow-elevation-12dp);
+            border-top:3px solid #222222;
+            border-bottom:3px solid #222222;
+    }
+
+      #forumheader paper-icon-button {
+        --paper-icon-button-ink-color: white;
+        color: white;
+        margin-right: 10px;
+      }
+
+      #forumheader h1 {
+        font-size: 20px;
+        color: white;
+        pointer-events: none;
+        font-weight: normal;
+        flex-grow: 2;
+      }
+
+      #forumheader paper-button {
+        color: white;
+      }
+
+    #titlesholder {
+      padding: 15px;
+      max-width: 1170px;
+      margin: 45px auto 0 auto;
+    }
+
+      #titlesholder .forum-title {
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+        padding: 20px;
+        background-color: white;
+        margin-top: 10px;
+        text-decoration: none;
+        color: #333;
+        border-radius: 3px;
+      }
+
+        #titlesholder .forum-title:hover {
+          background-color: #eee;
+        }
+
+        #titlesholder .forum-title iron-icon {
+          width: 30px;
+          height: 30px;
+          margin-right: 15px;
+          color: #ff7800;
+        }
+
+        #titlesholder .forum-title .title {
+          flex-grow: 2;
+        }
+
+          #titlesholder .forum-title .title .name {
+            font-size: 22px;
+          }
+
+          #titlesholder .forum-title .title .description {
+            font-size: 14px;
+          }
+
+      #titlesholder .newforumthread {
+        /*width: calc(100% - 30px);*/
+        @apply(--layout-horizontal);
+        padding: 15px;
+        background-color: white;
+        border-radius: 3px;
+      }
+
+        #titlesholder .newforumthread .inputs {
+          flex-grow: 2;
+          padding-right: 15px;
+          @apply(--layout-self-center);
+        }
+
+        #titlesholder .newforumthread .buttons {
+          @apply(--layout-self-start);
+        }
+
+          #titlesholder .newforumthread .buttons paper-button {
+            color: white;
+            background-color: #ff7800;
+            margin: 0;
+          }
+
+            .pb_heading{
+                    font-size: 18px;
+                    padding: 15px;
+                    min-width: 130px;
+            }
+            .pb_heading iron-icon{
+                padding: 0 !important;
+            }
+        </style>
+    </template>
+</dom-module>

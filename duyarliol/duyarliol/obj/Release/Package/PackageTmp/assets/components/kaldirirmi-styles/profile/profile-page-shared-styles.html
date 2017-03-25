@@ -1,0 +1,227 @@
+﻿<dom-module id="profile-page-shared-styles">
+    <template>
+        <style>
+             :root{
+                         --paper-input-container-input: {
+                        font-size: calc(0.5em + 1vmin) !important;
+                        };
+
+                        --paper-input-container-label: {
+                        font-size: calc(0.55em + 1vmin);
+                        };
+                 }
+              
+             paper-tooltip.custom-tooltip{
+                 --paper-tooltip-background: #ff7800;
+                 --paper-tooltip-text-color: #fff;
+                 width: 160px;
+                 --paper-tooltip: { font-size: 16px;}
+             }
+           
+            :host {
+                display: block;
+            }
+            iron-pages {
+                width: 100%;
+                height: 1000px;
+                font-size: 50px;
+                color: white;
+                text-align: center;
+            }
+
+                iron-pages div {
+                    width: 100%;
+                    height: 100%;
+                    padding: 20px 0;
+                }
+            #profile-page {
+                width: 100%;
+                min-height: calc(100vh - 149px);
+                background-color: #222;
+                display: flex;
+            }
+            #profileleftnav {
+                width: 5%;
+                min-height: 100%;
+                box-shadow: 0 12px 16px 1px rgba(0, 0, 0, 0.14), 0 4px 22px 3px rgba(0, 0, 0, 0.12), 0 6px 7px -4px rgba(0, 0, 0, 0.4);
+                border-top: 3px solid #222222;
+                border-bottom: 3px solid #222222;
+
+            }
+
+            #profileleftnav #profilenavigations{
+               --paper-menu-background-color: #222;
+               --paper-menu-color: white;
+               padding: 0px 0px 20px 0px;
+            }
+
+            #profile-content {
+                width: 90%;
+                min-height: 100%;
+            }
+            #profile-rightnav {
+                width: 400px;
+                min-height: 100%;
+                 box-shadow: 0 12px 16px 1px rgba(0, 0, 0, 0.14), 0 4px 22px 3px rgba(0, 0, 0, 0.12), 0 6px 7px -4px rgba(0, 0, 0, 0.4);
+                border-left: 3px solid #222222;
+                border-bottom: 3px solid #222222;
+            }
+            /*  parallax element for scrollbar*/
+            #profile-content parallax-element::-webkit-scrollbar {
+                width: 10px !important;
+            }
+            #profile-content parallax-element::-webkit-scrollbar-thumb {
+                background-color: #222;
+                border-radius: 5px;
+                border: 2px solid #000;
+                min-height: 50px;
+            }
+            #profile-content parallax-element::-webkit-scrollbar-track {
+                background-color: #000;
+            }
+            #profile-content parallax-element {
+                width: 100%;
+                height: calc(100vh - 149px) !important;
+            }
+            #profilepages paper-material {
+              max-width: 1400px !important;
+              padding: 20px !important;
+              margin: auto !important;
+            }
+            
+            #profilenavigations{
+                --paper-menu-selected-item:{
+                        color: #ff7800;
+                }
+            }
+
+            #profilenavigations paper-icon-item{
+              padding: 0px calc(1em + 1vmin) !important;
+            }
+
+            /* twitch like sidebar*/
+            #profileleftnav{
+                transition: all .5s ease;
+                width:200px;
+            }
+            #profilenavigations paper-item iron-icon{
+                padding-right:10px;
+            }
+            #buttonGroupOpeners{
+                display:flex;
+                flex-direction:row;
+                 height: calc(2.3em + 1vmin);
+                justify-content:space-between;
+            }
+            #buttonGroupOpeners paper-icon-button{
+                color:white;
+                 margin-bottom: -30px;
+                width: calc(2.3em + 1vmin);
+                height: calc(2.3em + 1vmin);
+            }
+            #profile-rightnav{
+                transition: all .5s ease;
+            }
+           
+            paper-item .navigationname{
+                font-size: calc(0.4em + 1vmin);
+                display: block;
+            }
+
+            .closedNavigation{
+                width: 65px !important;
+            }
+            .closedProfile{
+                width: 119px !important;
+            }
+            .closedSpan{
+                display:none !important;
+            }
+            .mobileProCardOpened{
+                width: 100% !important;
+                position:absolute !important;
+                background: #222;   
+                display: block !important;
+            }
+
+            #smallvcard{
+                @apply(--layout-vertical);
+                @apply(--layout-center);
+                width: 100%;
+                height: auto;   
+                margin-top:3em;
+            }
+            #smallvcard paper-material{
+                width:100%;
+                text-align:center;
+            }
+            #smallvcard .user-background{
+                width: 100%;
+                height: calc(10em + 1vmin);
+                filter: blur(5px);
+            }
+            #smallvcard .user-image{
+                border: 3px solid transparent;
+                height: calc(4.4em + 1vmin);
+                width: calc(4.4em + 1vmin);
+                display: block;
+                margin-left: calc(0.2em + 1vmin);
+                margin-top: -70px;
+                -webkit-box-shadow: 0px 0px 20px 2px rgba(56,56,56,0.64);
+                -moz-box-shadow: 0px 0px 20px 2px rgba(56,56,56,0.64);
+                box-shadow: 0px 1px 15px 3px rgba(56,56,56,0.64);
+            }
+            #smallvcard .user-name{
+                font-size: calc(1em + 1vmin);
+                margin: 0;
+                color: white;
+                margin-bottom: 30px;
+                margin-top: 10px;
+            }
+
+
+            #profile-rightnav, #pibOpenCloseNav, #pibOpenCloseProCard, #profilenavigations paper-item span{
+                display: none;
+            }
+            #buttonGroupOpeners{
+                display:none;
+            }
+            #pibMobileCloseProCard{
+                display: inline-block;
+            }
+            #pibMobileOpenProCard{
+                display:flex;
+                color: #ff7800;
+            }
+            #profileleftnav{
+                width: 65px;
+            }
+            #pibMobileCloseProCard{
+                background: #e64a19;
+                width: 100%;
+                height: 40px;
+                font-size: calc(0.6em + 1vmin);
+            }
+
+            @media only screen and (min-width : 1024px) {
+               #profile-rightnav, #profilenavigations paper-item span{
+                   display: block;
+               }
+               #pibOpenCloseNav, #pibOpenCloseProCard{
+                   display: inline-block;
+                   cursor: pointer;
+               }
+                 #pibMobileCloseProCard, #pibMobileOpenProCard{
+                    display: none;
+                }
+                #profileleftnav{
+                width: 200px;
+                 }
+                #buttonGroupOpeners{
+                    display: flex !important;
+                }
+          
+            }
+        </style>
+    </template>
+</dom-module>

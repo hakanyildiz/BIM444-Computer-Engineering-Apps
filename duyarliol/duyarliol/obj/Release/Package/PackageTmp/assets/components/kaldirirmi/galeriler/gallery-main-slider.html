@@ -1,0 +1,188 @@
+﻿<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="gamegallery-swiper.html" />
+
+<dom-module id="gallery-main-slider">
+  <template>
+    <!-- css -->
+    <style is="costum-style">
+      :host {
+        display: block;
+        margin-bottom: 50px;
+      }
+
+      #gamegallerylist {
+        @apply(--layout-horizontal);
+        @apply(--layout-center-center);
+        flex-flow: row wrap;
+        -ms-flex-flow: row wrap;
+        width: 100%;
+        height: auto;
+        padding: 10px;
+        background: #222;
+        margin-top: 50px;
+      }
+
+      .gallery {
+        @apply(--layout-vertical);
+        @apply(--layout-center);
+        background-color: #222;
+        transition: all ease .2s;
+        cursor: pointer;
+        position: relative;
+        text-decoration: none;
+      }
+
+        .gallery img {
+        width: 100% !important;
+        height: auto ;
+        opacity: 0.7;
+        pointer-events: none;
+        transition: all ease-in .2s;
+        background-color: #222;
+      }
+
+      .gallery .gallery-title {
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+        color: white;
+        height: 44px;
+        padding: 0 5px;
+        background: #ff7800;
+        width: 173px;
+      }
+
+        .gallery .gallery-title span {
+          width: 173px;
+          @apply(--paper-font-common-nowrap);
+          text-align: center;
+        }
+
+      .gallery:hover img{
+        opacity: 1 !important;
+      }
+
+      .loadingIndicator {
+        text-align: center;
+        height: 40px;
+        color: white;
+      }
+
+        .loadingIndicator paper-spinner-lite {
+          width: 20px;
+          height: 20px;
+          margin-right: 10px;
+          --paper-spinner-color: #ff7800;
+        }
+
+      #download-image {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin-top: 5px;
+        color: #FF7800;
+      }
+
+        #download-image paper-icon-button {
+          width: 50px !important;
+          height: 50px !important;
+          background-color: #FF7800;
+          color: white;
+          border-radius: 50%;
+
+        }
+
+        #download-image #textviewResmiIndir {
+          background-color: #FF7800;
+          color: white;
+          border-radius: 20%;
+          overflow: hidden;
+          max-width: 0;
+          -webkit-transition: .2s linear all;
+          -khtml-transition: .2s linear all;
+          -moz-transition: .2s linear all;
+          -ms-transition: .2s linear all;
+          -o-transition: .2s linear all;
+          transition: .2s linear all;
+        }
+
+      .pb_heading {
+        display: flex;
+        text-transform: none;
+        margin-top:5px;
+        margin-right:0 !important;
+        padding: 0 10px;
+        font-size: 20px;
+        border-top-left-radius:10px;
+        border-bottom-left-radius:10px;
+        color:#fff;
+        background-color:#ff7800;
+        right:-55px;
+          -webkit-transition: .2s linear all;
+          -khtml-transition: .2s linear all;
+          -moz-transition: .2s linear all;
+          -ms-transition: .2s linear all;
+          -o-transition: .2s linear all;
+          transition: .2s linear all;
+      }
+
+        .pb_heading .ic_heading {
+          padding-top: 5px;
+        }
+        .pb_heading p{
+          margin:5px auto;
+        }
+        .pb_heading:hover{
+          right:0;
+        }
+    </style>
+
+    <!-- html part-->
+    <iron-ajax auto id="getgalleryofgamesviagalleryurl" debounce="3000" url="/h/main?fm=get-gallery-of-game-via-gallery-url&a=[[galleryurl]]" handle-as="json" last-response="{{gamegallery}}" loading="{{loadinggames}}"></iron-ajax>
+
+    <gamegallery-swiper>
+      <template is="dom-repeat" items="{{gamegallery}}" as="item">
+        <div class="gallery">
+         <!--<iron-image background src="//cdn.kaldirirmi.com/images/games/[[item.gallerypicture]]" data-hash="gallery{{index}}" sizing="cover" alt="[[item.gallerytitle]]" preload fade></iron-image>-->
+          <img src="[[item.gallerypicture]]" />
+          <div id="download-image">
+            <a href="[[item.gallerypicture]]" download="picture.jpg" style="text-decoration:none;">
+              <paper-button id="{{_makePbId(index)}}" on-click="_acceptItem" class="pb_heading pbDownloader" style="font-size:18px; padding:0 10px;" raised>
+                <iron-icon class="ic_heading" icon="icons:file-download"></iron-icon>
+                <p>İndir</p>
+              </paper-button>
+            </a>
+            <paper-button onclick$="window.open('[[item.gallerypicture]]')" class="pb_heading" style="font-size:18px; padding:0 10px;" raised>
+              <iron-icon class="ic_heading" icon="icons:open-in-new"></iron-icon>
+              <p>Aç</p>
+            </paper-button>
+          </div>
+        </div>
+      </template>
+    </gamegallery-swiper>
+
+  </template>
+  <script>
+    Polymer({
+      is: "gallery-main-slider",
+      properties: {
+        galleryurl: {
+          type: "String",
+          notify: true
+        },
+        gamegallery: {
+          type: Array,
+          value: []
+        }
+      },
+      _acceptItem: function (e) {
+        console.log('_acceptItem clic');
+      },
+      _makePbId: function (index) {
+        return "_pbId" + index;
+      },
+     
+      
+    });
+
+  </script>
+</dom-module>

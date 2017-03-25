@@ -1,0 +1,398 @@
+﻿<dom-module id="news-animated-grid-styles">
+    <template>
+        <style>
+               :host {
+                display: block;
+                background: #222;
+                border-top: 3px solid #ff7800;
+            }
+
+            .tile {
+                position: relative;
+                display: inline-block;
+                float: left;
+                vertical-align: top;
+                width: calc(100% / 6);
+                height: calc(100% / 3);
+                transition: .4s all;
+                color: #292929;
+                @apply(--paper-font-title);
+                @apply(--layout-vertical);
+                @apply(--layout-center-center);
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: center;
+                  box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),
+                  0  6px 30px 5px rgba(0, 0, 0, 0.12),
+                  0  8px 10px -5px rgba(0, 0, 0, 0.4);
+            }
+                .tile a {
+                    color: #fff;
+                }
+
+                    /* effect part */
+                    .tile a:after {
+                        content: "";
+                        position: absolute;
+                        top: -110%;
+                        left: -210%;
+                        width: 200%;
+                        height: 200%;
+                        opacity: 1;
+                        transform: rotate(30deg);
+                        background: linear-gradient( to right, rgba(239, 121, 20, 0.13) 0%, rgba(239, 121, 20, 0.13) 77%, rgba(239, 121, 20, 0.5) 92%, rgba(239, 121, 20, 0.0) 100% );
+                    }
+
+                    .tile a:hover:after {
+                        opacity: 1;
+                        top: -30%;
+                        left: -30%;
+                        transition-property: left, top, opacity;
+                        transition-duration: 0.7s, 0.7s, 0.15s;
+                        transition-timing-function: ease;
+                    }
+
+                    .tile a:active:after {
+                        opacity: 1;
+                    }
+
+
+              
+                
+
+            .news-item {
+                width: 100%;
+                height: 100%;
+            }
+
+            .tile .news-item .item-content {
+                position: absolute;
+                bottom: 0;
+                text-align: left;
+                width: 100%;
+                padding-left: 5px;
+                padding-bottom: 5px;
+                background-color: #222;
+                opacity: 1;
+            }
+
+                .tile .news-item .item-content .actions {
+                    overflow: hidden;
+                    max-height: 0;
+                    -webkit-transition: .2s linear all;
+                    -khtml-transition: .2s linear all;
+                    -moz-transition: .2s linear all;
+                    -ms-transition: .2s linear all;
+                    -o-transition: .2s linear all;
+                    transition: .2s linear all;
+                    padding-bottom: 5px;
+                }
+
+            /*tile 1. ve 5.*/
+            .tile:nth-of-type(1) .news-item .item-content,
+            .tile:nth-of-type(5) .news-item .item-content {
+                padding-left: 10px;
+            }
+
+            .ironIconDetails {
+                padding-right: 5px;
+            }
+
+
+              /* mobile first tiles */
+                .tile {
+                    width: calc(100%);
+                    height: calc(100% / 3 * 2);
+                }
+
+                 .tile:nth-of-type(9), .tile:nth-of-type(10) {
+                    display: none;
+                }
+
+                 .tile .news-item .item-content .item-content-title {
+                        font-size: calc(0.6em + 1vmin);
+                        font-weight: 400;
+                        white-space: normal;
+                        margin: 0px 10px;
+                    }
+
+                    .tile .news-item .item-content .actions {
+                        font-size: calc(0.4em + 1vmin);
+                         margin: 0px 10px;
+                        font-weight: 100;
+                    }
+
+            @media only screen and (min-width : 1024px) { /* zoom %175 */
+                /* desktop shows */
+                /*1.sıradakine widthin 3te1ini ve heightın 3/2sini al diyor */
+                .tile {
+                    width: calc(100% / 6);
+                    height: calc(100% / 2.5);
+                }
+
+                .tile:nth-of-type(1) {
+                    width: calc(100% / 3);
+                    height: calc(100% / 3 * 2);
+                }
+
+                .tile:nth-of-type(4) {
+                    width: calc(100% / 3);
+                }
+
+                .tile:nth-of-type(5) {
+                    width: calc(100% / 3);
+                    height: calc(100% / 3 * 2);
+                }
+
+                .tile:nth-of-type(8) {
+                    width: calc(100% / 3);
+                    /*height: calc(100% / 3);*/
+                    height: calc(100% / 3.8);
+                }
+
+                .tile:nth-of-type(9) {
+                    position: absolute;
+                    top: calc(100% / 3 * 2);
+                    left: 0;
+                    width: calc(100% / 6);
+                    /*height: calc(100% / 3);*/
+                    height: calc(100% / 2.5);
+                }
+              
+                .tile:nth-of-type(10) {
+                    position: absolute;
+                    top: calc(100% / 3 * 2);
+                    left: calc(100% / 6);
+                    width: calc(100% / 6);
+                    /*height: calc(100% / 3);*/
+                    height: calc(100% / 2.5);
+
+                }
+                   .tile:nth-of-type(9), .tile:nth-of-type(10) {
+                    display: inline-block;
+                }
+
+                .tile .news-item .item-content {
+                    line-height: 16px;
+                    padding-bottom: 0px;
+                }
+                    /* default yani en ufak karenin özellikleri*/
+                    .tile .news-item .item-content .item-content-title {
+                        font-size: 7px;
+                        font-weight: 400;
+                        margin: 0;
+                        white-space: nowrap;
+                    }
+
+                    .tile .news-item .item-content .actions {
+                        font-size: 6px;
+                        font-weight: 100;
+                        margin: 0;
+                        white-space: nowrap;
+                    }
+
+                .tile:nth-of-type(1) .news-item .item-content .item-content-title,
+                .tile:nth-of-type(5) .news-item .item-content .item-content-title {
+                    font-size: 15px;
+                    padding-top: 1px;
+                }
+
+                .tile:nth-of-type(1) .news-item .item-content .actions,
+                .tile:nth-of-type(5) .news-item .item-content .actions {
+                    font-size: 10px;
+                }
+                /*tile 4. ve 8. */
+                .tile:nth-of-type(4) .news-item .item-content .item-content-title,
+                .tile:nth-of-type(8) .news-item .item-content .item-content-title {
+                    font-size: 12px;
+                    padding-top: 0px;
+                }
+
+                .tile:nth-of-type(4) .news-item .item-content .actions,
+                .tile:nth-of-type(8) .news-item .item-content .actions {
+                    font-size: 8px;
+                }
+
+                .tile .news-item .item-content .actions .ironIconDetails {
+                    width: 10px !important;
+                    height: 10px !important;
+                }
+            }
+
+            @media only screen and (min-width : 1224px) { /* zoom %150 */
+                .tile .news-item .item-content {
+                    line-height: 19px;
+                    padding-bottom: 1px;
+                }
+                    /* default yani en ufak karenin özellikleri*/
+                    .tile .news-item .item-content .item-content-title {
+                        font-size: 9px;
+                        font-weight: 400;
+                    }
+
+                    .tile .news-item .item-content .actions {
+                        font-size: 7px;
+                        font-weight: 100;
+                    }
+
+                .tile:nth-of-type(1) .news-item .item-content .item-content-title,
+                .tile:nth-of-type(5) .news-item .item-content .item-content-title {
+                    font-size: 17px;
+                    padding-top: 2px;
+                }
+
+                .tile:nth-of-type(1) .news-item .item-content .actions,
+                .tile:nth-of-type(5) .news-item .item-content .actions {
+                    font-size: 12px;
+                }
+                /*tile 4. ve 8. */
+                .tile:nth-of-type(4) .news-item .item-content .item-content-title,
+                .tile:nth-of-type(8) .news-item .item-content .item-content-title {
+                    font-size: 14px;
+                    padding-top: 0px;
+                }
+
+                .tile:nth-of-type(4) .news-item .item-content .actions,
+                .tile:nth-of-type(8) .news-item .item-content .actions {
+                    font-size: 10px;
+                }
+
+                .tile .news-item .item-content .actions .ironIconDetails {
+                    width: 14px !important;
+                    height: 14px !important;
+                }
+            }
+
+            @media only screen and (min-width : 1440px) { /* zoom % 125*/
+                .tile .news-item .item-content {
+                    line-height: 20px;
+                    padding-bottom: 3px;
+                }
+                    /* default yani en ufak karenin özellikleri*/
+                    .tile .news-item .item-content .item-content-title {
+                        font-size: 11px;
+                        font-weight: 400;
+                    }
+
+                    .tile .news-item .item-content .actions {
+                        font-size: 9px;
+                        font-weight: 100;
+                    }
+
+                .tile:nth-of-type(1) .news-item .item-content .item-content-title,
+                .tile:nth-of-type(5) .news-item .item-content .item-content-title {
+                    font-size: 19px;
+                    padding-top: 3px;
+                }
+
+                .tile:nth-of-type(1) .news-item .item-content .actions,
+                .tile:nth-of-type(5) .news-item .item-content .actions {
+                    font-size: 14px;
+                }
+                /*tile 4. ve 8. */
+                .tile:nth-of-type(4) .news-item .item-content .item-content-title,
+                .tile:nth-of-type(8) .news-item .item-content .item-content-title {
+                    font-size: 16px;
+                    padding-top: 1px;
+                }
+
+                .tile:nth-of-type(4) .news-item .item-content .actions,
+                .tile:nth-of-type(8) .news-item .item-content .actions {
+                    font-size: 12px;
+                }
+
+                .tile .news-item .item-content .actions .ironIconDetails {
+                    width: 17px !important;
+                    height: 17px !important;
+                }
+            }
+
+            @media only screen and (min-width : 1640px) { /* zoom %110*/
+                .tile .news-item .item-content {
+                    line-height: 22px;
+                    padding-bottom: 4px;
+                }
+                    /* default yani en ufak karenin özellikleri*/
+                    .tile .news-item .item-content .item-content-title {
+                        font-weight: 400;
+                        font-size: 13px;
+                    }
+
+                    .tile .news-item .item-content .actions {
+                        font-size: 11px;
+                        font-weight: 100;
+                    }
+
+                .tile:nth-of-type(1) .news-item .item-content .item-content-title,
+                .tile:nth-of-type(5) .news-item .item-content .item-content-title {
+                    font-size: 21px;
+                    padding-top: 4px;
+                }
+
+                .tile:nth-of-type(1) .news-item .item-content .actions,
+                .tile:nth-of-type(5) .news-item .item-content .actions {
+                    font-size: 16px;
+                }
+                /*tile 4. ve 8. */
+                .tile:nth-of-type(4) .news-item .item-content .item-content-title,
+                .tile:nth-of-type(8) .news-item .item-content .item-content-title {
+                    font-size: 18px;
+                    padding-top: 2px;
+                }
+
+                .tile:nth-of-type(4) .news-item .item-content .actions,
+                .tile:nth-of-type(8) .news-item .item-content .actions {
+                    font-size: 14px;
+                }
+
+                .tile .news-item .item-content .actions .ironIconDetails {
+                    width: 21px !important;
+                    height: 21px !important;
+                }
+            }
+
+            @media only screen and (min-width : 1824px) {
+                /* default yani en ufak karenin özellikleri*/
+                .tile .news-item .item-content {
+                    line-height: 26px;
+                    padding-bottom: 5px;
+                }
+
+                    .tile .news-item .item-content .item-content-title {
+                        font-size: 15px;
+                    }
+
+                    .tile .news-item .item-content .actions {
+                        font-size: 13px;
+                    }
+
+                .tile:nth-of-type(1) .news-item .item-content .item-content-title,
+                .tile:nth-of-type(5) .news-item .item-content .item-content-title {
+                    font-size: 23px;
+                    padding-top: 5px;
+                }
+
+                .tile:nth-of-type(1) .news-item .item-content .actions,
+                .tile:nth-of-type(5) .news-item .item-content .actions {
+                    font-size: 18px;
+                }
+                /*tile 4. ve 8. */
+                .tile:nth-of-type(4) .news-item .item-content .item-content-title,
+                .tile:nth-of-type(8) .news-item .item-content .item-content-title {
+                    font-size: 20px;
+                    padding-top: 3px;
+                }
+
+                .tile:nth-of-type(4) .news-item .item-content .actions,
+                .tile:nth-of-type(8) .news-item .item-content .actions {
+                    font-size: 16px;
+                }
+                /*iron icons in sub headline*/
+                .tile .news-item .item-content .actions .ironIconDetails {
+                    width: 24px !important;
+                    height: 24px !important;
+                }
+            }
+        </style>
+    </template>
+</dom-module>

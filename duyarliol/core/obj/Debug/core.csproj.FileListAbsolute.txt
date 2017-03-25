@@ -1,0 +1,5 @@
+C:\Users\lenovo\Documents\Hakan_Projects\duyarliol\core\bin\Debug\core.dll
+C:\Users\lenovo\Documents\Hakan_Projects\duyarliol\core\bin\Debug\core.pdb
+C:\Users\lenovo\Documents\Hakan_Projects\duyarliol\core\obj\Debug\core.dll
+C:\Users\lenovo\Documents\Hakan_Projects\duyarliol\core\obj\Debug\core.pdb
+C:\Users\lenovo\Documents\Hakan_Projects\duyarliol\core\obj\Debug\core.csprojResolveAssemblyReference.cache

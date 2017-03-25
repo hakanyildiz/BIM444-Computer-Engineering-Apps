@@ -1,0 +1,200 @@
+﻿<link rel="import" href="../../../components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="../../kaldirirmi-styles/news/news-animated-grid-styles.html">
+
+<dom-module id="news-animated-grid">
+    <template>
+        <style include="shared-styles"></style>
+        <style include="news-animated-grid-styles"></style>
+      
+        <iron-ajax id="getnews" auto url="/h/main?fm=get-news" method="get" handle-as="json" on-response="_responseNews"></iron-ajax>
+        <template itemscope itemtype="http://schema.org/Article" is="dom-repeat" items="[[newscast]]">
+            <div itemprop="articleBody" class="tile" id="part{{index}}" style="background-image: url('[[item.picture]]');">
+                <a itemprop="url" class="news-item" href="/haber/[[item.url]]" onclick="load();" style="text-decoration:none">
+                    <div class="item-content">
+                        <img src="[[item.picture]]" alt="[[item.title]]" itemprop="image" style="display:none"/>
+                        <meta itemprop="publisher" content="Kaldırırmı" />
+                        <meta itemprop="author" content="Hakke" />
+                        <time property="datePublished" datetime="[[item.releasedate]]"></time>
+
+                        <div itemprop="headline" class="item-content-title">[[item.title]]</div>
+                        <div class="actions">
+                            <div itemprop="alternativeHeadline" class="actions-details" style="opacity:1;">
+                                [[item.subtitle]]
+                            </div>
+                            <iron-icon class="ironIconDetails" icon="hardware:device-hub"></iron-icon>[[item.category]]
+                            <iron-icon class="ironIconDetails" style="padding-left:5px;" icon="editor:border-color"></iron-icon>[[item.releasedate]]
+                            <iron-icon class="ironIconDetails" style="padding-left:5px;" icon="image:remove-red-eye"></iron-icon>[[item.viewcount]]
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </template>
+
+    </template>
+
+</dom-module>
+
+<script>
+
+    Polymer({
+
+        is: 'news-animated-grid',
+
+        behaviors: [
+          Polymer.NeonSharedElementAnimatableBehavior
+        ],
+
+        properties: {
+            newscast: {
+                type: Array,
+                value: []
+            },
+            hovered: {
+                type: String,
+                value: 'display:none',
+                notify: true
+
+            },
+
+            animationConfig: {
+                type: Object,
+                value: function () {
+                    return {
+                        'entry': [{
+                            name: 'cascaded-animation',
+                            animation: 'transform-animation',
+                            transformFrom: 'translateY(100%)',
+                            transformTo: 'none',
+                            timing: {
+                                delay: 50
+                            }
+                        }]
+                    }
+                }
+            }
+
+
+        },
+
+        //listeners:{
+        //  mouseover: '_onHostHover',
+        //  mouseout : '_onHostUnhover',
+        //},
+        //attached: function()
+        //{
+        //  console.log(this.$$('#part0'));
+        //},
+        _responseNews: function (a) {
+            if (a.detail.response.length > 0) {
+                a.detail.response.forEach(function (news) {
+                    news.subtitle = news.subtitle.toString().substring(0, 45) + '...';
+                    //news.subtitle = news.subtitle.toString().substring(0, 45) + "...";
+                    this.push('newscast', news);
+                }, this);
+
+                this.async(function () {
+                    var nodeList = Polymer.dom(this.root).querySelectorAll('.tile');
+                    this.animationConfig['entry'][0].nodes = Array.prototype.slice.call(nodeList);
+                });
+            }
+        },
+        //_onHostHover: function (e) {
+
+        //  this.hovered = 'display:block';
+        //},
+        //_onHostUnhover: function (e) {
+        //  this.hovered = 'display:none';
+
+        //},
+
+
+    });
+
+</script>
+
+<script>
+    $(document).ready(function () {
+        //part0
+        $(document).on('mouseover', '#part0', function (e) {
+            //$('#part0 > .news-item > .item-content >.actions').css('visibility', 'visible');
+            $('#part0 > .news-item > .item-content >.actions').css('max-height', '100px');
+
+        });
+        $(document).on('mouseout', '#part0', function () {
+            //$('#part0 > .news-item > .item-content >.actions').css('visibility', 'hidden');
+            $('#part0 > .news-item > .item-content >.actions').css('max-height', '0px');
+        });
+        //part1
+        $(document).on('mouseover', '#part1', function (e) {
+            $('#part1 > .news-item > .item-content >.actions').css('max-height', '100px');
+        });
+        $(document).on('mouseout', '#part1', function () {
+            $('#part1 > .news-item > .item-content >.actions').css('max-height', '0px');
+        });
+        //part2
+        $(document).on('mouseover', '#part2', function (e) {
+            $('#part2 > .news-item > .item-content >.actions').css('max-height', '100px');
+        });
+        $(document).on('mouseout', '#part2', function () {
+            $('#part2 > .news-item > .item-content >.actions').css('max-height', '0px');
+        });
+        //part3
+        $(document).on('mouseover', '#part3', function (e) {
+            $('#part3 > .news-item > .item-content >.actions').css('max-height', '100px');
+        });
+        $(document).on('mouseout', '#part3', function () {
+            $('#part3 > .news-item > .item-content >.actions').css('max-height', '0px');
+        });
+        //part4
+        $(document).on('mouseover', '#part4', function (e) {
+            $('#part4 > .news-item > .item-content >.actions').css('max-height', '100px');
+        });
+        $(document).on('mouseout', '#part4', function () {
+            $('#part4 > .news-item > .item-content >.actions').css('max-height', '0px');
+        });
+        //part5
+        $(document).on('mouseover', '#part5', function (e) {
+            $('#part5 > .news-item > .item-content >.actions').css('max-height', '100px');
+        });
+        $(document).on('mouseout', '#part5', function () {
+            $('#part5 > .news-item > .item-content >.actions').css('max-height', '0px');
+        });
+        //part6
+        $(document).on('mouseover', '#part6', function (e) {
+            $('#part6 > .news-item > .item-content >.actions').css('max-height', '100px');
+        });
+        $(document).on('mouseout', '#part6', function () {
+            $('#part6 > .news-item > .item-content >.actions').css('max-height', '0px');
+        });
+        //part7
+        $(document).on('mouseover', '#part7', function (e) {
+            $('#part7 > .news-item > .item-content >.actions').css('max-height', '100px');
+        });
+        $(document).on('mouseout', '#part7', function () {
+            $('#part7 > .news-item > .item-content >.actions').css('max-height', '0px');
+        });
+        //part8
+        $(document).on('mouseover', '#part8', function (e) {
+            $('#part8 > .news-item > .item-content >.actions').css('max-height', '100px');
+        });
+        $(document).on('mouseout', '#part8', function () {
+            $('#part8 > .news-item > .item-content >.actions').css('max-height', '0px');
+        });
+        //part9
+        $(document).on('mouseover', '#part9', function (e) {
+            $('#part9 > .news-item > .item-content >.actions').css('max-height', '100px');
+        });
+        $(document).on('mouseout', '#part9', function () {
+            $('#part9 > .news-item > .item-content >.actions').css('max-height', '0px');
+        });
+        //part10
+        $(document).on('mouseover', '#part10', function (e) {
+            $('#part10 > .news-item > .item-content >.actions').css('max-height', '100px');
+        });
+        $(document).on('mouseout', '#part10', function () {
+            $('#part10 > .news-item > .item-content >.actions').css('max-height', '0px');
+        });
+
+    });
+</script>

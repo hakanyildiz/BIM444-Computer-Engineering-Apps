@@ -1,0 +1,151 @@
+﻿<link rel="import" href="../../polymer/polymer.html">
+<dom-module id="review-user-vote" >
+  <template itemscope itemtype="http://schema.org/Review">
+    <style is="costum-style">
+      paper-star-rating {
+        --paper-star-rating-icon-size: 30px;
+      }
+
+      h3 {
+        color: white;
+        font-weight: 100;
+        margin: 0;
+      }
+
+        h3 b {
+          color: #FF7800;
+        }
+
+      #star-actions .star-column {
+        float: left;
+        padding: 10px;
+        margin: 10px;
+        width: 120px;
+      }
+
+        #star-actions .star-column paper-button {
+          width: 100%;
+          background-color: #FF7800;
+          color: white;
+        }
+
+        #star-actions{
+          display:flex;
+          justify-content:center;
+        }
+    </style>
+
+
+    <paper-star-rating itemprop="ratingValue" star="5" value="{{vote}}"></paper-star-rating>
+    <meta itemprop="bestRating" content="5"/>
+    <div id="star-actions">
+    
+      <div class="star-column">
+        <paper-button id="pbGameVote" raised on-click="_voteGame">Oyla</paper-button>
+      </div>
+    </div>
+    
+    <form id="postuservote" is="iron-form" action="/h/main" method="post">
+      <input type="hidden" name="fm" value="post-uservote-review" />
+      <input type="hidden" id="userid" name="userid" value="[[userid]]" />
+      <input type="hidden" id="gameid" name="gameid" value="[[gameid]]" />
+      <input type="hidden" id="vote" name="vote" value="[[vote]]" />
+    </form>
+
+    <!--<iron-ajax id="postuservote" method="POST" url="/h/main?fm=post-uservote-review&a=[[userid]]&b=[[gameid]]&c=[[vote]]" handl e-as="json" on-response="_responsePostVote"></iron-ajax>-->
+    <iron-ajax auto id="checkuserisvote" url="/h/main?fm=get-uservote&a=[[userid]]&b=[[gameid]]" handle-as="json" on-response="_responseCheckVote"></iron-ajax>
+
+  </template>
+  <script>
+    Polymer({
+      is: "review-user-vote",
+      properties: {
+        userid: {
+          type: Number,
+          value: 0,
+          notify: true
+        },
+        gameid: {
+          type: Number,
+          value: 0,
+          notify: true
+        },
+        uservoted: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+        vote: {
+          type: Number,
+          value: 0,
+          notify: true
+        }
+
+      },
+      _responseCheckVote: function (a) {
+        //console.log("check response ");
+        if(a.detail.response.length > 0)
+        {
+          this.uservoted = true;
+          a.detail.response.forEach(function (gameuservote) {
+            //console.log(gameuservote.vote + " " + gameuservote.gameid);
+           this.vote = gameuservote.vote;
+          }, this);
+          
+          //console.log('check response this.vote = ' + this.vote);
+        }
+        else {
+          //console.log("check response uservoted no :( !! ");
+          //user daha önce oylamamış..
+          this.uservoted = false;
+        }
+
+
+        //console.log('kaldirirmi-news-populer;_response' + a.detail.response.length);
+        //if (a.detail.response.length > 0) {
+        //  a.detail.response.forEach(function (news) {
+        //    this.push('newscast', news);
+        //  }, this);
+        //}
+      },
+      _voteGame: function () {
+        if (this.vote == 0) {
+          alert('Oy kullanmadan önce bir seçim işlemi yapmalısın');
+        }
+        else if (this.vote != 0 && this.userid != null && this.gameid != null) {
+          this.$.postuservote.submit();
+          
+          //this.$.postuservote.generateRequest();
+          //oy secildi devamında userid ve gameid de boş olmadığına sıra geldi ajax post işlemine..
+        }
+      }
+    });
+  </script>
+  <script>
+      document.addEventListener('WebComponentsReady', function () {
+
+          var postuservote = document.getElementById('postuservote');
+          //console.log(postuservote);
+          if (postuservote !== null) {
+              postuservote.addEventListener('iron-form-response', function (e) {
+                  if (e.detail.response.success) {
+                      var btn = document.getElementById('pbGameVote');
+                      btn.innerText = 'Oylama başarılı yönlendiriliyorsunuz..';
+                      btn.style.width = '200px';
+                      btn.style.fontSize = '15px';
+                      btn.style.fontWeight = '100';
+                      btn.style.right = '44px';
+                      location.reload();
+                  }
+                  else {
+                      unload();
+                      document.getElementById('postuservote').reset();
+                      document.getElementById('userid').removeAttribute('value');
+                      document.getElementById('gameid').removeAttribute('value');
+                      document.getElementById('vote').removeAttribute('value');
+                  }
+              });
+          }
+    });
+  </script>
+</dom-module>

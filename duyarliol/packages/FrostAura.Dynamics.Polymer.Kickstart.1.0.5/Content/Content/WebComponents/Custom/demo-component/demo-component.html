@@ -1,0 +1,74 @@
+﻿<!-- Essential import to allow the definition of a web component -->
+<link rel="import" href="../../Polymer/polymer/polymer.html"/>
+
+<!-- Import all bahaviours -->
+<link rel="import" href="../../Custom/demo-behaviour/demo-behaviour.html" />
+
+<!--
+This is a demo component that describes how to
+
+    1) Create a custom web component
+    2) Document a custom web component
+    3) Test a custom web component
+
+Example:
+
+    <custom-component></custom-component>
+
+@group My Custom Component Category
+@element custom-component
+@hero hero.svg
+@demo Content/WebComponents/Custom/demo-component/demo/index.html
+-->
+
+<dom-module id="demo-component">
+	<!-- This is where the component specific styling goes -->
+	<style>
+		:host{}
+	</style>
+
+	<!-- This is where the component specific HTML goes -->
+	<template>
+	</template>
+
+	<!-- This is where the component specific scripting goes -->
+	<script>
+		Polymer({
+			/** The component identifier */
+			is: 'demo-component',
+
+			/** An array of behaviours that this component implements */
+			behaviors: [DemoBehavior],
+
+			properties: {
+				demoString: {
+					type: String,
+					value: 'Demo Default Value',
+					notify: true, // Update bindings that are bound to this variable when the value changed
+					reflectToAttribute: true, // Updates the DOM element's attribute with this property's name, with the value
+					readOnly: false, // Disallows using the setter on this property
+					observer: '_demoStringChanged' // Event handler for when the property's value gets updated
+				},
+				demoObject: {
+					type: Object,
+					value: null
+				},
+				demoArray: {
+					type: Array,
+					value: []
+				},
+				demoNumber: {
+					type: Number,
+					value: 0
+				},
+				demoBoolean: {
+					type: Boolean,
+					value: false
+				}
+			},
+
+			_demoStringChanged: function(newValue) {
+			}
+		});
+	</script>
+</dom-module>

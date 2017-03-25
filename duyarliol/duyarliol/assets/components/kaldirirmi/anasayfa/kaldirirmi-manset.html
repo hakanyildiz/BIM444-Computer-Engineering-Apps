@@ -1,0 +1,361 @@
+﻿<link rel="import" href="/assets/components/polymer/polymer.html">
+<link rel="import" href="/assets/components/iron-icon/iron-icon.html">
+<link rel="import" href="/assets/components/iron-icons/hardware-icons.html">
+<link rel="import" href="/assets/components/iron-icons/social-icons.html">
+<link rel="import" href="/assets/components/iron-icons/av-icons.html">
+<link rel="import" href="/assets/components/paper-styles/paper-styles.html">
+
+<link rel="import" href="/assets/components/iron-ajax/iron-ajax.html" />
+<link rel="import" href="/assets/components/paper-slider/l2t-paper-slider.html">
+<link rel="import" href="/assets/components/paper-button/paper-button.html">
+<link rel="import" href="/assets/components/paper-item/paper-item.html">
+<link rel="import" href="/assets/components/paper-menu/paper-menu.html">
+<link rel="import" href="/assets/components/paper-styles/color.html">
+<script src="assets/components/webcomponentsjs/webcomponents-lite.min.js"></script>
+
+<link rel="import" href="/assets/components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="/assets/components/paper-fab/paper-fab.html">
+
+<link rel="import" href="/assets/components/paper-card/paper-card.html">
+<link rel="import" href="/assets/components/paper-spinner/paper-spinner-lite.html">
+
+<!-- custom spinner -->
+<link rel="import" href="/assets/components/paper-spinner/spinner-cube-grid.html">
+
+<dom-module id="kaldirirmi-manset">
+  <template>
+
+    <style is="custom-style">
+      paper-fab.main-color {
+        --paper-fab-background: #ee7813;
+        --paper-fab-keyboard-focus-background:#d36308;
+      }
+
+      .cuff {
+        /*width:1000px;*/
+        height:600px;
+        display: flex;
+      }
+
+        .cuff > .cuff-slider {
+          width: 85%;
+          /*background-color:aqua;*/
+        }
+
+        .cuff > .cuff-navigation {
+          width: 15%;
+          /*background-color:yellow;*/
+        }
+
+      body {
+        font-family: 'Roboto', sans-serif;
+        text-align: center;
+      }
+
+      .container {
+        width: 300px;
+        height: 300px;
+        margin: 20px auto;
+        border: 1px solid rgba(0, 0, 0, 0.5);
+      }
+
+      .half-height {
+        height: 150px;
+      }
+
+      .container paper-button.proceed:last-child {
+        float: right;
+      }
+
+      .demo-style {
+        text-align: center;
+        vertical-align: middle;
+        line-height: 600px;
+        color: #fff;
+        font-size: 64px !important;
+        font-weight: bolder;
+      }
+
+
+      .button-flex {
+        display: flex;
+      }
+
+        .button-flex > paper-button {
+          flex: 1;
+        }
+
+      demo-snippet {
+        width: 768px;
+        margin: 0 auto;
+        text-align: left;
+      }
+
+      @media screen and (max-width: 768px) {
+        demo-snippet {
+          width: 100%;
+        }
+      }
+
+
+      /* cuff-navigation part */
+      .cuff-navigation-buttons {
+        width: 100%;
+        margin: 2px;
+        margin-top: 10px;
+        text-transform: none;
+        font-size: 18px;
+        background-color: white;
+        color: black;
+      }
+
+      .card-fab-item {
+        margin-top: 12px;
+        padding-left: 20px;
+      }
+
+
+      paper-tooltip.pt_nav {
+        --paper-tooltip-background: #ee7813;
+        --paper-tooltip-text-color: white;
+        font-size: 18px;
+      }
+
+      .pb_heading {
+        display: flex;
+        text-transform: none;
+        margin-left: -10px;
+        padding: 0;
+        font-size: 20px;
+        margin-left: 0px;
+        padding: 0 35px !important;
+        color: white;
+      }
+
+        .pb_heading .ic_heading {
+          padding-top: 18px;
+          padding-left: 6px;
+        }
+
+      .loadingIndicatorManset {
+        text-align: center;
+        height: 40px;
+        color: white;
+      }
+
+        .loadingIndicatorManset paper-spinner-lite {
+          width: 20px;
+          height: 20px;
+          margin-right: 10px;
+        }
+
+      /* paper-spinner-lite*/
+      #pslMulti {
+        --paper-spinner-layer-1-color: var(--paper-purple-500);
+        --paper-spinner-layer-2-color: var(--paper-cyan-500);
+        --paper-spinner-layer-3-color: var(--paper-blue-grey-500);
+        --paper-spinner-layer-4-color: var(--paper-amber-500);
+      }
+
+      .cuff .cuff-slider .loadingIndicatorManset {
+        margin: auto;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+       right: 250px;
+      }
+    </style>
+
+    <iron-ajax id="getmanset" auto="{{go}}" url="/h/main?fm=get-manset-via-category&a=[[selectedCategory]]&b=[[totalslides]]" method="get" handle-as="json" on-response="_response" loading="{{loading}}"></iron-ajax>
+    <div class="cuff">
+      <div class="cuff-slider" style="cursor:pointer">
+        <div class="loadingIndicatorManset" style="color:#FF7800" hidden$="[[!loading]]">
+          <spinner-cube-grid></spinner-cube-grid>
+          <!--<paper-spinner-lite id="pslMulti"></paper-spinner-lite>--> {{selectedCategory}} Yükleniyor
+        </div>
+        <l2t-paper-slider position="{{position}}" style$="[[displaying]]" auto-progress slide-duration="5" class="reinit-demo" total-slides="[[totalslides]]" >
+          <template is="dom-repeat" items="[[mansetArray]]" as="item">
+
+            <paper-slide class="demo-style" style="background-image: url('http://cdn.kaldirirmi.com/images/games/[[item.background]]'); background-size:cover; background-repeat:no-repeat"></paper-slide>
+            <a href="/oyun/[[item.name]]" onclick="load();">
+            </a>
+
+          </template>
+        </l2t-paper-slider>
+      </div>
+      <div class="cuff-navigation">
+
+        <!--<h6>{{selectedCategory}}</h6>-->
+        <!--<paper-menu style="background-color:inherit;" class="dropdown-content" selected="{{selected}}" on-iron-select="_itemSelected">-->
+        <!--<paper-item><paper-button class="cuff-navigation-buttons" raised>Haberler</paper-button></paper-item>
+          <paper-item><paper-button class="cuff-navigation-buttons" raised>İncelemeler</paper-button></paper-item>
+          <paper-item><paper-button class="cuff-navigation-buttons" raised>Kampanyalar</paper-button></paper-item>
+          <paper-item><paper-button class="cuff-navigation-buttons" raised>Oyunlar</paper-button></paper-item>
+        </paper-menu>-->
+
+
+        <paper-card style="background-color:inherit; width: 100%;">
+          <div class="card-content">
+            <paper-button class="pb_heading md-trigger md-setperspective" style="font-size:18px; padding:0 10px;" data-modal="modal-19" raised>
+              <p>Hemen Giriş Yap</p>
+              <iron-icon class="ic_heading" icon="social:mood"></iron-icon>
+            </paper-button>
+          </div>
+          <div class="card-actions" style="border-top: 1px solid #222; float:right; padding:10px 40px;">
+            <div class="card-fab-item">
+              <paper-fab class="main-color" id="pf_Haberler" icon="icons:markunread-mailbox" on-click="_fabClickHaber"></paper-fab>
+              <paper-tooltip class="pt_nav" for="pf_Haberler" position="left" animation-delay="0">Haberler</paper-tooltip>
+            </div>
+
+            <div class="card-fab-item">
+              <paper-fab class="main-color" id="pf_Incelemeler" icon="social:whatshot" on-click="_fabClickInceleme"></paper-fab>
+              <paper-tooltip class="pt_nav" for="pf_Incelemeler" position="left" animation-delay="0">İncelemeler</paper-tooltip>
+            </div>
+
+            <div class="card-fab-item">
+              <paper-fab class="main-color" id="pf_Kampanyalar" icon="icons:card-giftcard" on-click="_fabClickKampanya"></paper-fab>
+              <paper-tooltip class="pt_nav" for="pf_Kampanyalar" position="left" animation-delay="0">Kampanyalar</paper-tooltip>
+            </div>
+
+            <div class="card-fab-item">
+              <paper-fab class="main-color" id="pf_Oyunlar" icon="hardware:videogame-asset" on-click="_fabClickOyun"></paper-fab>
+              <paper-tooltip class="pt_nav" for="pf_Oyunlar" position="left" animation-delay="0">Oyunlar</paper-tooltip>
+            </div>
+            <div class="card-fab-item">
+              <paper-fab class="main-color" id="pf_Videolar" icon="av:slow-motion-video" on-click="_fabClickVideo"></paper-fab>
+              <paper-tooltip class="pt_nav" for="pf_Videolar" position="left" animation-delay="0">Videolar</paper-tooltip>
+            </div>
+          </div>
+        </paper-card>
+
+
+      </div>
+
+    </div>
+
+
+  </template>
+  <script>
+    Polymer({
+      is: "kaldirirmi-manset",
+      properties: {
+        genre: {
+          type: "String",
+          value: "Action", //default selected genre --> action
+          notify: true
+        },
+        displaying: {
+          type: String,
+          value:'display:none',
+          notify:true
+        },
+        position: {
+          type: Number,
+          value: 0,
+          notify: true
+        },
+        mansetArray: {
+          type: Array,
+          value: []
+        },
+        totalslides: {
+          type: Number,
+          value: 10,
+          notify: true
+        },
+        selected: {
+          type: Number,
+          value: 0,
+          notify: true
+        },
+        selectedCategory: {
+          type: String,
+          value: 'Haberler',
+          notify: true
+        },
+        loading: {
+          type: Boolean,
+          value: true,
+          notify: true
+        },
+      },
+      ready: function () {
+        // this bit just because otherwise it's too fast to see
+        console.log('ready ' + this.loading);
+        this.async(function () {
+          this.go = true;
+          this.displaying = 'display:block';
+        }, 1000);
+      },
+      _response: function (a) {
+        console.log("Manset => _response");
+        if (a.detail.response.length > 0) {
+          this.mansetArray = [];
+          a.detail.response.forEach(function (manset) {
+            this.push('mansetArray', manset);
+          }, this);
+          this.position = 0;
+
+          this.go = false;
+          this.loading = true;
+          this.displaying = 'display:block';
+        }
+      },
+      _itemSelected2: function (e) {
+        console.log("Manset => _itemSelected");
+
+        var selectedItem = e.target.selectedItem;
+        if (selectedItem) {
+          console.log("selected: " + selectedItem.innerText.trim()); //selectedItem.innerText
+        }
+        this.selectedCategory = selectedItem.innerText.trim();
+        console.log("_itemSelected selectedCategory:" + this.selectedCategory);
+        if (this.$.getmanset.lastRequest) {
+          this.$.getmanset.lastRequest.abort();
+        }
+        this.$.getmanset.generateRequest();
+
+      },
+      _fabClickHaber: function (e) {
+        this.displaying = 'display:none';
+        this.selectedCategory = 'Haberler';
+        this.async(function () {
+          this.go = true;
+        }, 1500);
+      },
+      _fabClickInceleme: function (e) {
+        this.displaying = 'display:none';
+        this.selectedCategory = 'İncelemeler';
+        this.async(function () {
+          this.go = true;
+        }, 1500);
+      },
+      _fabClickKampanya: function (e) {
+        this.displaying = 'display:none';
+        this.selectedCategory = 'Kampanyalar';
+        this.async(function () {
+          this.go = true;
+        }, 1500);
+      },
+      _fabClickOyun: function (e) {
+        this.displaying = 'display:none';
+        this.selectedCategory = 'Oyunlar';
+        this.async(function () {
+          this.go = true;
+        }, 1500);
+      },
+      _fabClickVideo: function (e) {
+        this.displaying = 'display:none';
+        this.selectedCategory = 'Videolar';
+        this.async(function () {
+          this.go = true;
+        }, 1500);
+      }
+
+    });
+
+  </script>
+
+
+</dom-module>

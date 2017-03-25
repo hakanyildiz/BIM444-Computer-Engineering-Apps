@@ -1,0 +1,86 @@
+﻿<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../kaldirirmi-styles/review/review-related-game-styles.html">
+
+<dom-module id="review-related-game">
+    <template>
+        <style is="custom-style" include="review-related-game-styles"></style>
+        <iron-ajax auto id="gereviewrelatedgame" url="/h/main?fm=get-related-game-with-reviews&a=[[gameid]]" handle-as="json" on-response="_responseGame"></iron-ajax>
+        <div id="relatedgamelist" itemscope itemtype="http://schema.org/Game">
+            <template is="dom-repeat" items="{{relatedgame}}" as="item">
+                <span itemprop="name" hidden>[[item.name]]</span>
+                <div class="card card-stats">
+                    <div class="card-header" data-background-color="orange">
+                        <a itemprop="url" class="relatedgame" href="/oyun/[[item.url]]" onclick="load();">
+                            <iron-image itemprop="thumbnailUrl" background src="[[item.picture]]" sizing="cover" alt="[[item.name]]" preload fade></iron-image>
+                        </a>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-content-category" itemprop="publisher">[[item.publisher]]</h3>
+                        <h2 class="card-content-title" itemprop="genre">[[item.genres]]</h2>
+                        <paper-button id="pbGoGame" raised><a itemprop="isBasedOnUrl" href="/oyun/[[item.url]]" onclick="load();">[[item.name]] oyununa git</a></paper-button>
+                    </div>
+                    <div class="card-footer">
+                            <div class="game-rating" itemscope itemtype="http://schema.org/Offer">
+                                <div class="game-comments">
+                                    <template is="dom-repeat" items="{{positivecomments}}" as="positive">
+                                        <p class="positive-comment-class" itemprop="commentText"><iron-icon style="color:green" icon="icons:add-circle-outline"></iron-icon> [[positive]] </p>
+                                    </template>
+                                </div>
+                                <div class="game-comments">
+                                    <template is="dom-repeat" items="{{negativecomments}}" as="negative">
+                                        <p class="negative-comment-class" itemprop="commentText"><iron-icon style="color:red" icon="icons:remove-circle-outline"></iron-icon> [[negative]] </p>
+                                    </template>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+    </template>
+    <script>
+        Polymer({
+            is: "review-related-game",
+            properties: {
+                relatedgame: {
+                    type: Array,
+                    value: []
+                },
+                positivecomments: {
+                    type: Array,
+                    value: []
+                },
+                negativecomments: {
+                    type: Array,
+                    value: []
+                },
+                gametitle: {
+                    type: String,
+                    value: '',
+                    notify: true
+                },
+                newsActive: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                }
+
+            },
+            ready: function () {
+            },
+            _responseGame: function (a) {
+                //console.log('review-related-game reponse');
+                if (a.detail.response.length > 0) {
+                    a.detail.response.forEach(function (game) {
+                        //console.log(game);
+                        this.push('relatedgame', game);
+                        this.positivecomments = game.positivecomments.split(';');
+                        this.negativecomments = game.negativecomments.split(';');
+
+                    }, this);
+                }
+            },
+
+        });
+    </script>
+</dom-module>

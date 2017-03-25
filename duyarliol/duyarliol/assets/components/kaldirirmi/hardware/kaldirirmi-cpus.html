@@ -1,0 +1,236 @@
+﻿<link rel="import" href="../../polymer/polymer.html" />
+<link rel="import" href="../../kaldirirmi-styles/hardware/hardware-elements-shared-styles.html"/>
+<dom-module id="kaldirirmi-cpus">
+    <style is="custom-style" include="hardware-elements-shared-styles">
+    </style>
+    <template>
+        <iron-ajax id="getcpuslist"
+                   debounce="3000"
+                   url="/h/main?fm=get-hardware-list&a=[[hardware]]&b=[[query]]&c=[[order]]&d=[[itemperpage]]&e=[[page]]&f=[[criter]]"
+                   handle-as="json"
+                   on-response="_response"
+                   ></iron-ajax>
+        
+        <app-toolbar>
+            <input class="searchInput" type="search" placeholder="İşlemci Ara" value="{{query::input}}">
+            <div class="mobileSearchHardware" id="cpuMobileSearch">
+                <paper-icon-button id="mobileSearchIcon" on-tap="_mobileSearchIcon" icon="[[mobileSearchIcon]]"></paper-icon-button>
+                <input id="mobileSearchInput" type="search" placeholder="İşlemci Ara" value="{{query::input}}" />
+            </div>
+                <paper-dropdown-menu class="pdmHeader" label="Sıralama">
+                    <paper-listbox style="background-color:#E65100; color:white" class="dropdown-content"
+                                   attr-for-selected="value"
+                                   selected="{{order}}">
+                        <paper-item value="benchmarkscore">Benchmark Score</paper-item>
+                        <paper-item value="name">Ürün Adı</paper-item>
+                        <paper-item value="cores">Çekirdek Sayısı</paper-item>
+                        <paper-item value="clockSpeed">İşlem Hızı</paper-item>
+                    </paper-listbox>
+                </paper-dropdown-menu>
+                <paper-dropdown-menu class="pdmHeader" label="Kriter">
+                    <paper-listbox style="background-color:#E65100; color:white" class="dropdown-content"
+                                   attr-for-selected="value"
+                                   selected="{{criter}}">
+                        <paper-item value="desc">Azalan</paper-item>
+                        <paper-item value="asc">Artan</paper-item>
+                    </paper-listbox>
+                </paper-dropdown-menu>
+        </app-toolbar>
+        <div id="hardware-list-container" itemscope itemtype="http://schema.org/ItemList">
+            <iron-scroll-threshold lower-threshold="60" on-lower-threshold="_loadMoreHardware" id="cpusThreshold">
+                <link itemprop="itemListOrder" href="http://schema.org/ItemListOrderAscending" />
+                    <iron-list id="ironListCpus" items="[[response.cpus]]" as="item" scroll-target="cpusThreshold" selection-enabled multi-selection>
+                        <template>
+                            <div itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                                <div class$="[[getClassForItem(item, selected)]]" tabindex$="[[tabIndex]]">
+                                        <div class="item-column">
+                                            <iron-image itemprop="image" class="avatar" sizing="contain" src="{{_remakeBrandImage(item.brand)}}"></iron-image>
+                                            <div class="pad">
+                                                <div class="primary" itemprop="name">[[item.name]]</div>
+                                                <div class="shortText">İşlemci Sınıfı: <b>[[item.cpuClass]]</b></div>
+                                                <meta itemprop="position" content="[[index]]"/>
+                                                <meta itemprop="url" content="http://www.google.com/search?q= [[item.name]]"/>
+                                            </div>
+                                            <div class="benchmark" itemprop="description">[[item.benchmarkscore]]</div>
+                                            <iron-icon icon$="[[getIconForItem(selected)]]"></iron-icon>
+                                        </div>
+                                        <div class="item-column item-column-invisible">
+                                           <div class="item-column-rowler">
+                                               <p>Core: [[item.cores]] Çekirdekli</p>
+                                               <p>Socket: [[item.socket]]</p>
+                                               <p>Clock Speed: [[item.clockSpeed]]</p>
+                                               <p>Maximum TDP: [[item.maxTDP]]</p>
+                                           </div>
+                                        </div>
+                                </div>
+                            </div>
+                        </template>
+                    </iron-list>
+                    <div class="loadingIndicator" style="color:#FF7800;" hidden$="[[!loading]]">
+                        <loader-pac></loader-pac>
+                    </div>
+                    <div class="empty-message" hidden$="[[!empty]]">
+                        Aradığınız kriterlerde sonuç bulunamadı.
+                    </div>
+            </iron-scroll-threshold>
+        </div>
+    </template>
+</dom-module>
+<script>
+    Polymer({
+        is: "kaldirirmi-cpus",
+        properties: {
+            hardware: {
+                type: String,
+                value: '',
+                notify: true
+            },
+            go: {
+                type: Boolean,
+                value: false,
+                notify: true
+            },
+            loading: {
+                type: Boolean,
+                value: true, 
+                notify: true
+            },
+            query: {
+                type: String,
+                value: '',
+                notify: true
+            },
+            order: {
+                type: String,
+                value: 'benchmarkscore',
+                notify: true,
+                observer: '_orderChanged'
+            },
+            criter:{
+                type: String,
+                value: 'desc',
+                notify: true,
+                observer: '_criterChanged'
+            },
+            page: {
+                type: Number,
+                value: 0,
+            },
+            itemperpage: {
+                type: Number,
+                value: 20
+            },
+            response: {
+                type: Object,
+                notify: true,
+                value: function () {
+                    return {
+                        cpus: [],
+                        gpus: []
+                    }
+                }
+            },
+            timeout: {
+                type: Number,
+                value: 1111,
+                notify: true
+            },
+
+            mobileSearchIcon:{
+                type: String,
+                value: 'search'
+            }
+        },
+        observers: [
+            '_resetListForQuery(query)'
+        ],
+        _loadMoreHardware: function () {
+            this.loading = true;
+            if (this.$.getcpuslist.lastRequest) {
+                this.$.getcpuslist.lastRequest.abort();
+            }
+            this.page++;
+            this.async(function () {
+                this.$.getcpuslist.generateRequest();
+            }, this.timeout);
+            this.timeout = 1111;
+
+        },
+        _response: function (event) {
+            //console.log('_response query => ' + this.query + ', order => '+ this.order + ', criter => ' + this.criter + ' , page => ' + this.page );
+            var response = event.detail.response;
+
+            if (response.cpus.length > 0) {
+                response.cpus.forEach(function (item) {
+                    this.push('response.cpus', item);
+                }, this);
+                this.$.cpusThreshold.clearTriggers();
+            }
+            else {
+                this.empty = true;
+            }
+            this.loading = false;
+        },
+        _orderChanged: function (newVal, oldVal) {
+            this._clearState();
+            this.debounce('_generateNewDataRequest', this._generateRequest, 400);
+        },
+        _resetListForQuery: function (query) {
+            if (query.trim().length >= 2 || query.trim() === '') {
+                this._clearState();
+                this.debounce('_generateNewDataRequest', this._generateRequest, 400);
+            }
+
+        },
+        _criterChanged: function (newVal, oldVal) {
+            this._clearState();
+            this.debounce('_generateNewDataRequest', this._generateRequest, 400);
+        },
+        _clearState: function () {
+            this.page = 0;
+            this.empty = false;
+            this.loading = true;
+            this.set('response.cpus', []);
+            this.set('response.gpus', []);
+        },
+        _generateRequest: function () {
+            if (this.$.getcpuslist.lastRequest) {
+                this.$.getcpuslist.lastRequest.abort();
+            }
+            this.page = 1;
+            this.$.getcpuslist.generateRequest();
+
+
+        },
+
+        _remakeLoaderTitle: function (title) {
+            if (title == 'gpu') return 'Ekran Kartları Yükleniyor..';
+            else if (title == 'cpu') return 'İşlemciler Yükleniyor..';
+        },
+        _remakeBrandImage: function(brand){
+            if (brand == 'AMD') { return '/assets/img/amd-icon.png' }
+            else { return '/assets/img/intel-icon.png'}
+        },
+        _remakeGraphicCardBrand: function(name){
+
+            if (name.includes('GeForce')) return '/assets/img/nvidia-icon.png';
+            else if (name.includes('Radeon')) return '/assets/img/amd-icon.png';
+            else if (name.includes('Intel')) return '/assets/img/intel-icon.png';
+            else { return '/assets/img/nvidia-icon.png'; }
+
+
+        },
+        getClassForItem: function (item, selected) {
+            return selected ? 'item expanded' : 'item';
+        },
+        getIconForItem: function (selected) {
+            return selected ? 'icons:expand-less' : 'icons:expand-more';
+        },
+        _mobileSearchIcon: function (event) {
+            $('#cpuMobileSearch #mobileSearchInput').toggleClass('inputOpened');
+
+            if (this.mobileSearchIcon == 'search') this.mobileSearchIcon = 'close';
+            else if (this.mobileSearchIcon == 'close') this.mobileSearchIcon = 'search';
+        }
+    });
+</script>

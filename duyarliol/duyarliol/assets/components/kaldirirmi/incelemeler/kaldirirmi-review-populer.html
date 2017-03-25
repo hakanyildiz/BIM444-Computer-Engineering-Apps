@@ -1,0 +1,77 @@
+﻿<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../kaldirirmi-styles/review/review-populer-styles.html">
+
+<dom-module id="kaldirirmi-review-populer">
+    <style is="custom-style" include="review-populer-styles"></style>
+ 
+  <template itemscope itemtype="http://schema.org/Review">
+    <iron-ajax auto="{{go}}" id="getpopulerreview" url="/h/main?fm=get-populer-review&a=[[currentreview]]" handle-as="json" on-response="_response" loading="{{loadingreview}}"></iron-ajax>
+    <h3 itemprop="about">Popüler İncelemeler</h3>
+      <meta itemprop="author" content="[[item.title]]"/>
+    <div itemscope itemtype="http://schema.org/Game" id="populerreviewlist">
+      <template is="dom-repeat" items="{{reviewcast}}" as="item">
+        <a itemprop="url" class="populerreview" href="/inceleme/[[item.url]]" onclick="load();">
+          <iron-image itemprop="thumbnailUrl" background src="[[item.picture]]" sizing="cover" alt="[[item.title]]" preload fade></iron-image>
+          <div itemprop="interactionCount" class="populerreview-viewcount"><iron-icon icon="image:remove-red-eye"></iron-icon>[[item.viewcount]]</div>
+          <div itemprop="name" class="populerreview-title"><h5>[[item.title]]</h5></div>
+        </a>
+      </template>
+    </div>
+
+    <div class="loadingIndicatorPopulerNews" style="color:#FF7800" hidden$="[[!loadingreview]]">
+      <spinner-cube-grid></spinner-cube-grid>
+    </div>
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: "kaldirirmi-review-populer",
+    properties: {
+      page: {
+        type: Number,
+        value: 0
+      },
+      itemperpage: {
+        type: Number,
+        value: 18
+      },
+      query: {
+        type: String,
+        value: ''
+      },
+      loadingreview: {
+        type: Boolean,
+        value: true,
+        notify: true
+      },
+      go: {
+        type: Boolean,
+        value: false,
+        notify: true
+      },
+      reviewcast: {
+        type: Array,
+        value: []
+      },
+      currentreview: {
+        type: Number,
+        value: 0,
+        notify: true
+      }
+    },
+    ready: function () {
+      //console.log('ready ' + this.loadingreview);
+      this.async(function () {
+        this.go = true;
+      }, 1000);
+    },
+    _response: function (a) {
+      //console.log('kaldirirmi-review-populer;_response' + a.detail.response.length);
+      if (a.detail.response.length > 0) {
+        a.detail.response.forEach(function (review) {
+          this.push('reviewcast', review);
+        }, this);
+      }
+    }
+  });
+</script>

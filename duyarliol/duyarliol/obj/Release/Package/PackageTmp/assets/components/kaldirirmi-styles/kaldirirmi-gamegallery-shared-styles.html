@@ -1,0 +1,56 @@
+﻿<dom-module id="kaldirirmi-gamegalley-shared-styles">
+    <template>
+        <style>
+              p, h1, h2, h3, h4, h5, h6 {
+            color: white;
+        }
+
+        #gallery-page {
+            height: 100%;
+             @apply(--layout-horizontal);
+            @apply(--layout-center-justified);
+        }
+
+        #gallery-page-header {
+            @apply(--layout-horizontal);
+            @apply(--layout-center);
+            /*background: #ff7800;*/
+            height: calc(2.1em + 1vmin);
+            padding: 0 1.8em;
+            position: absolute;
+              width:70%;
+            @apply(--shadow-elevation-12dp);
+            border-top:3px solid #222222;
+            border-bottom:3px solid #222222;
+        }
+
+            #gallery-page-header .left-directive {
+                display: flex;
+                flex-grow: 2;
+            }
+
+
+            #gallery-page-header .right-directive {
+                display: flex;
+            }
+
+        #gallery-page-container {
+            height: 100%;
+            margin: 0 auto;
+            width: 70%;
+        }
+        /* font of header navigations*/
+        #gallery-page #gallery-page-header div h1 {
+            font-size: 1.2em;
+            pointer-events: none;
+            font-weight: normal;
+        }
+
+        #gallery-page #gallery-page-header div paper-icon-button {
+            --paper-icon-button-ink-color: white;
+            color: white;
+            margin-top: 0.3em;
+        }
+        </style>
+    </template>
+</dom-module>

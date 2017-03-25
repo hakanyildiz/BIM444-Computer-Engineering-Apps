@@ -1,0 +1,47 @@
+﻿<dom-module id="kaldirirmi-login-button">
+    <template>
+        <style>
+            paper-button{
+                z-index: 9;
+                 min-width: 120px;
+                background: #222;
+                color: white;
+                text-transform: capitalize;
+            }
+            #loginTrigger {
+                display: none;
+            }
+
+            @media only screen and (min-width: 760px) {
+                #loginTrigger {
+                    display: inline-flex !important;
+                }
+
+                #loginTriggerMobile {
+                    display: none !important;
+                }
+            }
+        </style>
+
+        <paper-button id="loginTrigger" raised on-tap="_loginTrigger">
+            <iron-icon class="ic_heading" icon="apps"></iron-icon>
+            <span>Giriş Yap</span>
+        </paper-button>
+        <paper-button id="loginTriggerMobile" raised on-tap="_loginTriggerMobile">
+            <iron-icon class="ic_heading" icon="apps"></iron-icon>
+            <span>Giriş Yap</span>
+        </paper-button>
+
+    </template>
+    <script>
+        Polymer({
+            is: 'kaldirirmi-login-button',
+            _loginTrigger: function (e) {
+                    $('.nav-user').trigger("click");
+            },
+            _loginTriggerMobile: function (e) {
+                $('.mobile-login-btn').trigger("click");
+            }
+        });
+    </script>
+</dom-module>

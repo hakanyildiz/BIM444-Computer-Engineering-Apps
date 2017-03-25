@@ -1,0 +1,157 @@
+﻿<link rel="import" href="../../polymer/polymer.html" />
+<link rel="import" href="../../kaldirirmi/hottags/sc-swiper-hottags.html" />
+
+<dom-module id="kaldirirmi-hottags">
+    <style>
+        :host {
+           display: block; 
+
+        }
+
+        @font-face {
+            font-family: 'oktofont';
+            src: url('../../fonts/PressStart2P.ttf');
+        }
+
+        #hottagslist {
+            font-size: calc(0.20em + 1vmin);
+            color:black;
+            font-family: oktofont !important;
+            /*font-family: 'press_start_2pregular' !important;*/
+            width: 100%;
+            @apply(--layout-horizontal);
+            @apply(--layout-center);
+            
+        }
+        #hottagslist h3{
+                        font-size: calc(0.20em + 1vmin) !important;
+                        color: #fff;
+                        font-weight: 400;
+        }
+
+        #hottagslist a {
+            text-decoration: none;
+            background-color: inherit !important;
+            color:white !important;
+        }
+
+        #hottagslist a span{
+            font-size: calc(0.10em + 1vmin);
+            
+        }
+
+
+    </style>
+    <template>
+        <iron-ajax auto id="gethottags" method="get" url="/h/main?fm=get-hottags" handle-as="json" last-response="{{hottags}}" on-response="_response" loading="{{loadinggames}}"></iron-ajax>
+
+        <div id="hottagslist">
+            <!-- forum threads -->
+            <h3>forum</h3>
+            <sc-swiper-hottags>
+                <template is="dom-repeat" items="{{hottags.hotforumlist}}" as="item">
+                    <a href="/forum/[[item.titleurl]]/[[item.threadurl]]" target="_blank" onclick="load();">
+                        <span style="color:#000 !important">{{rebuildForumTitle(item.threadname)}}</span>
+                    </a>
+                </template>
+            </sc-swiper-hottags>
+            <!-- hotnews-->
+            <h3>haberler</h3>
+            <sc-swiper-hottags>
+                <template is="dom-repeat" items="{{hottags.hotnewslist}}" as="item">
+                    <a href="[[item.url]]" target="_blank"  onclick="load();">
+                        <span style="color:#000 !important">{{_remakeTitle(item.searchkeywords)}}</span>
+                        <!--<span style="color:#000 !important;">{{makeDottedTitle(item.title)}}</span>-->
+                    </a>
+                </template>
+            </sc-swiper-hottags>
+            <!-- hot reviews -->
+            <h3>incelemeler</h3>
+            <sc-swiper-hottags>
+                <template is="dom-repeat" items="{{hottags.hotreviewlist}}" as="item">
+                    <a href="[[item.url]]" target="_blank"  onclick="load();">
+                        <span style="color:#000 !important">{{_remakeTitle(item.searchkeywords)}} review</span>
+                    </a>
+                </template>
+            </sc-swiper-hottags>
+            <!-- hot game gallery -->
+            <h3>oyun galerileri</h3>
+            <sc-swiper-hottags>
+                <template is="dom-repeat" items="{{hottags.hotgamegallerylist}}" as="item">
+                    <a href="[[item.url]]" target="_blank"  onclick="load();">
+                        <span style="color:#000 !important">{{_remakeTitle(item.searchkeywords)}} gallery</span>
+                    </a>
+                </template>
+            </sc-swiper-hottags>
+        </div>
+
+        <div class="loadingIndicator" hidden$="[[!loadinggames]]">
+            <paper-spinner-lite active$="[[loadinggames]]"></paper-spinner-lite> Yükleniyor
+        </div>
+    </template>
+</dom-module>
+<script>
+    Polymer({
+        is: "kaldirirmi-hottags",
+        properties: {
+            page: {
+                type: Number,
+                value: 0
+            },
+            itemperpage: {
+                type: Number,
+                value: 18
+            },
+            query: {
+                type: String,
+                value: ''
+            },
+            loadinggames: {
+                type: Boolean,
+                value: false
+            },
+            games: {
+                type: Array,
+                value: []
+            }
+        },
+        _loadmoregame: function () {
+            console.log('_loadmoregame');
+
+            if (this.$.getgames.lastRequest) {
+                this.$.getgames.lastRequest.abort();
+            }
+
+            this.page++;
+            this.$.getgames.generateRequest();
+        },
+        _response: function (a) {
+            console.log(a.detail.response);
+        },
+        makeDottedTitle: function(title){
+            //if(title.length > 30) 
+            //{
+            //    return title.substring(0, 27) + '...';
+            //}
+            //else{
+            //    return title;
+            //}
+
+            return  '#' + title.split(" ")[0].toLowerCase();
+
+        },
+        rebuildForumTitle: function (title) {
+            if (title.length > 25) {
+                return '#' + title.substring(0, 22) + '...';
+            }
+            else {
+                return '#' + title.toLowerCase();
+            }
+                
+        },
+        _remakeTitle: function (title)
+        {
+            return title.toLowerCase();
+        }
+    });
+</script>

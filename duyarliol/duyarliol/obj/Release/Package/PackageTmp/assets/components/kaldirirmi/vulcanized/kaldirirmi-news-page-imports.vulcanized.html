@@ -1,0 +1,1438 @@
+<html><head><!--
+@license
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+--></head><body><div hidden="" by-polymer-bundler="">﻿
+﻿<dom-module id="kaldirirmi-nav-content" assetpath="../">
+    <template>
+        <style is="custom-style">
+            /* SVG wrap */
+            .svg-wrap {
+                position: absolute;
+                width: 0px;
+                height: 0px;
+                overflow: hidden;
+            }
+
+            nav a {
+                position: absolute;
+                top: 50%;
+                display: block;
+                outline: none;
+                text-align: left;
+                z-index: 1000;
+                -webkit-transform: translateY(-50%);
+                transform: translateY(-50%);
+            }
+
+                nav a.prev {
+                    left: 0;
+                }
+
+                nav a.next {
+                    right: 0;
+                }
+
+                nav a svg {
+                    display: block;
+                    margin: 0 auto;
+                    padding: 0;
+                }
+
+            /*--------------------*/
+            /* Reveal */
+            /*--------------------*/
+            .color-6 {
+                background-color: #af7ac4;
+            }
+
+            .nav-reveal a {
+                overflow: hidden;
+                width: 40px;
+                height: 120px;
+                white-space: nowrap;
+                background-color: rgba(255,120,0,0.6);
+                -webkit-transition: width 0.4s, background-color 0.4s;
+                transition: width 0.4s, background-color 0.4s;
+                -webkit-transition-timing-function: cubic-bezier(0.7,0,0.3,1);
+                transition-timing-function: cubic-bezier(0.7,0,0.3,1);
+                box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14),
+                  0 9px 46px 8px rgba(0, 0, 0, 0.12),
+                  0 11px 15px -7px rgba(0, 0, 0, 0.4);
+
+                }
+
+
+            .nav-reveal .icon-wrap {
+                position: absolute;
+                z-index: 100;
+                padding: 44px 4px;
+                width: 40px;
+            }
+
+            .nav-reveal a.prev .icon-wrap {
+                left: 0;
+            }
+
+            .nav-reveal a.next .icon-wrap {
+                right: 0;
+            }
+
+            .nav-reveal svg.icon {
+                fill: #ff7800;
+            }
+
+            .nav-reveal a:hover, svg.icon{
+                fill: white !important;
+            }
+
+
+            .nav-reveal div {
+                position: absolute;
+                top: 0;
+                padding: 0 40px;
+                /*width: 400px;*/
+                height: 100%;
+            }
+
+            .nav-reveal a.prev div {
+                left: 0;
+                padding-right: 150px;
+                text-align: right;
+            }
+
+            .nav-reveal a.next div {
+                right: 0;
+                padding-left: 150px;
+            }
+
+            .nav-reveal h3 {
+                position: relative;
+                margin: 0;
+                padding: 20px 0;
+                color: #fff;
+                font-weight: 300;
+                font-size: 1.15em;
+                line-height: 1.2;
+                transition: all ease-in-out .6s;
+            }
+
+            .nav-reveal div h3 span {
+                display: block;
+                padding-top: 10px;
+                color: #542568;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                font-weight: 700;
+                font-size: 50%;
+            }
+
+            .nav-reveal img {
+                position: absolute;
+                top: 10px;
+                height: 100px;
+                width: 130px;
+            }
+
+            .nav-reveal a.prev img {
+                right: 10px;
+            }
+
+            .nav-reveal a.next img {
+                left: 10px;
+            }
+
+            .nav-reveal a:hover {
+                width: 400px;
+                background-color: #ff7800;
+                white-space: normal;
+            }
+
+            @media screen and (max-width: 520px) {
+                .nav-slide a.prev,
+                .nav-reveal a.prev,
+                .nav-doubleflip a.prev,
+                .nav-fillslide a.prev,
+                .nav-growpop a.prev {
+                    -webkit-transform-origin: 0% 50%;
+                    transform-origin: 0% 50%;
+                }
+
+                .nav-slide a.next,
+                .nav-reveal a.next,
+                .nav-doubleflip a.next,
+                .nav-fillslide a.next,
+                .nav-growpop a.next {
+                    -webkit-transform-origin: 100% 50%;
+                    transform-origin: 100% 50%;
+                }
+
+                .nav-slide a,
+                .nav-reveal a,
+                .nav-doubleflip a,
+                .nav-fillslide a {
+                    -webkit-transform: scale(0.6);
+                    transform: scale(0.6);
+                }
+
+                .nav-growpop a {
+                    -webkit-transform: translateY(-50%) scale(0.6);
+                    transform: translateY(-50%) scale(0.6);
+                }
+            }
+        </style>
+        <div class="svg-wrap">
+            <svg width="64" height="64" viewBox="0 0 64 64">
+                <path id="arrow-left-1" d="M46.077 55.738c0.858 0.867 0.858 2.266 0 3.133s-2.243 0.867-3.101 0l-25.056-25.302c-0.858-0.867-0.858-2.269 0-3.133l25.056-25.306c0.858-0.867 2.243-0.867 3.101 0s0.858 2.266 0 3.133l-22.848 23.738 22.848 23.738z"></path>
+            </svg>
+            <svg width="64" height="64" viewBox="0 0 64 64">
+                <path id="arrow-right-1" d="M17.919 55.738c-0.858 0.867-0.858 2.266 0 3.133s2.243 0.867 3.101 0l25.056-25.302c0.858-0.867 0.858-2.269 0-3.133l-25.056-25.306c-0.858-0.867-2.243-0.867-3.101 0s-0.858 2.266 0 3.133l22.848 23.738-22.848 23.738z"></path>
+            </svg>
+            <svg width="64" height="64" viewBox="0 0 64 64">
+                <path id="arrow-left-2" d="M26.667 10.667q1.104 0 1.885 0.781t0.781 1.885q0 1.125-0.792 1.896l-14.104 14.104h41.563q1.104 0 1.885 0.781t0.781 1.885-0.781 1.885-1.885 0.781h-41.563l14.104 14.104q0.792 0.771 0.792 1.896 0 1.104-0.781 1.885t-1.885 0.781q-1.125 0-1.896-0.771l-18.667-18.667q-0.771-0.813-0.771-1.896t0.771-1.896l18.667-18.667q0.792-0.771 1.896-0.771z"></path>
+            </svg>
+            <svg width="64" height="64" viewBox="0 0 64 64">
+                <path id="arrow-right-2" d="M37.333 10.667q1.125 0 1.896 0.771l18.667 18.667q0.771 0.771 0.771 1.896t-0.771 1.896l-18.667 18.667q-0.771 0.771-1.896 0.771-1.146 0-1.906-0.76t-0.76-1.906q0-1.125 0.771-1.896l14.125-14.104h-41.563q-1.104 0-1.885-0.781t-0.781-1.885 0.781-1.885 1.885-0.781h41.563l-14.125-14.104q-0.771-0.771-0.771-1.896 0-1.146 0.76-1.906t1.906-0.76z"></path>
+            </svg>
+            <svg width="64" height="64" viewBox="0 0 64 64">
+                <path id="arrow-left-3" d="M44.797 17.28l0.003 29.44-25.6-14.72z"></path>
+            </svg>
+            <svg width="64" height="64" viewBox="0 0 64 64">
+                <path id="arrow-right-3" d="M19.203 17.28l-0.003 29.44 25.6-14.72z"></path>
+            </svg>
+            <svg width="64" height="64" viewBox="0 0 64 64">
+                <path id="arrow-left-4" d="M15.946 48l0.003-10.33 47.411 0.003v-11.37h-47.414l0.003-10.304-15.309 16z"></path>
+            </svg>
+            <svg width="64" height="64" viewBox="0 0 64 64">
+                <path id="arrow-right-4" d="M48.058 48l-0.003-10.33-47.414 0.003v-11.37h47.418l-0.003-10.304 15.306 16z"></path>
+            </svg>
+            <svg width="64" height="64" viewBox="0 0 64 64">
+                <path id="arrow-left-5" d="M48 10.667q1.104 0 1.885 0.781t0.781 1.885-0.792 1.896l-16.771 16.771 16.771 16.771q0.792 0.792 0.792 1.896t-0.781 1.885-1.885 0.781q-1.125 0-1.896-0.771l-18.667-18.667q-0.771-0.771-0.771-1.896t0.771-1.896l18.667-18.667q0.771-0.771 1.896-0.771zM32 10.667q1.104 0 1.885 0.781t0.781 1.885-0.792 1.896l-16.771 16.771 16.771 16.771q0.792 0.792 0.792 1.896t-0.781 1.885-1.885 0.781q-1.125 0-1.896-0.771l-18.667-18.667q-0.771-0.771-0.771-1.896t0.771-1.896l18.667-18.667q0.771-0.771 1.896-0.771z"></path>
+            </svg>
+            <svg width="64" height="64" viewBox="0 0 64 64">
+                <path id="arrow-right-5" d="M29.333 10.667q1.104 0 1.875 0.771l18.667 18.667q0.792 0.792 0.792 1.896t-0.792 1.896l-18.667 18.667q-0.771 0.771-1.875 0.771t-1.885-0.781-0.781-1.885q0-1.125 0.771-1.896l16.771-16.771-16.771-16.771q-0.771-0.771-0.771-1.896 0-1.146 0.76-1.906t1.906-0.76zM13.333 10.667q1.104 0 1.875 0.771l18.667 18.667q0.792 0.792 0.792 1.896t-0.792 1.896l-18.667 18.667q-0.771 0.771-1.875 0.771t-1.885-0.781-0.781-1.885q0-1.125 0.771-1.896l16.771-16.771-16.771-16.771q-0.771-0.771-0.771-1.896 0-1.146 0.76-1.906t1.906-0.76z"></path>
+            </svg>
+        </div>
+
+        <iron-ajax auto="" id="iaGetNavContents" debounce="3000" url="/h/main?fm=get-nav-contents&amp;a=[[dataid]]&amp;b=[[datatable]]" handle-as="json" on-response="_onResponse"></iron-ajax>
+        <nav class="nav-reveal">
+            <a class="prev" href$="{{_remakeUrl(response.left.url, datatable)}}">
+                <span class="icon-wrap"><svg class="icon" width="32" height="32" viewBox="0 0 64 64"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-left-3"></use></svg></span>                <div>
+                    <h3>[[response.left.title]]</h3>
+                    <img src$="{{_remakePicture(response.left.picture, datatable)}}" alt="[[response.left.title]]">
+                </div>
+            </a>
+
+            <template is="dom-if" if="[[!end]]">
+                <a class="next" href$="{{_remakeUrl(response.right.url, datatable)}}">
+                    <span class="icon-wrap"><svg class="icon" width="32" height="32" viewBox="0 0 64 64"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-right-3"></use></svg></span>                <div>
+                        <h3>[[response.right.title]]</h3>
+                        <img src$="{{_remakePicture(response.right.picture, datatable)}}" alt="[[response.right.title]]">
+                    </div>
+                </a>
+            </template>
+        </nav>
+
+    </template>
+    <script>
+        Polymer({
+            is: 'kaldirirmi-nav-content',
+            properties: {
+                datatable: {
+                    type: String,
+                    value: "",
+                    notify: true
+                },
+                dataid: {
+                    type: Number,
+                    value: 0,
+                    notify: true
+                },
+                response: {
+                    type: Array,
+                    notify: true,
+                    value: function(){
+                        return { left: null, right: null }
+                    }
+                },
+                end: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                }
+            },
+            _onResponse: function (event) {
+                var response = event.detail.response;
+                //console.log(response);
+                var index = 0;
+
+                if(event.detail.response.length == 1)
+                {
+                    this.end = true;
+                }
+                response.forEach(function (data) {
+                    if (index == 0) {
+                        this.set('response.left', data);
+                    }
+                    else if (index == 1) {
+                        this.set('response.right', data);
+                    }
+                    index++;
+                }, this);
+
+            },
+            _remakeUrl: function (url, table) {
+                
+                if (table == 'kalnews') {
+                    return '/haber/' + url;
+                }
+                else if (table == 'kalreviews') {
+                    return '/inceleme/' + url;
+                }
+
+            },
+            _remakePicture: function (picture, table) {
+                if (table == 'kalnews') {
+                    return 'http://cdn.kaldirirmi.com/images/news/' + picture;
+                }
+                else if (table == 'kalreviews') {
+                    return 'http://cdn.kaldirirmi.com/images/reviews/' + picture;
+                }
+            }
+
+        });
+    </script>
+</dom-module>
+﻿<link rel="import" href="../../polymer/polymer.html">
+﻿<dom-module id="news-populer-styles" assetpath="../../kaldirirmi-styles/news/">
+    <template>
+        <style>
+                   :host {
+                       display: block;
+                       margin-bottom: 50px;
+                   }
+
+                   #populernewslist {
+                       @apply(--layout-horizontal);
+                       @apply(--layout-center-center);
+                       flex-flow: row wrap;
+                       -ms-flex-flow: row wrap;
+                       width: 100%;
+                       height: auto;
+                       background: #222;
+                   }
+
+                   .populernews {
+                       @apply(--layout-vertical);
+                       @apply(--layout-center);
+                       margin: 5px;
+                       background-color: #222;
+                       transition: all ease .2s;
+                       cursor: pointer;
+                       width: 100%;
+                       position: relative;
+                       text-decoration: none;
+                       box-shadow: 0 12px 16px 1px rgba(0, 0, 0, 0.14), 0 4px 22px 3px rgba(0, 0, 0, 0.12), 0 6px 7px -4px rgba(0, 0, 0, 0.4);
+                   }
+
+                       .populernews iron-image {
+                           width: 100%;
+                           height: 100%;
+                           pointer-events: none;
+                           transition: all ease-in .2s;
+                           opacity: .7;
+                           background-color: #222;
+                       }
+
+                       .populernews .populernews-title {
+                           @apply(--layout-horizontal);
+                           @apply(--layout-center);
+                           color: white;
+                           height: 35%;
+                           background: #ff7800;
+                           width: 100%;
+                       }
+
+                       .populernews .populernews-viewcount {
+                           color: white;
+                           position: absolute;
+                           top: 0;
+                           right: 0;
+                           padding: 5px;
+                       }
+
+                       .populernews .populernews-title h5 {
+                           padding: 5px;
+                           font-weight: 100;
+                           font-size: calc(0.55em + 1vmin) !important;
+                       }
+
+                   /*.populernews:hover iron-image[background] {
+                   opacity: 1;
+                 }*/
+
+                   .loadingIndicator {
+                       text-align: center;
+                       height: 40px;
+                       color: white;
+                   }
+
+                       .loadingIndicator paper-spinner-lite {
+                           width: 20px;
+                           height: 20px;
+                           margin-right: 10px;
+                           --paper-spinner-color: #ff7800;
+                       }
+
+                   h3 {
+                       font-weight: 100;
+                       color: white;
+                       padding: 10px;
+                       background-color: #ff7800;
+                   }
+
+                   /*shine effect*/
+                   populernews:hover {
+                   }
+                   /* generated element for shine effect.
+            * normal state is semi-transparent
+            * white but with zero width. Set no
+            * transition here for no mouse-leave
+            * animations. Otherwise the effect
+            * will play in reverse when your mouse
+            * leaves the element
+            */
+                   .populernews:after {
+                       content: "";
+                       position: absolute;
+                       top: 0px;
+                       /*left: 0px;*/
+                       width: 0%;
+                       height: 100%;
+                       background-color: rgba(255,120,0,0.4);
+                       -webkit-transition: none;
+                       -moz-transition: none;
+                       -ms-transition: none;
+                       -o-transition: none;
+                       transition: none;
+                   }
+                   /* on hover we animate the width to
+            * 100% and opacity to 0 so the element
+            * grows and fades out
+            */
+                   .populernews:hover:after {
+                       width: 100%;
+                       background-color: rgba(255,120,0,0.1);
+                       -webkit-transition: all 0.3s ease-out;
+                       -moz-transition: all 0.3s ease-out;
+                       -ms-transition: all 0.3s ease-out;
+                       -o-transition: all 0.3s ease-out;
+                       transition: all 0.3s ease-out;
+                   }
+
+                   /*mobile first*/
+                   .populernews {
+                       height: 180px;
+                   }
+                   /* media query for images */
+                   /* yazı ayarları anasayfasından geliyor */
+                   /* Desktops and laptops ----------- */
+
+                   @media only screen and (min-width : 768px) { /* zoom %175 */
+                       .populernews {
+                           height: 260px;
+                       }
+                   }
+
+                   @media only screen and (min-width : 1024px) { /* zoom %175 */
+                       .populernews {
+                           height: 195px;
+                       }
+
+                           .populernews .populernews-title {
+                               height: 27%;
+                           }
+
+                               .populernews .populernews-title h5 {
+                                   font-size: calc(0.35em + 1vmin) !important;
+                               }
+                   }
+
+                   @media only screen and (min-width : 1224px) { /* zoom %150 */
+                       .populernews {
+                           height: 215px;
+                       }
+                   }
+
+                   @media only screen and (min-width : 1440px) { /* zoom % 125*/
+                       .populernews {
+                           height: 230px;
+                       }
+                   }
+
+                   @media only screen and (min-width : 1640px) { /* zoom %110*/
+                       .populernews {
+                           height: 280px;
+                       }
+                   }
+                   /* Large screens ----------- */
+                   @media only screen and (min-width : 1824px) {
+                       .populernews {
+                           height: 300px;
+                       }
+                   }
+        </style>
+    </template>
+</dom-module>
+
+<dom-module id="kaldirirmi-news-populer" assetpath="../haberler/">
+    <style is="custom-style" include="news-populer-styles"></style>
+ 
+    <template itemscope="" itemtype="http://schema.org/Blog">
+        <iron-ajax auto="{{go}}" id="getpopulernews" url="/h/main?fm=get-populer-news&amp;a=[[currentnews]]" handle-as="json" on-response="_response" loading="{{loadingnews}}"></iron-ajax>
+        <h3 itemprop="about">Popüler Haberler</h3>
+        <div id="populernewslist" itemscope="" itemtype="http://schema.org/Game">
+            <template is="dom-repeat" items="{{newscast}}" as="item">
+                <a itemprop="url" class="populernews" href="/haber/[[item.url]]" onclick="load();">
+                    <iron-image itemprop="thumbnailUrl" background="" src="[[item.picture]]" sizing="cover" alt="[[item.title]]" preload="" fade=""></iron-image>
+                    <div itemprop="interactionCount" class="populernews-viewcount"><iron-icon icon="image:remove-red-eye"></iron-icon>[[item.viewcount]]</div>
+                    <div itemprop="name" class="populernews-title"><h5>[[item.title]]</h5></div>
+                </a>
+            </template>
+        </div>
+
+        <div class="loadingIndicatorPopulerNews" style="color:#FF7800" hidden$="[[!loadingnews]]">
+            <spinner-cube-grid></spinner-cube-grid>
+        </div>
+    </template>
+</dom-module>
+<script>
+    Polymer({
+        is: "kaldirirmi-news-populer",
+        properties: {
+            page: {
+                type: Number,
+                value: 0
+            },
+            itemperpage: {
+                type: Number,
+                value: 18
+            },
+            query: {
+                type: String,
+                value: ''
+            },
+            loadingnews: {
+                type: Boolean,
+                value: true,
+                notify: true
+            },
+            go: {
+                type: Boolean,
+                value: false,
+                notify: true
+            },
+            newscast: {
+                type: Array,
+                value: []
+            },
+            currentnews: {
+                type: Number,
+                value: 0,
+                notify: true
+            }
+        },
+        ready: function () {
+            //console.log('ready ' + this.loadingnews);
+            this.async(function () {
+                this.go = true;
+            }, 1000);
+        },
+        _response: function (a) {
+            //console.log('kaldirirmi-news-populer;_response' + a.detail.response.length);
+            if (a.detail.response.length > 0) {
+                a.detail.response.forEach(function (news) {
+                    this.push('newscast', news);
+                }, this);
+            }
+        }
+    });
+</script>
+﻿
+﻿<link rel="import" href="/assets/components/polymer/polymer.html">
+
+<dom-module id="spinner-cube-grid" assetpath="../../paper-spinner/">
+  <template>
+    <style is="custom-style">
+        .sk-cube-grid {
+          width: 40px;
+          height: 40px;
+          margin: 0 auto;
+          /*
+      * Spinner positions
+      * 1 2 3
+      * 4 5 6
+      * 7 8 9
+      */
+        }
+
+          .sk-cube-grid .sk-cube {  
+            width: 33.33%;
+            height: 33.33%;
+            background-color: #FF7800;
+            float: left;
+            -webkit-animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
+            animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
+          }
+
+          .sk-cube-grid .sk-cube1 {
+            -webkit-animation-delay: 0.2s;
+            animation-delay: 0.2s;
+          }
+
+          .sk-cube-grid .sk-cube2 {
+            -webkit-animation-delay: 0.3s;
+            animation-delay: 0.3s;
+          }
+
+          .sk-cube-grid .sk-cube3 {
+            -webkit-animation-delay: 0.4s;
+            animation-delay: 0.4s;
+          }
+
+          .sk-cube-grid .sk-cube4 {
+            -webkit-animation-delay: 0.1s;
+            animation-delay: 0.1s;
+          }
+
+          .sk-cube-grid .sk-cube5 {
+            -webkit-animation-delay: 0.2s;
+            animation-delay: 0.2s;
+          }
+
+          .sk-cube-grid .sk-cube6 {
+            -webkit-animation-delay: 0.3s;
+            animation-delay: 0.3s;
+          }
+
+          .sk-cube-grid .sk-cube7 {
+            -webkit-animation-delay: 0.0s;
+            animation-delay: 0.0s;
+          }
+
+          .sk-cube-grid .sk-cube8 {
+            -webkit-animation-delay: 0.1s;
+            animation-delay: 0.1s;
+          }
+
+          .sk-cube-grid .sk-cube9 {
+            -webkit-animation-delay: 0.2s;
+            animation-delay: 0.2s;
+          }
+
+        @-webkit-keyframes sk-cubeGridScaleDelay {
+          0%, 70%, 100% {
+            -webkit-transform: scale3D(1, 1, 1);
+            transform: scale3D(1, 1, 1);
+          }
+
+          35% {
+            -webkit-transform: scale3D(0, 0, 1);
+            transform: scale3D(0, 0, 1);
+          }
+        }
+
+        @keyframes sk-cubeGridScaleDelay {
+          0%, 70%, 100% {
+            -webkit-transform: scale3D(1, 1, 1);
+            transform: scale3D(1, 1, 1);
+          }
+
+          35% {
+            -webkit-transform: scale3D(0, 0, 1);
+            transform: scale3D(0, 0, 1);
+          }
+        }
+    </style><!-- sk-folding-cube styless..-->
+    
+    <!-- dom elements here-->
+    <div class="sk-cube-grid">
+      <div class="sk-cube sk-cube1"></div>
+      <div class="sk-cube sk-cube2"></div>
+      <div class="sk-cube sk-cube3"></div>
+      <div class="sk-cube sk-cube4"></div>
+      <div class="sk-cube sk-cube5"></div>
+      <div class="sk-cube sk-cube6"></div>
+      <div class="sk-cube sk-cube7"></div>
+      <div class="sk-cube sk-cube8"></div>
+      <div class="sk-cube sk-cube9"></div>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: "spinner-cube-grid",
+     
+    });
+
+  </script>
+
+
+</dom-module>
+
+﻿<dom-module id="news-related-game-styles" assetpath="../../kaldirirmi-styles/news/">
+    <template>
+        <style>
+            :host {
+                display: block;
+                margin-bottom: 50px;
+            }
+
+            #relatedgamelist {
+                @apply(--layout-horizontal);
+                @apply(--layout-center-center);
+                flex-flow: row wrap;
+                -ms-flex-flow: row wrap;
+                width: 90%;
+                height: auto;
+                background: #222;
+                margin-top: 30px;
+            }
+
+            .relatedgame {
+                @apply(--layout-vertical);
+                @apply(--layout-center);
+                /*margin: 5px;*/
+                background-color: #222;
+                transition: all ease .2s;
+                cursor: pointer;
+                width: 100%;
+                height: 100%;
+                position: relative;
+                text-decoration: none;
+            }
+
+                .relatedgame:hover iron-image[background] {
+                    opacity: 1;
+                }
+
+
+            /* card beybi */
+            .card {
+                display: inline-block;
+                position: relative;
+                width: 100%;
+                margin: 25px 0px 0px 0px;
+                box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
+                border-radius: 3px;
+                /* color: rgba(0,0,0, 0.87); */
+                background: #fff;
+            }
+
+            .card-stats .card-header {
+                float: left;
+                text-align: center;
+            }
+
+            .card [data-background-color] {
+                color: #FFFFFF;
+            }
+
+            .card [data-background-color="orange"] {
+                background: linear-gradient(60deg, #ffa726, #fb8c00);
+                box-shadow: 0 12px 20px -10px rgba(255, 152, 0, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(255, 152, 0, 0.2);
+            }
+
+            .card .card-header {
+                box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.42), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+                margin: -20px 15px 0;
+                border-radius: 4px;
+                background-color: #999999;
+                margin-bottom: 20px;
+            }
+
+            .card-stats .card-content {
+                text-align: right;
+                padding-top: 10px;
+            }
+
+            .card .card-content {
+                padding: 15px 20px;
+            }
+
+            .card .card-content-category:not([class*="text-"]) {
+                color: #fb8c00;
+                font-weight: 500;
+            }
+
+            p {
+                margin: 0 0 10px;
+            }
+
+            .card-stats .card-content {
+                color: black;
+                margin: 0;
+            }
+
+            .card-content-title {
+                color: black;
+            }
+
+            .card .card-footer {
+                margin: 0 20px 10px;
+                padding-top: 10px;
+                border-top: 1px solid #eeeeee;
+            }
+
+            .card-header .relatedgame iron-image {
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                transition: all ease-in .2s;
+                opacity: .7;
+                background-color: #222;
+            }
+
+            .star {
+                color: #fb8c00;
+            }
+
+            .game-rating {
+                float: right;
+            }
+
+
+
+
+            /* related news */
+
+            #relatednewspanel {
+                margin-bottom: 15px;
+                border-top: 1px solid #eeeeee;
+                padding-top: 10px;
+                @apply(--layout-horizontal);
+                flex-flow: row wrap;
+                -ms-flex-flow: row wrap;
+                width: 100%;
+                height: auto;
+            }
+
+                #relatednewspanel .relatedpanel-title {
+                    padding-left: 15px;
+                    margin: 0;
+                    padding-bottom: 5px;
+                    font-weight: 400;
+                    color: #fb8c00;
+                }
+
+                    #relatednewspanel .relatedpanel-title b {
+                        color: black;
+                        font-weight: 500;
+                    }
+
+            #relatednewslist {
+                @apply(--layout-vertical);
+                @apply(--layout-center);
+                align-items: flex-start !important;
+                justify-content: flex-start !important;
+                flex-flow: row wrap;
+                -ms-flex-flow: row wrap;
+                width: 100%;
+                height: auto;
+            }
+
+            .relatednews {
+                @apply(--layout-vertical);
+                @apply(--layout-center);
+                margin: 2px;
+                background-color: #222;
+                transition: all ease .2s;
+                cursor: pointer;
+                position: relative;
+                text-decoration: none;
+            }
+
+                .relatednews iron-image {
+                    width: 100%;
+                    height: 190px;
+                    pointer-events: none;
+                    transition: all ease-in .2s;
+                    opacity: .7;
+                    background-color: #222;
+                }
+
+
+                .relatednews .relatednews-title {
+                    @apply(--layout-horizontal);
+                    @apply(--layout-center);
+                    color: white;
+                    background: #ff7800;
+                    width: 100%;
+                }
+
+                    .relatednews .relatednews-title h6 {
+                        padding: 5px;
+                        font-weight: 100;
+                        font-size: calc(0.55em + 1vmin) !important;
+                    }
+
+                .relatednews:hover iron-image[background] {
+                    opacity: 1;
+                }
+
+
+            /* media query for images */
+            /* yazı ayarları anasayfasından geliyor */
+
+            /* MOBILE FIRST */
+            .card-header {
+                height: calc(6em + 1vmin);
+                width: 53%;
+                padding: 8px;
+            }
+
+            #relatednewslist .relatednews {
+                width: 90%;
+                height: calc(10em + 1vmin);
+                margin: 0 auto;
+            }
+
+                #relatednewslist .relatednews .relatednews-title {
+                    height: 35%;
+                }
+
+            @media only screen and (min-width : 768px) {
+                .card-header {
+                    height: calc(9em + 1vmin);
+                }
+
+                #relatednewslist .relatednews {
+                    width: 48%;
+                    height: calc(10em + 1vmin);
+                    margin: 0px 5px;
+                }
+            }
+
+            @media only screen and (min-width : 1024px) {
+                .card-header {
+                    height: calc(6em + 1vmin);
+                }
+
+                .relatednews .relatednews-title h6 {
+                    font-size: calc(0.25em + 1vmin) !important;
+                }
+            }
+
+            @media only screen and (min-width : 1024px) { /* zoom %175 */
+                /* game big image! */
+                .card-header {
+                    height: 180px;
+                    width: 50%;
+                    padding: 8px;
+                }
+                /* ilgili haberler kısmı */
+                #relatednewslist {
+                    flex-direction: column !important;
+                }
+
+                    #relatednewslist .relatednews {
+                        width: 32%;
+                        height: 140px;
+                    }
+
+                        #relatednewslist .relatednews .relatednews-title {
+                            height: 26%;
+                        }
+            }
+
+            @media only screen and (min-width : 1224px) { /* zoom %150 */
+                .card-header {
+                    height: 210px;
+                    width: 55%;
+                    padding: 10px;
+                }
+                /* ilgili haberler kısmı */
+                #relatednewslist .relatednews {
+                    height: 165px;
+                }
+
+                    #relatednewslist .relatednews .relatednews-title {
+                        height: 26%;
+                    }
+            }
+
+            @media only screen and (min-width : 1440px) { /* zoom % 125*/
+                .card-header {
+                    height: 250px;
+                    width: 57%;
+                    padding: 12px;
+                }
+                /* ilgili haberler kısmı */
+                #relatednewslist .relatednews {
+                    height: 180px;
+                }
+
+                    #relatednewslist .relatednews .relatednews-title {
+                        height: 26%;
+                    }
+            }
+
+            @media only screen and (min-width : 1640px) { /* zoom %110*/
+                .card-header {
+                    height: 270px;
+                    width: 60%;
+                    padding: 14px;
+                }
+                /* ilgili haberler kısmı */
+                #relatednewslist .relatednews {
+                    height: 190px;
+                }
+
+                    #relatednewslist .relatednews .relatednews-title {
+                        height: 26%;
+                    }
+            }
+            /* Large screens ----------- */
+            @media only screen and (min-width : 1824px) {
+                .card-header {
+                    padding: 15px;
+                    height: 300px;
+                    width: 65%;
+                }
+
+                /* ilgili haberler kısmı */
+                #relatednewslist .relatednews {
+                    height: 200px;
+                }
+
+                    #relatednewslist .relatednews .relatednews-title {
+                        height: 26%;
+                    }
+            }
+        </style>
+    </template>
+</dom-module>
+<dom-module id="kaldirirmi-related-game" assetpath="../haberler/">
+    <style is="custom-style" include="news-related-game-styles"></style>
+    <template>
+        <iron-ajax auto="" id="getrelatedgame" url="/h/main?fm=get-related-game-with-news&amp;a=[[gamename]]" handle-as="json" on-response="_responseGame"></iron-ajax>
+        <iron-ajax auto="" id="getrelatednews" url="/h/main?fm=get-related-news-with-news&amp;a=[[gamename]]&amp;b=[[currentnewsid]]" handle-as="json" on-response="_responseNews"></iron-ajax>
+
+        <div id="relatedgamelist">
+            <template is="dom-repeat" items="{{relatedgame}}" as="item">
+                <div class="card card-stats">
+                    <div class="card-header" data-background-color="orange">
+                        <a class="relatedgame" href="/oyun/[[item.url]]" onclick="load();">
+                            <iron-image background="" src="[[item.background]]" sizing="cover" alt="[[item.name]]" preload="" fade=""></iron-image>
+                            <!--<div class="relatedgame-title"><h4>[[item.name]]</h4></div>-->
+                        </a>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-content-category">İlgili Oyun</h3>
+                        <h2 class="card-content-title">[[item.name]]</h2>
+                    </div>
+                    <div class="card-footer">
+                        <div class="stats">
+                            <div class="game-rating">
+                                <iron-icon class="star" icon="star"></iron-icon>
+                                <iron-icon class="star" icon="star"></iron-icon>
+                                <iron-icon class="star" icon="star"></iron-icon>
+                                <iron-icon class="star" icon="star"></iron-icon>
+                                <iron-icon class="star" icon="star"></iron-icon>
+                            </div>
+                        </div>
+                    </div><!-- card footer -->
+
+
+
+
+                    <div id="relatednewspanel">
+                        <template is="dom-if" if="[[newsActive]]">
+                            <h3 class="relatedpanel-title"><b>{{gametitle}}</b> ile İlgili Haberler</h3>
+                            <div id="relatednewslist">
+                                <template is="dom-repeat" items="{{relatednews}}" as="item">
+                                    <a class="relatednews" href="/haber/[[item.url]]" onclick="load();">
+                                        <iron-image background="" src="[[item.picture]]" sizing="cover" alt="[[item.title]]" preload="" fade=""></iron-image>
+                                        <div class="relatednews-title"><h6>[[item.title]]</h6></div>
+                                    </a>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+
+                </div>
+
+                <!--<a class="relatedgame" href="/oyun/[[item.url]]" onclick="load();">
+                  <iron-image background src="[[item.background]]" sizing="cover" alt="[[item.name]]" preload fade></iron-image>
+                  <div class="relatedgame-title"><h4>[[item.name]]</h4></div>
+                </a>-->
+
+
+
+            </template>
+        </div>
+
+
+
+
+    </template>
+</dom-module>
+<script>
+    Polymer({
+        is: "kaldirirmi-related-game",
+        properties: {
+            relatedgame: {
+                type: Array,
+                value: []
+            },
+            relatednews: {
+                type: Array,
+                value: []
+            },
+            gametitle: {
+                type: String,
+                value: '',
+                notify: true
+            },
+            newsActive: {
+                type: Boolean,
+                value: false,
+                notify: true
+            }
+
+        },
+
+        _responseGame: function (a) {
+            if (a.detail.response.length > 0) {
+                a.detail.response.forEach(function (game) {
+                    this.push('relatedgame', game);
+                    this.gametitle = game.name;
+                }, this);
+
+            }
+        },
+        _responseNews: function (a) {
+
+            if (a.detail.response.length > 0) {
+                this.newsActive = true;
+                a.detail.response.forEach(function (news) {
+                    this.push('relatednews', news);
+                }, this);
+
+            }
+
+        }
+    });
+</script>
+﻿
+<script>/*
+Copyright (c) 2016 Niklas Knaack
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+
+! function () {
+    function t(t, e) {
+        function n() {
+            A = document.createElementNS(E, "svg"), A.addEventListener("mousemove", v), t.appendChild(A), p.bgDraw && (P = document.createElementNS(E, "rect"), P.setAttribute("x", 0), P.setAttribute("y", 0), P.setAttribute("fill", p.bgColor), A.appendChild(P)), a(), i(), d(), window.addEventListener("resize", y)
+        }
+
+        function i() {
+            var e = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
+                n = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight,
+                i = e,
+                r = n;
+            p.width.toString().indexOf("%") > 0 || p.height.toString().indexOf("%") > 0 ? (i = Math.round(t.offsetWidth / 100 * parseInt(p.width)), r = Math.round(i / 100 * parseInt(p.height))) : (i = parseInt(p.width), r = parseInt(p.height)), i >= e && (i = e), r >= n && (r = n), b = {
+                x: i / 2,
+                y: r / 2
+            }, O.x = p.speed / b.x, O.y = p.speed / b.y, w = i >= r ? r / 100 * parseInt(p.radius) : i / 100 * parseInt(p.radius), 1 > w && (w = 1), x = w / 2, x < p.radiusMin && (x = p.radiusMin, w = 2 * x), A.setAttribute("width", i), A.setAttribute("height", r), p.bgDraw && (P.setAttribute("width", i), P.setAttribute("height", r)), o(x)
+        }
+
+        function o(t) {
+            for (var e = 0, n = S.length; n > e; e++) r(S[e], t)
+        }
+
+        function r(t, e) {
+            var n = t.vectorPosition.x - C.x,
+                i = t.vectorPosition.y - C.y,
+                o = t.vectorPosition.z - C.z,
+                r = Math.sqrt(n * n + i * i + o * o);
+            t.vectorPosition.x /= r, t.vectorPosition.y /= r, t.vectorPosition.z /= r, t.vectorPosition.x *= e, t.vectorPosition.y *= e, t.vectorPosition.z *= e
+        }
+
+        function s(t, e, n, i, o) {
+            var r = {};
+            return r.element = document.createElementNS(E, "text"), r.element.setAttribute("x", 0), r.element.setAttribute("y", 0), r.element.setAttribute("fill", p.fontColor), r.element.setAttribute("font-family", p.fontFamily), r.element.setAttribute("font-size", p.fontSize), r.element.setAttribute("font-weight", p.fontWeight), r.element.setAttribute("font-style", p.fontStyle), r.element.setAttribute("font-stretch", p.fontStretch), r.element.setAttribute("text-anchor", "middle"), r.element.textContent = p.fontToUpperCase ? e.label.toUpperCase() : e.label, r.link = document.createElementNS(E, "a"), r.link.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", e.url), r.link.setAttribute("target", e.target), r.link.addEventListener("mouseover", f, !0), r.link.addEventListener("mouseout", h, !0), r.link.appendChild(r.element), r.index = t, r.mouseOver = !1, r.vectorPosition = {
+                x: n,
+                y: i,
+                z: o
+            }, r.vector2D = {
+                x: 0,
+                y: 0
+            }, A.appendChild(r.link), r
+        }
+
+        function a() {
+            for (var t = 1, e = p.entries.length + 1; e > t; t++) {
+                var n = Math.acos(-1 + (2 * t - 1) / e),
+                    i = Math.sqrt(e * Math.PI) * n,
+                    o = Math.cos(i) * Math.sin(n),
+                    r = Math.sin(i) * Math.sin(n),
+                    a = Math.cos(n),
+                    u = s(t - 1, p.entries[t - 1], o, r, a);
+                S.push(u)
+            }
+        }
+
+        function u(t) {
+            for (var e = 0, n = S.length; n > e; e++) {
+                var i = S[e];
+                if (i.element.getAttribute("x") === t.getAttribute("x") && i.element.getAttribute("y") === t.getAttribute("y")) return i
+            }
+        }
+
+        function c(t) {
+            for (var e = u(t), n = 0, i = S.length; i > n; n++) {
+                var o = S[n];
+                o.index === e.index ? o.mouseOver = !0 : o.mouseOver = !1
+            }
+        }
+
+        function l() {
+            var t = O.x * z.x - p.speed,
+                e = p.speed - O.y * z.y,
+                n = t * k,
+                i = e * k;
+            D.sx = Math.sin(n), D.cx = Math.cos(n), D.sy = Math.sin(i), D.cy = Math.cos(i);
+            for (var o = 0, r = S.length; r > o; o++) {
+                var s = S[o];
+                if (M) {
+                    var a = s.vectorPosition.x,
+                        u = s.vectorPosition.y * D.sy + s.vectorPosition.z * D.cy;
+                    s.vectorPosition.x = a * D.cx + u * D.sx, s.vectorPosition.y = s.vectorPosition.y * D.cy + s.vectorPosition.z * -D.sy, s.vectorPosition.z = a * -D.sx + u * D.cx
+                }
+                var c = p.fov / (p.fov + s.vectorPosition.z);
+                s.vector2D.x = s.vectorPosition.x * c + b.x, s.vector2D.y = s.vectorPosition.y * c + b.y, s.element.setAttribute("x", s.vector2D.x), s.element.setAttribute("y", s.vector2D.y);
+                var l;
+                M ? (l = (x - s.vectorPosition.z) / w, l < p.opacityOut && (l = p.opacityOut)) : (l = parseFloat(s.element.getAttribute("opacity")), l += s.mouseOver ? (p.opacityOver - l) / p.opacitySpeed : (p.opacityOut - l) / p.opacitySpeed), s.element.setAttribute("opacity", l)
+            }
+            S = S.sort(function (t, e) {
+                return e.vectorPosition.z - t.vectorPosition.z
+            })
+        }
+
+        function d() {
+            requestAnimFrame(d), l()
+        }
+
+        function f(t) {
+            M = !1, c(t.target)
+        }
+
+        function h(t) {
+            M = !0
+        }
+
+        function v(t) {
+            z = m(A, t)
+        }
+
+        function m(t, e) {
+            var n = t.getBoundingClientRect();
+            return {
+                x: e.clientX - n.left,
+                y: e.clientY - n.top
+            }
+        }
+
+        function y(t) {
+            i()
+        }
+        var p = {
+            entries: [],
+            width: 480,
+            height: 480,
+            radius: "70%",
+            radiusMin: 75,
+            bgDraw: !0,
+            bgColor: "#000",
+            opacityOver: 1,
+            opacityOut: .05,
+            opacitySpeed: 6,
+            fov: 800,
+            speed: 2,
+            fontFamily: "Arial, sans-serif",
+            fontSize: "15",
+            fontColor: "#fff",
+            fontWeight: "normal",
+            fontStyle: "normal",
+            fontStretch: "normal",
+            fontToUpperCase: !1
+        };
+        if (void 0 !== e)
+            for (var g in e) e.hasOwnProperty(g) && p.hasOwnProperty(g) && (p[g] = e[g]);
+        if (!p.entries.length) return !1;
+        var x, w, b, A, P, S = [],
+            M = !0,
+            z = {
+                x: 0,
+                y: 0
+            },
+            C = {
+                x: 0,
+                y: 0,
+                z: 0
+            },
+            O = {
+                x: 0,
+                y: 0
+            },
+            D = {
+                sx: 0,
+                cx: 0,
+                sy: 0,
+                cy: 0
+            },
+            k = Math.PI / 180,
+            E = "http://www.w3.org/2000/svg";
+        window.requestAnimFrame = function () {
+            return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (t) {
+                window.setTimeout(t, 1e3 / 60)
+            }
+        }(), n()
+    }
+    window.SVG3DTagCloud = t
+}(), "undefined" != typeof jQuery && ! function (t) {
+    t.fn.svg3DTagCloud = function (e) {
+        return this.each(function () {
+            t.data(this, "plugin_SVG3DTagCloud") || t.data(this, "plugin_SVG3DTagCloud", new SVG3DTagCloud(this, e))
+        })
+    }
+}(jQuery);</script>
+<dom-module id="kaldirirmi-tagcloud" assetpath="../../tagcloud/">
+    <template>
+        <iron-ajax auto="" id="gettagsofcontent" debounce="3000" url="/h/main?fm=get-tags-of-content&amp;a=[[contenttitle]]&amp;b=[[contenttable]]" handle-as="json" on-response="_response" loading="{{loadinggames}}"></iron-ajax>
+        <style is="custom-style">
+            /* Desktops and laptops ----------- */
+            #tag-cloud{
+                display:none;
+            }
+            
+            @media only screen and (min-width : 1024px) { /* zoom %175 */
+                #tag-cloud {
+                    margin-left: -90px;
+                    display: block;
+                }
+            }
+
+            @media only screen and (min-width : 1224px) { /* zoom %150 */
+                #tag-cloud {
+                    margin-left: -70px;
+                }
+            }
+
+            @media only screen and (min-width : 1440px) { /* zoom % 125*/
+                #tag-cloud {
+                    margin-left: -30px;
+                }
+            }
+
+            @media only screen and (min-width : 1640px) { /* zoom %110*/
+                #tag-cloud {
+                    margin-left: 0px;
+                }
+            }
+            /* Large screens ----------- */
+            @media only screen and (min-width : 1824px) {
+                #tag-cloud {
+                    margin-left: 0px;
+                }
+            }
+        </style>
+        <!-- dom elements here-->
+        <div id="tag-cloud"></div>
+
+    </template>
+    <script>
+        Polymer({
+            is: "kaldirirmi-tagcloud",
+            properties: {
+                contenttitle: {
+                    type: String,
+                    value: "",
+                    notify: true
+                },
+                contenttable: {
+                    type: String,
+                    value: "",
+                    notify: true
+                },
+                contents: {
+                    type: Array,
+                    value: [],
+                    notify: true
+                }
+            },
+            ready: function () {
+
+            },
+            _response: function (a) {
+                if (a.detail.response.length > 0) {
+                    a.detail.response.forEach(function (content) {
+                        //console.log(content);
+                        this.push('contents', content);
+                    }, this);
+                }
+                //devamında tagcloud basıcam.
+                var settings = {
+                    entries: this.contents,
+                    width: 400,
+                    height: 300,
+                    radius: '65%',
+                    radiusMin: 75,
+                    bgDraw: true,
+                    bgColor: '#222',
+                    opacityOver: 1.00,
+                    opacityOut: 0.05,
+                    opacitySpeed: 6,
+                    fov: 800,
+                    speed: 1,
+                    fontFamily: 'Roboto, Arial, sans-serif',
+                    fontSize: 'calc(0.3em + 1vmin)',
+                    fontColor: '#fff',
+                    fontWeight: 'normal',//bold
+                    fontStyle: 'normal',//italic
+                    fontStretch: 'normal',//wider, narrower, ultra-condensed, extra-condensed, condensed, semi-condensed, semi-expanded, expanded, extra-expanded, ultra-expanded
+                    fontToUpperCase: true
+                };
+                $('#tag-cloud').svg3DTagCloud(settings);
+
+            }
+
+        });
+    </script>
+
+</dom-module>
+
+
+</div></body></html>

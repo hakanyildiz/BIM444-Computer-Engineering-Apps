@@ -1,0 +1,74 @@
+﻿<link rel="import" href="../polymer/polymer.html" />
+
+<dom-module id="kaldirirmi-game-detail">
+  <template>
+    <style>
+      :host {
+      }
+    </style>
+
+    <content></content>
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: "kaldirirmi-game-detail",
+
+    properties: {
+      headers: {
+        type: Object,
+        computed: '_getheaders(token)'
+      },
+      token: {
+        type: String,
+        value: function () {
+          var a = document.querySelector('iron-meta[key="token"]');
+          return a.getAttribute('value');
+        }
+      },
+      data: { type: Object },
+      gameurl: {
+        type: String,
+        value: function () {
+          return location.pathname.replace('/oyun/', '');
+        }
+      }
+    },
+
+    ready: function () {
+
+    },
+
+    _getheaders: function (a) {
+      return { 'Authorization': 'Bearer ' + a };
+    },
+
+    _getvid: function (a) {
+      return a.replace('https://www.youtube.com/watch?v=', '');
+    },
+
+    _handleresponse: function (a) {
+      this.$.spinner.removeAttribute('active');
+      this.$.loader.setAttribute('hidden', '');
+      this.$.gamecontent.removeAttribute('hidden');
+    },
+
+    _responseerror: function () {
+      location.href = '/';
+    },
+
+    _videoloaded: function () {
+      this.$.videospinner.removeAttribute('active');
+      this.$.videoloader.setAttribute('hidden', '');
+    },
+    _shareGooglePlus: function () {
+      window.open('https://plus.google.com/share?url=http://pg.kaldirirmi.com/oyun/' + this.gameurl, '_blank', 'width=620,height=620,scrollbars=yes');
+    },
+    _shareFacebook: function () {
+      window.open('https://www.facebook.com/dialog/share?app_id=1620890171560157&display=popup&href=http://pg.kaldirirmi.com/oyun/' + this.gameurl, '_blank', 'width=620,height=620,scrollbars=yes');
+    },
+    _shareTwitter: function () {
+      window.open('https://twitter.com/intent/tweet?url=http://pg.kaldirirmi.com/oyun/' + this.gameurl + '&text=' + this.game.name + ' oyununu bilgisayarım kaldırır mı ?', '_blank', 'width=620,height=620,scrollbars=yes');
+    }
+  });
+</script>

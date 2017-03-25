@@ -1,0 +1,92 @@
+﻿<dom-module id="kaldirirmi-tagdetails-shared-styles">
+    <template>
+        <style>
+              :host {
+            display: block;
+            margin-bottom: 50px;
+            margin-top:10px;
+        }
+
+        #tagmaterial {
+            width: 100%;
+            height: auto;
+            min-height: 24em;
+            @apply(--layout-vertical);
+        }
+
+            #tagmaterial .tag-header {
+                color: #eeeeee;
+                border-bottom: 1px solid #e5e5e5;
+                margin: 0;
+                padding: 16px;
+            }
+           
+            #tagmaterial .tag-header h3{
+                margin: 0 !important;
+                font-weight: 100 !important;
+            }
+
+            #tagmaterial .tag-content {
+                height: 100%;
+                @apply(--layout-horizontal);
+                @apply(--layout-center-center);
+                padding: 10px;
+                flex-flow: row wrap;
+                -ms-flex-flow: row wrap;
+            }
+
+                #tagmaterial .tag-content .taghreflink {
+                    text-decoration: none;
+                    font-weight:bold;
+                    color:black;
+                }
+
+                #tagmaterial .tag-content paper-card[tagcard] {
+                    margin: 5px;
+                    width:calc(17em + 1vmin);
+                    background: #e5e5e5;
+                }
+
+                    #tagmaterial .tag-content paper-card[tagcard] .card-content iron-image {
+                        width: 100%;
+                        height: calc(10em + 1vmin);
+                        pointer-events: none;
+                        transition: all ease-in .2s;
+                        opacity: .8;
+                    }
+                    #tagmaterial .tag-content paper-card[tagcard]:hover{
+                        @apply(--shadow-elevation-12dp);
+                    }
+
+                    #tagmaterial .tag-content paper-card[tagcard]:hover iron-image[background] {
+                        opacity: 1;
+                    }
+                  #tagmaterial .tag-content paper-card[tagcard] .card-actions{
+                        @apply(--layout-horizontal);
+                        height:calc(1.5em + 1vmin);
+                        border-top:1px solid #222;
+                        color:#222;
+                        padding: 10px 17px;
+                    }
+
+        .loadingIndicator {
+            text-align: center;
+            height: 40px;
+            color: white;
+        }
+        .loadingIndicator h3{
+                font-weight: 400;
+                line-height:2em;
+                   color: #E65100 !important;
+        }
+
+            .loadingIndicator paper-spinner-lite {
+                width: 20px;
+                height: 20px;
+                margin-right: 10px;
+                --paper-spinner-color: #ff7800;
+            }
+       
+        </style>
+    </template>
+</dom-module>

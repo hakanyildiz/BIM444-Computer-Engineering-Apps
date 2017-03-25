@@ -1,0 +1,50 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="main.master.cs" Inherits="duyarliol.main" EnableViewState="false" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="tr" xml:lang="tr" dir="ltr">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta class="viewport" name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="robots" content="index, follow" />
+
+    <title>Duyarlı Ol</title>
+    <asp:ContentPlaceHolder ID="seo" runat="server"></asp:ContentPlaceHolder>
+
+    <script src="assets/js/masterpage.js"></script>
+
+    <link rel="import" href="assets/components/kaldirirmi/do-all-imports.html"/>
+    <link href="assets/css/animate.css" rel="stylesheet" />
+  
+    <asp:ContentPlaceHolder ID="style" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+
+<body id="kaldirirmi.com" class="fullbleed layout vertical" unresolved onunload="" style="overflow: hidden;">
+
+    <%
+        if (Session["site-message"] != null)
+        {
+    %>
+    <paper-toast id="alert" text="<%= Session["site-message"].ToString() %>" duration="4000" ></paper-toast>
+    <script>
+        setTimeout(function () {
+            document.getElementById('alert').setAttribute('opened', '');
+            document.getElementById('alert').open();
+        }, 300);
+    </script>
+    <%
+            Session["site-message"] = null;
+        }
+        else {
+            %>
+        <paper-toast id="alert" duration="3000"></paper-toast>
+    <%
+        }
+        %>
+        <asp:ContentPlaceHolder ID="body" runat="server"></asp:ContentPlaceHolder>
+    <asp:ContentPlaceHolder ID="script" runat="server">
+    </asp:ContentPlaceHolder>
+</body>
+</html>

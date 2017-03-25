@@ -1,0 +1,112 @@
+﻿<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../paper-spinner/spinner-cube-grid.html">
+<link rel="import" href="../../kaldirirmi-styles/news/news-related-game-styles.html"/>
+<dom-module id="kaldirirmi-related-game">
+    <style is="custom-style" include="news-related-game-styles"></style>
+    <template>
+        <iron-ajax auto id="getrelatedgame" url="/h/main?fm=get-related-game-with-news&a=[[relatedgameid]]" handle-as="json" on-response="_responseGame"></iron-ajax>
+        <iron-ajax auto id="getrelatednews" url="/h/main?fm=get-related-news-with-news&a=[[relatedgameid]]&b=[[currentnewsid]]" handle-as="json" on-response="_responseNews"></iron-ajax>
+
+        <div id="relatedgamelist">
+            <template is="dom-repeat" items="{{relatedgame}}" as="item">
+                <div class="card card-stats">
+                    <div class="card-header" data-background-color="orange">
+                        <a class="relatedgame" href="/oyun/[[item.url]]" onclick="load();">
+                            <iron-image background src="[[item.background]]" sizing="cover" alt="[[item.name]]" preload fade></iron-image>
+                            <!--<div class="relatedgame-title"><h4>[[item.name]]</h4></div>-->
+                        </a>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-content-category">İlgili Oyun</h3>
+                        <h2 class="card-content-title">[[item.name]]</h2>
+                    </div>
+                    <div class="card-footer">
+                        <div class="stats">
+                            <div class="game-rating">
+                                <iron-icon class="star" icon="star"></iron-icon>
+                                <iron-icon class="star" icon="star"></iron-icon>
+                                <iron-icon class="star" icon="star"></iron-icon>
+                                <iron-icon class="star" icon="star"></iron-icon>
+                                <iron-icon class="star" icon="star"></iron-icon>
+                            </div>
+                        </div>
+                    </div><!-- card footer -->
+
+                    <div id="relatednewspanel">
+                        <template is="dom-if" if="[[newsActive]]">
+                            <h3 class="relatedpanel-title"><b>{{gametitle}}</b> ile İlgili Haberler</h3>
+                            <div id="relatednewslist">
+                                <template is="dom-repeat" items="{{relatednews}}" as="item">
+                                    <a class="relatednews" href="/haber/[[item.url]]" onclick="load();">
+                                        <iron-image background src="[[item.picture]]" sizing="cover" alt="[[item.title]]" preload fade></iron-image>
+                                        <div class="relatednews-title"><h6>[[item.title]]</h6></div>
+                                    </a>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+
+                </div>
+
+                <!--<a class="relatedgame" href="/oyun/[[item.url]]" onclick="load();">
+                  <iron-image background src="[[item.background]]" sizing="cover" alt="[[item.name]]" preload fade></iron-image>
+                  <div class="relatedgame-title"><h4>[[item.name]]</h4></div>
+                </a>-->
+
+
+
+            </template>
+        </div>
+
+
+
+
+    </template>
+</dom-module>
+<script>
+    Polymer({
+        is: "kaldirirmi-related-game",
+        properties: {
+            relatedgame: {
+                type: Array,
+                value: []
+            },
+            relatednews: {
+                type: Array,
+                value: []
+            },
+            gametitle: {
+                type: String,
+                value: '',
+                notify: true
+            },
+            newsActive: {
+                type: Boolean,
+                value: false,
+                notify: true
+            }
+
+        },
+
+        _responseGame: function (a) {
+            if (a.detail.response.length > 0) {
+                a.detail.response.forEach(function (game) {
+                    this.push('relatedgame', game);
+                    this.gametitle = game.name;
+                }, this);
+
+            }
+        },
+        _responseNews: function (a) {
+
+            if (a.detail.response.length > 0) {
+                this.newsActive = true;
+                a.detail.response.forEach(function (news) {
+                    this.push('relatednews', news);
+                }, this);
+
+            }
+
+        }
+    });
+</script>

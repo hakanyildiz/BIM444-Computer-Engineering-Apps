@@ -1,0 +1,621 @@
+﻿<link rel="import" href="../../polymer/polymer.html" />
+<dom-module id="kaldirirmi-profile-page">
+    <template>
+       <style is="custom-style">
+           :root{
+                         --paper-input-container-input: {
+                        font-size: calc(0.5em + 1vmin) !important;
+                        };
+
+                        --paper-input-container-label: {
+                        font-size: calc(0.55em + 1vmin);
+                        };
+                 }
+
+            
+             paper-tooltip.custom-tooltip{
+                 --paper-tooltip-background: #ff7800;
+                 --paper-tooltip-text-color: #fff;
+                 width: 160px;
+                 --paper-tooltip: { font-size: 16px;}
+             }
+           
+            :host {
+                display: block;
+            }
+            iron-pages {
+                width: 100%;
+                height: 1000px;
+                font-size: 50px;
+                color: white;
+                text-align: center;
+            }
+
+                iron-pages div {
+                    width: 100%;
+                    height: 100%;
+                    padding: 20px 0;
+                }
+            #profile-page {
+                width: 100%;
+                min-height: calc(100vh - 64px);
+                background-color: #222;
+                display: flex;
+            }
+            #profileleftnav {
+                width: 5%;
+                min-height: 100%;
+                box-shadow: 0 12px 16px 1px rgba(0, 0, 0, 0.14), 0 4px 22px 3px rgba(0, 0, 0, 0.12), 0 6px 7px -4px rgba(0, 0, 0, 0.4);
+                border-top: 3px solid #222222;
+                border-bottom: 3px solid #222222;
+
+            }
+
+            #profileleftnav #profilenavigations{
+               --paper-menu-background-color: #222;
+               --paper-menu-color: white;
+               padding: 0px 0px 20px 0px;
+            }
+
+            #profile-content {
+                width: 100%;
+                min-height: 100%;
+            }
+            #profile-rightnav {
+                width: 400px;
+                min-height: 100%;
+                 box-shadow: 0 12px 16px 1px rgba(0, 0, 0, 0.14), 0 4px 22px 3px rgba(0, 0, 0, 0.12), 0 6px 7px -4px rgba(0, 0, 0, 0.4);
+                border-left: 3px solid #222222;
+                border-bottom: 3px solid #222222;
+            }
+            /*  parallax element for scrollbar*/
+            #profile-content parallax-element::-webkit-scrollbar {
+                width: 10px !important;
+            }
+            #profile-content parallax-element::-webkit-scrollbar-thumb {
+                background-color: #222;
+                border-radius: 5px;
+                border: 2px solid #000;
+                min-height: 50px;
+            }
+            #profile-content parallax-element::-webkit-scrollbar-track {
+                background-color: #000;
+            }
+            #profile-content parallax-element {
+                width: 100%;
+                height: calc(100vh - 64px) !important;
+            }
+            #profilepages paper-material {
+              max-width: 1400px !important;
+              padding: 20px !important;
+              margin: auto !important;
+            }
+            
+            #profilenavigations{
+                --paper-menu-selected-item:{
+                        color: #ff7800;
+                }
+            }
+
+            #profilenavigations paper-icon-item{
+              padding: 0px calc(1em + 1vmin) !important;
+            }
+
+            /* twitch like sidebar*/
+            #profileleftnav{
+                transition: all .5s ease;
+                width:200px;
+            }
+            #profilenavigations paper-item iron-icon{
+                padding-right:10px;
+            }
+            #buttonGroupOpeners{
+                display:flex;
+                flex-direction:row;
+                 height: calc(2.3em + 1vmin);
+                justify-content:space-between;
+            }
+            #buttonGroupOpeners paper-icon-button{
+                color:white;
+                 margin-bottom: -30px;
+                width: calc(2.3em + 1vmin);
+                height: calc(2.3em + 1vmin);
+            }
+            #profile-rightnav{
+                transition: all .5s ease;
+            }
+           
+            paper-item .navigationname{
+                font-size: calc(0.4em + 1vmin);
+                display: block;
+            }
+
+            .closedNavigation{
+                width: 65px !important;
+            }
+            .closedProfile{
+                width: 119px !important;
+            }
+            .closedSpan{
+                display:none !important;
+            }
+            .mobileProCardOpened{
+                width: 100% !important;
+                position:absolute !important;
+                background: #222;   
+                display: block !important;
+            }
+
+            #smallvcard{
+                @apply(--layout-vertical);
+                @apply(--layout-center);
+                width: 100%;
+                height: auto;   
+                margin-top:3em;
+            }
+            #smallvcard paper-material{
+                width:100%;
+                text-align:center;
+            }
+            #smallvcard .user-background{
+                width: 100%;
+                height: calc(10em + 1vmin);
+                filter: blur(5px);
+            }
+            #smallvcard .user-image{
+                border: 3px solid transparent;
+                height: calc(4.4em + 1vmin);
+                width: calc(4.4em + 1vmin);
+                display: block;
+                margin-left: calc(0.2em + 1vmin);
+                margin-top: -70px;
+                -webkit-box-shadow: 0px 0px 20px 2px rgba(56,56,56,0.64);
+                -moz-box-shadow: 0px 0px 20px 2px rgba(56,56,56,0.64);
+                box-shadow: 0px 1px 15px 3px rgba(56,56,56,0.64);
+            }
+            #smallvcard .user-name{
+                font-size: calc(1em + 1vmin);
+                margin: 0;
+                color: white;
+                margin-bottom: 30px;
+                margin-top: 10px;
+            }
+
+
+            #profile-rightnav, #pibOpenCloseNav, #pibOpenCloseProCard, #profilenavigations paper-item span{
+                display: none;
+            }
+            #buttonGroupOpeners{
+                display:none;
+            }
+            #pibMobileCloseProCard{
+                display: inline-block;
+            }
+            #pibMobileOpenProCard{
+                display:flex;
+                color: #ff7800;
+                 padding: 0 !important;
+                padding-left: 15px !important;
+            }
+            #profileleftnav{
+                width: 65px;
+            }
+            #pibMobileCloseProCard{
+                background: #e64a19;
+                width: 100%;
+                height: 40px;
+                font-size: calc(0.6em + 1vmin);
+            }
+
+            @media only screen and (min-width : 1024px) {
+               #profile-rightnav, #profilenavigations paper-item span{
+                   display: block;
+               }
+               #pibOpenCloseNav, #pibOpenCloseProCard{
+                   display: inline-block;
+                   cursor: pointer;
+                   color:white;
+               }
+                 #pibMobileCloseProCard, #pibMobileOpenProCard{
+                    display: none;
+                }
+                #profileleftnav{
+                width: 200px;
+                 }
+                #buttonGroupOpeners{
+                    display: flex !important;
+                }
+
+             
+            }
+
+            .closedTooltip{
+                display:none !important;
+            }
+            
+            /*neon-animated-pages  > *{
+                position: relative !important;
+            }
+            neon-animatable{
+                display: flex !important;
+            }*/
+
+           #profilepages .iron-selected {
+                position: static !important;
+                }
+
+
+           #profile-content #profileTopNav{
+               @apply(--layout-horizontal);
+                   justify-content: space-between;
+                   align-items: center;
+           }
+           #profileTopNav #profilenavigations{
+               color:white;
+               font-weight:100;
+               font-size: 16px;
+               --paper-tabs-selection-bar-color	: #222;
+           }
+          #profilenavigations .iron-selected{
+               color:#ff7800 !important;
+                font-weight: bold;
+                font-size: 19px;
+          }
+          #profilenavigations paper-tab span{
+              
+              display:none;
+              transition: opacity linear .3s;
+              opacity:0;
+          }
+            #profilenavigations paper-tab iron-icon{
+                margin-right:5px;
+            }
+          .spanOpener{
+                display: block !important;
+                opacity:1 !important;
+            }
+
+            paper-toast{
+                left: 10% !important;
+            }
+
+        </style>
+        <iron-ajax auto id="getuserinfo" url="/h/main?fm=get-userinfoviaid" handle-as="json" last-response="{{userinfo}}"></iron-ajax>
+        <iron-ajax auto id="userauths" url="/h/main?fm=user-auths" method="get" handle-as="json" last-response="{{auths}}"></iron-ajax>
+
+        <div id="profile-page">
+            <div id="profile-content">
+                <div id="profileTopNav">
+                    <paper-item id="pibMobileOpenProCard" class="nav-icon" on-tap="_pibMobileOpenProCard">
+                        <iron-icon icon="social:mood" item-icon></iron-icon>
+                    </paper-item>
+                    <paper-tabs id="profilenavigations" selected="{{selectedIndex}}" on-iron-select="_ironSelect" scrollable>
+                        <paper-tab id="piiInformation" class="nav-icon">
+                            <iron-icon icon="device:data-usage" item-icon></iron-icon>
+                            <span class="navigationname ">Genel Bilgiler</span>
+                        </paper-tab>
+                        <paper-tab id="piiAccounts" class="nav-icon">
+                            <iron-icon icon="icons:account-box" item-icon></iron-icon>
+                            <span class="navigationname ">Hesaplar</span>
+                        </paper-tab>
+                        <paper-tab id="piiSystem" class="nav-icon">
+                            <iron-icon icon="device:brightness-high" item-icon></iron-icon>
+                            <span class="navigationname ">Sistem</span>
+                        </paper-tab>
+                        <paper-tab id="piiForum" class="nav-icon">
+                            <iron-icon icon="communication:forum" item-icon></iron-icon>
+                            <span class="navigationname ">Forum</span>
+                        </paper-tab>
+                        <paper-tab id="piiFriendship" class="nav-icon">
+                            <iron-icon icon="social:people" item-icon></iron-icon>
+                            <span class="navigationname ">Arkadaşlar</span>
+                        </paper-tab>
+                        <paper-tab id="piiLikedGames" class="nav-icon">
+                            <iron-icon icon="hardware:videogame-asset" item-icon></iron-icon>
+                            <span class="navigationname ">Oyunlar</span>
+                        </paper-tab>
+                        <paper-tab id="piiTwitch" class="nav-icon">
+                            <iron-icon icon="kaldirirmi:twitch" item-icon></iron-icon>
+                            <span class="navigationname ">Twitch</span>
+                        </paper-tab>
+                        <paper-tab id="piiSteam" class="nav-icon">
+                            <iron-icon icon="kaldirirmi:steam" item-icon></iron-icon>
+                            <span class="navigationname">Steam</span>
+                        </paper-tab>
+
+                    </paper-tabs>
+                    <!--<paper-icon-button id="pibOpenCloseNav" on-tap="_pibOpenCloseNav" icon="[[closerIcon]]"></paper-icon-button>-->
+                    <paper-icon-button id="pibOpenCloseProCard" on-tap="_pibOpenCloseProCard" icon="[[vButtonIcon]]"></paper-icon-button>
+                </div>
+               <parallax-element profile>
+                  <neon-animated-pages id="profilepages"  entry-animation="slide-from-right-animation" exit-animation="slide-left-animation">
+                            <neon-animatable>
+                                <kaldirirmi-profile-general-information id="ipGeneralInformation"></kaldirirmi-profile-general-information>
+                            </neon-animatable>
+                            <neon-animatable>
+                                <kaldirirmi-profile-user-accounts id="ipUserAccounts" auths="[[auths]]"></kaldirirmi-profile-user-accounts>
+                            </neon-animatable>
+                            <neon-animatable>
+                                <kaldirirmi-profile-user-system id="ipUserSystem"></kaldirirmi-profile-user-system>
+                            </neon-animatable>
+                            <neon-animatable>
+                                <kaldirirmi-profile-forum id="ipUserForum"></kaldirirmi-profile-forum>
+                            </neon-animatable>
+                            <neon-animatable>
+                                <kaldirirmi-profile-friends id="ipUserFriends"></kaldirirmi-profile-friends>
+                            </neon-animatable>
+                            <neon-animatable>
+                                <kaldirirmi-profile-games id="idUserGames"></kaldirirmi-profile-games>
+                            </neon-animatable>
+                            <neon-animatable>
+                                <kaldirirmi-profile-twitch id="idUserTwitch" connected="[[auths.twitch.linked]]"></kaldirirmi-profile-twitch>
+                            </neon-animatable>
+                            <neon-animatable>
+                                <kaldirirmi-profile-steam id="idUserSteam" connected="[[auths.steam.linked]]"></kaldirirmi-profile-steam>
+                            </neon-animatable>
+                    </neon-animated-pages>
+                </parallax-element>
+            </div>
+            <div id="profile-rightnav">
+
+                <paper-button raised id="pibMobileCloseProCard"  on-tap="_pibMobileCloseProCard">
+                    <iron-icon icon="arrow-back"></iron-icon>
+                     Geri Dön</paper-button>
+
+                <template is="dom-if" if="[[!vcardOpened]]">
+                       <div id="smallvcard">
+                            <paper-material elevation="4">
+                                <iron-image class="user-background" src="{{_remakeUserAvatar(userinfo.avatar)}}" sizing="cover" preload fade></iron-image>
+                                <iron-image class="user-image center" src="{{_remakeUserAvatar(userinfo.avatar)}}" sizing="cover" preload fade></iron-image>
+                                <p class="user-name center">[[userinfo.username]]</p>
+                            </paper-material>
+                        </div>
+                </template>
+                <template is="dom-if" if="[[vcardOpened]]">
+                    <profile-vcard userinfo="[[userinfo]]"></profile-vcard>
+                </template>
+            </div>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: "kaldirirmi-profile-page",
+            properties: {
+                userinfo:{
+                    type: Object,
+                    notify: true
+                },
+                twitchConnected: {
+                    type: Boolean,
+                    notify: true
+                },
+                closerIcon: {
+                    type: String,
+                    value: 'lock-open',
+                    notify: true
+                },
+                vcardOpened: {
+                    type: Boolean,
+                    value: true,
+                    notify: true
+                },
+                vButtonIcon: {
+                    type: String,
+                    value: 'lock-open',
+                    notify: true
+                },
+                selectedIndex: {
+                    type: Number,
+                    //value: 0,
+                    observer: '_selectedIndexChanged'
+                },
+                accountGo: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                }
+            },
+            _pibOpenCloseProCard: function () {
+                if (this.vcardOpened) {
+                    //açıksa kapat height daralt!
+                    this.vcardOpened = false;
+                    this.vButtonIcon = 'lock-outline';
+                    document.getElementById('profile-rightnav').classList.add('closedProfile');
+                }
+                else {
+                    //demekki kapalı, simdi aç height full
+                    this.vcardOpened = true;
+                    this.vButtonIcon = 'lock-open';
+                    document.getElementById('profile-rightnav').classList.remove('closedProfile');
+
+                }
+            },
+            _pibOpenCloseNav: function () {
+                var leftnav = document.getElementById('profileleftnav');
+                if (this.closerIcon == 'lock-open') {
+                    this.closerIcon = 'lock-outline';
+                    leftnav.classList.add("closedNavigation");
+                    var nodes = document.querySelectorAll('span.navigationname')
+                      , i
+                      , node;
+                    for (i in nodes) {
+                        node = nodes[i];
+                        node.className += " closedSpan";
+                    }
+
+
+                    //tooltip config
+                    var allTooltips = document.querySelectorAll('paper-tooltip.custom-tooltip'), i, tooltip;
+                    for (i in allTooltips) {
+                        tooltip = allTooltips[i];
+                        tooltip.className += " closedTooltip";
+                    }
+
+
+                }
+                else if (this.closerIcon == 'lock-outline') {
+                    this.closerIcon = 'lock-open';
+                    leftnav.classList.remove("closedNavigation");
+                    var nodes = document.querySelectorAll('span.navigationname')
+                      , i
+                      , node;
+
+                    setTimeout(function () {
+                        for (i in nodes) {
+                            node = nodes[i];
+                            node.className = "navigationname style-scope kaldirirmi-profile-page";
+                        }
+                    }, 400);
+
+                    //tooltip config
+                    var allTooltips = document.querySelectorAll("paper-tooltip.custom-tooltip"), i, tooltip;
+                    setTimeout(function () {
+                        for (i in allTooltips) {
+                            tooltip = allTooltips[i];
+                            //console.log(tooltip.className);
+                        }
+                    });
+
+
+                }
+            },
+            _pibMobileOpenProCard: function(){
+                document.getElementById('profile-rightnav').classList.add('mobileProCardOpened');
+            },
+            _pibMobileCloseProCard: function () {
+                document.getElementById('profile-rightnav').classList.remove('mobileProCardOpened');
+            },
+            _remakeUserBackground: function (background) {
+                var url = '//cdn.kaldirirmi.com/images/user/wallpaper/';
+                if (background) {
+                    return url + background;
+                }
+                else {
+                    return '/assets/img/kaldirirmi-header-2.png';
+                }
+            },
+            _remakeUserAvatar: function (avatar) {
+                //console.log('_remakeUserAvatar' + avatar);
+                var url = '//cdn.kaldirirmi.com/images/user/avatar/';
+                if (avatar) {
+                    return url + avatar;
+                }
+                else {
+                    return url + 'default-user-avatar3.png';
+                }
+            },
+            _ironSelect: function (event) {
+                //console.log(event.detail.item);
+                //console.log(event.target.selected);
+                var item = event.detail.item;
+                
+
+                //$('#profilenavigations paper-tab.iron-selected').find('span').toggleClass('spanOpener');
+                var selected = event.target.selected;
+                //console.log(selected);
+
+                //if (Polymer.isInstance(this.$.ipUserAccounts)) {
+                //   console.log('is instance!');
+                //}
+                //else {
+                //   console.log('yoooo');
+                //}
+                
+                //if (selected == 1) {
+                //    Polymer.Base.importHref('assets/components/kaldirirmi/profile/kaldirirmi-profile-user-accounts.html');
+                //}
+                this._checkImports(selected);
+                this.$.profilepages.select(selected);
+
+            },
+            _checkImports: function (selection) {
+                if (selection == 0) {
+                    if (!this._isAlreadyInstance(this.$.ipGeneralInformation)) {
+                        Polymer.Base.importHref('assets/components/kaldirirmi/profile/kaldirirmi-profile-general-information.html');
+                    }
+                }
+                if (selection == 1) {
+                    if (!this._isAlreadyInstance(this.$.ipUserAccounts)) {
+                        Polymer.Base.importHref('assets/components/kaldirirmi/profile/kaldirirmi-profile-user-accounts.html');
+                    }
+                }
+                if (selection == 2) {
+                    if (!this._isAlreadyInstance(this.$.ipUserSystem)) {
+                        Polymer.Base.importHref('assets/components/kaldirirmi/profile/kaldirirmi-profile-user-system.html');
+                    }
+                }
+                if (selection == 3) {
+                    if (!this._isAlreadyInstance(this.$.ipUserForum)) {
+                        Polymer.Base.importHref('assets/components/kaldirirmi/profile/kaldirirmi-profile-forum.html');
+                    }
+                }
+                if (selection == 4) {
+                    if (!this._isAlreadyInstance(this.$.ipUserFriends)) {
+                        Polymer.Base.importHref('assets/components/kaldirirmi/profile/kaldirirmi-profile-friends.html');
+                    }
+                }
+                if (selection == 5) {
+                    if (!this._isAlreadyInstance(this.$.idUserGames)) {
+                        Polymer.Base.importHref('assets/components/kaldirirmi/profile/kaldirirmi-profile-games.html');
+                    }
+                }
+                if (selection == 6) {
+                    if (!this._isAlreadyInstance(this.$.idUserTwitch)) {
+                        Polymer.Base.importHref('assets/components/kaldirirmi/profile/kaldirirmi-profile-twitch.html');
+                    }
+                }
+                if (selection == 7) {
+                    if (!this._isAlreadyInstance(this.$.idUserSteam)) {
+                        Polymer.Base.importHref('assets/components/kaldirirmi/profile/kaldirirmi-profile-steam.html');
+                    }
+                }
+
+            },
+            _isAlreadyInstance: function(element){
+                if (Polymer.isInstance(element)) {
+                    return true;
+                }
+                return false;
+            },
+            _selectedIndexChanged: function (newIndex, oldIndex) {
+                //if (typeof newIndex === 'number') {
+                //    console.log('You selected item #' + newIndex + '.');
+                //}
+                //if (typeof oldIndex === 'number') {
+                //    console.log('Before, you had item #' + oldIndex + ' selected.');
+                //}
+
+                //var navigations = document.getElementById('profilenavigations');
+                //var pages = document.getElementById('profilepages');
+                //navigation listbox'ına bir iron-select isimli listener eklendi.Bu listener triggerlık yapıyor.
+                //navgition'un this.selected'ı (indexine bakıyor e.g. 0, 1) iron-pages'in o indexindekini seçiyor!
+                //navigations.addEventListener('iron-select', function () {
+                //    console.log(this.selected);
+                //    pages.select(this.selected);
+                //});
+            }
+        });
+
+        document.addEventListener('WebComponentsReady', function () {
+            var navigations = document.getElementById('profilenavigations');
+            if (location.hash == '#auths') navigations.select(1);
+            else if (location.hash == '#system') navigations.select(2);
+            else if (location.hash == '#forum') navigations.select(3);
+            else if (location.hash == '#friends') navigations.select(4);
+            else if (location.hash == '#games') navigations.select(5);
+            else if (location.hash == '#twitch') navigations.select(6);
+            else if (location.hash == '#steam') navigations.select(7);
+
+            else navigations.select(0);
+
+            $('#profilenavigations paper-tab').hover(function () {
+                //console.log($(this).find('span'));
+                $(this).find('span').toggleClass('spanOpener');
+            });
+
+
+
+        });
+    </script>
+
+</dom-module>

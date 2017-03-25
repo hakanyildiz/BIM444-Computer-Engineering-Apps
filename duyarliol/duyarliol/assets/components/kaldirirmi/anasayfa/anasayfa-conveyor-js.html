@@ -1,0 +1,108 @@
+﻿<link rel="import" href="../../polymer/polymer.html" />
+<dom-module id="anasayfa-conveyor-js">
+
+  <template>
+  </template>
+  <script>
+    Polymer({
+      is: "anasayfa-conveyor-js",
+      properties: {
+        games1: {
+          type: Array,
+          value: []
+        },
+      },
+      listeners: {
+        'dom-change': '_hakkedan'
+      },
+      ready: function () {
+        this.async(function () {
+          this.go = true;
+        }, 1000);
+      },
+      _hakkedan: function () {
+       
+      },
+      _response: function (a) {
+        if (a.detail.response.length > 0) {
+          var count = 0;
+          a.detail.response.forEach(function (game) {
+            if (count < 5) {
+              this.push('games1', game);
+            }
+            count = count + 1;
+          }, this);
+        }
+      }
+    });
+  </script>
+
+
+  <script>
+    document.addEventListener('WebComponentsReady', function () {
+      $('.container1').conveyor({
+        fit: 'cover',
+        transition: 'horizontal',
+        direction: 'backward',
+        countdown: 7886,
+        html: true
+
+      });
+      $('.container2').conveyor({
+        fit: 'cover',
+        transition: 'vertical',
+        countdown: 8000,
+        html:true
+      });
+      $('.container3').conveyor({
+        fit: 'cover',
+        transition: 'horizontal',
+        countdown: 9200,
+        html: true
+
+      });
+      $('.container4').conveyor({
+        fit: 'cover',
+        transition: 'vertical',
+        countdown: 7235,
+        html: true
+
+      });
+      $('.container5').conveyor({
+        fit: 'cover',
+        transition: 'horizontal',
+        countdown: 8888,
+        html: true
+
+      });
+      $('.container6').conveyor({
+        fit: 'cover',
+        transition: 'vertical',
+        countdown: 6357,
+        html: true
+
+      });
+      $('.container7').conveyor({
+        fit: 'cover',
+        transition: 'horizontal',
+        countdown: 7138,
+        html: true
+
+      });
+      $('.container8').conveyor({
+        fit: 'cover',
+        transition: 'vertical',
+        countdown: 8952,
+        html: true
+      });
+        
+      $('.container320').conveyor({
+          fit: 'cover',
+          transition: 'vertical',
+          countdown: 8952,
+          html: true
+      });
+     
+    });
+  </script>
+</dom-module>

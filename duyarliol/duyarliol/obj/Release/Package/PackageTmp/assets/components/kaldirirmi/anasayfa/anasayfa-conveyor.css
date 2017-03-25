@@ -1,0 +1,255 @@
+﻿
+
+html {
+  background: #fff;
+  height: 100%;
+  overflow-x: hidden;
+  background-image: radial-gradient(rgba(150,180,190,0.25),rgba(175,220,130,0.05));
+  background: -webkit-radial-gradient(circle,rgba(150,180,190,0.25),rgba(175,220,130,0.05)) #111;
+  background-image: -moz-radial-gradient(50% 50%,circle,rgba(150,180,190,0.25) 50%,rgba(175,220,130,0.05) 100%);
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+}
+
+.star {
+  color: #9cff00;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+  nav .conveyor-li {
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+    margin: 10px;
+  }
+
+.conveyor-li {
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+  margin: 0;
+  -webkit-transition: all .3s;
+  -moz-transition: all .3s;
+  -o-transition: all .3s;
+  -ms-transition: all .3s;
+  transition: all .3s;
+}
+
+  .conveyor-li:hover {
+    cursor: pointer;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    background-color: #911;
+  }
+
+.option {
+  margin-top: 30px;
+  text-align: center;
+  color: #0ff;
+  font-size: .7em;
+}
+
+.usage {
+  color: transparent;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  position: absolute;
+  left: 50%;
+  margin-left: -25px;
+  z-index: 1000;
+}
+
+
+.conveyor-li.info {
+  display: inline-block;
+  width: 140px;
+  border-left: 1px solid #0ff;
+  border-right: 1px solid #0ff;
+}
+
+.desc {
+  padding-top: 30px;
+  width: 580px;
+  margin: 0 auto;
+  font-family: Manksans,serif;
+  color: #fa8072;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.5);
+  font-size: 1.25em;
+}
+
+@media only screen and (max-width : 600px) {
+  .desc {
+    width: 100%;
+  }
+}
+
+.arrow {
+  width: 0;
+  height: 0;
+  border: 19px solid;
+  margin-left: 6px;
+  border-top-color: #fff;
+  -webkit-transition: all .3s;
+  -moz-transition: all .3s;
+  -o-transition: all .3s;
+  -ms-transition: all .3s;
+  transition: all .3s;
+  margin-top: 18px;
+}
+
+
+.talk {
+  -webkit-transition: all .5s;
+  -moz-transition: all .5s;
+  -o-transition: all .5s;
+  -ms-transition: all .5s;
+  transition: all .5s;
+  z-index: 1000;
+  background: rgba(255,255,255,0.8);
+  position: fixed;
+  top: 0;
+  left: -500px;
+  width: 400px;
+  height: 100%;
+  padding: 0 50px 50px 50px;
+}
+
+#disqus_thread {
+  width: 400px;
+  height: 100%;
+  padding-bottom: 100px;
+  overflow-y: auto;
+}
+
+  .close:hover {
+    opacity: 1;
+    -ms-filter: none;
+    filter: none;
+    cursor: pointer;
+  }
+
+.container {
+  width: 100%;
+  height: 100%;
+}
+
+.mCustomScrollBox {
+  width: 430px;
+}
+
+.twitbot {
+  margin-top: 10px;
+  margin-left: 250px;
+}
+
+@media only screen and (max-width : 600px) {
+  .twitbot {
+    margin-left: 10px;
+  }
+
+    .twitbot p {
+      width: 100%;
+    }
+}
+
+@media only screen and (max-width : 600px) {
+  .conveyor-li.buttons.discuss {
+    display: none;
+  }
+}
+
+#content {
+  font-family: Walkway;
+  font-size: 20px;
+  letter-spacing: .125em;
+  color: #fff;
+  width: 100% !important;
+  display: flex;
+  margin: 20px auto;
+  zoom: 1;
+}
+
+  #content:before, #content:after {
+    content: "";
+    display: table;
+  }
+
+  #content:after {
+    clear: both;
+  }
+
+  #content .boxes {
+    margin:0 auto;
+    padding:0;
+    zoom: 1;
+  }
+
+    #content .boxes:before, #content .boxes:after {
+      content: "";
+      display: table;
+    }
+
+    #content .boxes:after {
+      clear: both;
+    }
+
+  #content .container1 {
+    width: 200px;
+    height: 200px;
+    float: left;
+  }
+
+  #content .container2 {
+   width: 200px;
+    height: 200px;
+    float: left;
+  }
+
+  #content .container3 {
+    width: 200px;
+    height: 200px;
+    float: left;
+  }
+
+  #content .container4 {
+   width: 200px;
+    height: 200px;
+    float: left;
+  }
+
+  #content .container5 {
+  width: 200px;
+    height: 200px;
+    float: left;
+  }
+
+  #content .container6 {
+  width: 200px;
+    height: 200px;
+    float: left;
+  }
+
+  #content .container7 {
+   width: 200px;
+    height: 200px;
+    float: left;
+  }
+
+  #content .container8 {
+   width: 200px;
+    height: 200px;
+    float: left;
+  }
+
+  #content .container9 {
+   width: 200px;
+    height: 200px;
+    float: left;
+  }

@@ -1,0 +1,128 @@
+﻿<dom-module id="gallery-animated-grid-styles">
+    <template>
+
+        <style>
+            :host {
+                display: block;
+                background: #222;
+                border-top: 3px solid #ff7800;
+            }
+
+            .tile {
+                cursor: pointer;
+                position: relative;
+                display: inline-block;
+                float: left;
+                vertical-align: top;
+                width: calc(100%);
+                height: calc(100% / 3);
+                transition: .4s all;
+                color: #292929;
+                @apply(--paper-font-title);
+                @apply(--layout-vertical);
+                @apply(--layout-center-center);
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: center;
+               box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),
+                  0  6px 30px 5px rgba(0, 0, 0, 0.12),
+                  0  8px 10px -5px rgba(0, 0, 0, 0.4);
+            }
+
+                .tile:after {
+                    content: "";
+                    position: absolute;
+                    top: -110%;
+                    left: -210%;
+                    width: 200%;
+                    height: 200%;
+                    opacity: 1;
+                    transform: rotate(30deg);
+                    background: linear-gradient( to right, rgba(239, 121, 20, 0.13) 0%, rgba(239, 121, 20, 0.13) 77%, rgba(239, 121, 20, 0.5) 92%, rgba(239, 121, 20, 0.0) 100% );
+                }
+
+                .tile:hover:after {
+                    opacity: 1;
+                    top: -30%;
+                    left: -30%;
+                    transition-property: left, top, opacity;
+                    transition-duration: 0.7s, 0.7s, 0.15s;
+                    transition-timing-function: ease;
+                }
+
+                .tile:active:after {
+                    opacity: 1;
+                }
+
+                .tile iron-image {
+                    width: 100%;
+                    height: 160px;
+                    pointer-events: none;
+                    transition: all ease-in .2s;
+                    opacity: .7;
+                    background-color: #222;
+                }
+
+                .tile .game-title {
+                    width: 100%;
+                    background-color: #222;
+                    color: white;
+                    font-weight: 100;
+                    text-align: center;
+                    font-size: calc(0.65em + 1vmin) !important;
+                    line-height: calc(1.2em + 1vmin) !important;
+                    opacity: 0.8;
+                }
+
+
+            @media only screen and (min-width : 768px) { /* zoom %175 */
+                .tile {
+                    width: calc(100% / 2);
+                }
+
+                    .tile iron-image {
+                        height: 255px;
+                    }
+            }
+
+
+            @media only screen and (min-width : 1024px) { /* zoom %175 */
+                .tile {
+                    width: calc(100% / 6);
+                }
+
+                    .tile iron-image {
+                        height: 155px;
+                    }
+
+                    .tile .game-title {
+                        font-size: calc(0.45em + 1vmin) !important;
+                    }
+            }
+
+            @media only screen and (min-width : 1224px) { /* zoom %150 */
+                .tile iron-image {
+                    height: 180px;
+                }
+            }
+
+            @media only screen and (min-width : 1440px) { /* zoom % 125*/
+                .tile iron-image {
+                    height: 203px;
+                }
+            }
+
+            @media only screen and (min-width : 1640px) { /* zoom %110*/
+                .tile iron-image {
+                    height: 224px;
+                }
+            }
+
+            @media only screen and (min-width : 1824px) {
+                .tile iron-image {
+                    height: 256px;
+                }
+            }
+        </style>
+    </template>
+</dom-module>

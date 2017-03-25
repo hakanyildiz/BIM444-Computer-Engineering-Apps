@@ -1,0 +1,102 @@
+﻿<dom-module id="streaming-list-style">
+    <template>
+        <style>
+              :host {
+                display: block;
+                box-sizing: border-box;
+                @apply(--layout-vertical);
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                min-height: calc(15em + 1vmin);
+            }
+
+            #streams {
+                @apply(--layout-wrap);
+                @apply(--layout-horizontal);
+                @apply(--layout-center-center);
+            }
+
+            twitchtv-card, youtube-card {
+                margin: 10px;
+            }
+
+            paper-spinner {
+                margin: 16px auto;
+            }
+
+            #errorMessage{
+                @apply(--layout-horizontal);
+                @apply(--layout-center);
+            }
+              
+            .loadingIndicator{
+                       display: flex;
+                      flex-direction: row !important;
+            }
+
+            .loadingIndicatorTitle{
+                    padding-top: 1.7em;
+                    font-size: calc(0.6em + 1vmin);
+                    padding-left: 3em;
+                    font-weight: 100;
+            }
+
+              @media only screen and (min-width : 360px) {
+                 
+                    twitchtv-card{
+                        width: 80% !important;
+                    }
+              }
+              @media only screen and (min-width : 412px) {
+                  
+                    twitchtv-card{
+                        width: 80% !important;
+                    }
+              }  
+              @media only screen and (min-width : 480px) {
+                  
+                    twitchtv-card{
+                        width: 80% !important;
+                    }
+              }
+              @media only screen and (min-width : 768px) {
+                  
+                      twitchtv-card{
+                        width: 40% !important;
+                    }
+              }
+              @media only screen and (min-width : 1024px) { /* zoom %175 */
+                  
+                   twitchtv-card{
+                        width: 40% !important;
+                    }
+              }
+              @media only screen and (min-width : 1224px) { /* zoom %150 */
+                   
+                    twitchtv-card{
+                        width: 27% !important;
+                    }
+              }
+              @media only screen and (min-width : 1440px) { /* zoom % 125*/
+                  
+                    twitchtv-card{
+                        width: 30% !important
+                    }
+              }
+              @media only screen and (min-width : 1640px) { /* zoom %110*/
+                    
+                     twitchtv-card{
+                        width: 260px !important;
+                    }
+              }
+              @media only screen and (min-width : 1824px) {
+                
+                    twitchtv-card{
+                        width: 295px !important;
+                    }
+              }
+        </style>
+    </template>
+</dom-module>

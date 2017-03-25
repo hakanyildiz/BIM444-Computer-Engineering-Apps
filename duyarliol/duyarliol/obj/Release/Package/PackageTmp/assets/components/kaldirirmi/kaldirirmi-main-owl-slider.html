@@ -1,0 +1,181 @@
+﻿<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="kaldirirmi-main-owl-slider">
+  <template>
+    <!-- Owl Carousel Assets -->
+    <link href="../../owl-carousel/owl.carousel.css" rel="stylesheet" />
+    <link href="../../owl-carousel/owl.theme.css" rel="stylesheet" />
+
+    <!-- local DOM goes here -->
+    <iron-ajax auto id="ajaxForMainOwlSlider" url="/h/main?fm=get-games-for-main-slider&a=[[itemsize]]" method="get" handle-as="json" on-response="_response"></iron-ajax>
+
+    <div id="owl-main-slider" class="owl-carousel">
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: "kaldirirmi-main-owl-slider",
+      properties: {
+        genre: {
+          type: "String",
+          value: "Action", //default selected genre --> action
+          notify: true
+        },
+        games: {
+          type: Array,
+          value: []
+        },
+        itemsize: {
+          type: Number,
+          value: 15,
+          notify: true
+        }
+      },
+      created: function () {
+
+      },
+      _response: function (a) {
+
+        console.log("main-owl-slider _response");
+        var content = "";
+
+
+        if (a.detail.response.length > 0) {
+
+          var counter = 0;
+          a.detail.response.forEach(function (game) {
+            var gamedetail = "<a class='item' style='text-decoration: none;' href='/oyun/" + game.url + "'><div class='game' onclick='load();'> " +
+           "<iron-image background src='//cdn.kaldirirmi.com/images/games/" + game.picture + "' sizing='cover' alt='" + game.name +
+           "' preload fade style='height: 270px;'></iron-image><div class='game-title'><span>"+game.name+"</span></div></div></a>";
+            counter++;
+
+            if(counter == 9 || counter == 15)
+            {
+              //banner part
+              gamedetail = "<a class='item' style='text-decoration: none;' href='/oyun/" + game.url + "'><div class='game' onclick='load();'> " +
+           "<iron-image background src='https://placeholdit.imgix.net/~text?txtsize=15&txt=159%C3%97270&w=159&h=270' sizing='cover' alt='" + game.name +
+           "' preload fade style='height: 270px;'></iron-image><div class='game-title'><span>Buraya reklam alabilirsiniz</span></div></div></a>";
+
+            }
+            content += gamedetail;
+
+          }, this);
+          document.getElementById('owl-main-slider').innerHTML = content;
+
+        }
+      }
+
+    });
+  </script>
+  <script src="../../owl-carousel/owl.carousel.js"></script>
+  <style>
+    .owl-controls{
+      visibility: hidden !important;
+    }
+
+
+    .owl-item {
+      padding: 7px;
+      width: 170px !important;
+    }
+
+    #gamelist {
+      @apply(--layout-horizontal);
+      @apply(--layout-center-center);
+      flex-flow: row wrap;
+      -ms-flex-flow: row wrap;
+      width: 100%;
+      height: auto;
+      padding: 10px;
+      background: #222;
+    }
+
+    .game {
+      @apply(--layout-vertical);
+      @apply(--layout-center);
+      background-color: #222;
+      transition: all ease .2s;
+      cursor: pointer;
+      position: relative;
+      text-decoration: none;
+    }
+
+      .game iron-image {
+        width: 100%;
+        height: 260px;
+        pointer-events: none;
+        transition: all ease-in .2s;
+        opacity: .7;
+        background-color: #222;
+      }
+
+      .game .game-title {
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+        color: white;
+        height: 44px;
+        padding: 0 5px;
+        background: #ff7800;
+        text-align: center;
+      }
+
+        .game .game-title span {
+          width: 173px;
+          @apply(--paper-font-common-nowrap);
+          text-align: center;
+        }
+
+      .game:hover iron-image[background] {
+        opacity: 1;
+      }
+
+    .loadingIndicator {
+      text-align: center;
+      height: 40px;
+      color: white;
+    }
+
+      .loadingIndicator paper-spinner-lite {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+        --paper-spinner-color: #ff7800;
+      }
+     
+  </style>
+  <script>
+    document.addEventListener('WebComponentsReady', function () {
+
+      var owl = $("#owl-main-slider");
+      owl.owlCarousel({
+        //Basic Speeds
+        slideSpeed: 200,
+        paginationSpeed: 500,
+        rewindSpeed: 600,
+        //Lazy load
+        lazyLoad: false,
+        lazyFollow: true,
+        lazyEffect: "fade",
+        //Autoplay
+        autoPlay: true,
+        stopOnHover: true,
+
+
+        itemsCustom: [
+          [0, 2],
+          [450, 4],
+          [600, 5],
+          [700, 6],
+          [1000, 7],
+          [1200, 8],
+          [1400, 10],
+          [1600, 12]
+        ],
+        navigation: true
+      });
+
+    });
+  </script>
+
+</dom-module>

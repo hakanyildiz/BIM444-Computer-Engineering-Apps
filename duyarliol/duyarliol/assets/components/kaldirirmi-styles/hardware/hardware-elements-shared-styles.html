@@ -1,0 +1,218 @@
+﻿<dom-module id="hardware-elements-shared-styles">
+    <template>
+        <style>
+            :host {
+                display: block;
+                @apply(--paper-font-common-base);
+            }
+
+            app-toolbar {
+                background-color: #E65100;
+                box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3);
+                font-weight: bold;
+                color: white;
+                font-size: 18px;
+                z-index: 1;
+            }
+
+                app-toolbar paper-icon-button {
+                    --paper-icon-button-ink-color: white;
+                }
+
+            .item {
+                @apply(--layout-vertical);
+                padding: 20px;
+                background-color: white;
+                border: 1px solid #ddd;
+                cursor: pointer;
+                margin-bottom: 10px;
+            }
+
+                .item .item-column {
+                    @apply(--layout-horizontal);
+                    @apply(--layout-center);
+                }
+
+                .item .item-column-rowler {
+                    @apply(--layout-vertical);
+                    margin-top: 20px;
+                    border-top: 1.5px solid black;
+                    font-weight: 400;
+                    width: 100%;
+                }
+
+                .item .item-column .benchmark {
+                    background: #E65100;
+                    border-radius: 40%;
+                    padding: 10px;
+                    margin-right: 10px;
+                    color: white;
+                }
+
+                .item .item-column-invisible {
+                    display: none;
+                    opacity: 0;
+                    transition: opacity 1s linear;
+                }
+
+            .avatar {
+                height: 40px;
+                width: 40px;
+                border-radius: 20px;
+                box-sizing: border-box;
+                background-color: #DDD;
+            }
+
+            .pad {
+                padding: 0 16px;
+                @apply(--layout-flex);
+                @apply(--layout-vertical);
+            }
+
+            .primary {
+                font-size: 16px;
+                font-weight: bold;
+            }
+
+            .shortText, .longText {
+                font-size: 14px;
+            }
+
+            .item.expanded .item-column-invisible {
+                opacity: 1;
+                display: flex !important;
+            }
+
+            .spacer {
+                @apply(--layout-flex);
+            }
+
+            @media (max-width: 460px) {
+                paper-toolbar .bottom.title {
+                    font-size: 14px;
+                }
+            }
+
+            .loadingIndicator {
+                left: 0;
+                right: 0;
+                position: relative;
+                top: 6em;
+            }
+
+            #hardware-list-container {
+                min-height: 400px;
+                box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.4);
+                padding: 15px;
+            }
+
+          paper-dropdown-menu{
+            line-height: 0 !important;
+            --paper-input-container-label: {
+                      color: white;
+                      text-align: center;
+                      font-weight: bold;
+                      font-size: calc(0.45em + 1vmin);
+                };
+                --paper-input-container-input: {
+                      color: white;
+                      text-align: center;   
+                      text-transform: uppercase;
+                       font-size: calc(0.45em + 1vmin);
+
+                };
+                 --paper-input-container-focus-color: white;
+                --paper-input-container-underline: {
+                      display: none;
+                };
+
+    }
+            .searchInput {
+                @apply(--layout-flex);
+                font-size: 18px;
+                padding: 10px 20px;
+                border: none;
+                background-color: rgba(255, 255, 255, 0.2);
+                color: white;
+                -webkit-appearance: none;
+                border-radius: 0px;
+            }
+
+                .searchInput::-webkit-input-placeholder {
+                    color: white;
+                }
+
+                .searchInput:-moz-placeholder { /* Firefox 18- */
+                    color: white;
+                }
+
+                .searchInput::-moz-placeholder { /* Firefox 19+ */
+                    color: white;
+                }
+
+                .searchInput:-ms-input-placeholder {
+                    color: white;
+                }
+
+                .searchInput:hover {
+                    background-color: rgba(255, 255, 255, 0.3);
+                }
+
+                .searchInput:focus {
+                    background-color: white;
+                    outline: none;
+                    color: black;
+                }
+
+            .empty-message {
+                color: #ff7800;
+                text-align: center;
+                font-size: 1.2em;
+            }
+
+            
+       .searchInput, #mobileSearchInput{
+           outline: none !important;
+            display:none;
+        }
+       #mobileSearchInput{
+          z-index: 111;
+            width: 80%;
+            -ms-flex: 1 1 0.000000001px;
+            -webkit-flex: 1;
+            flex: 1;
+            -webkit-flex-basis: 0.000000001px;
+            flex-basis: 0.000000001px;
+            font-size: 18px;
+            padding: 10px 20px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            -webkit-appearance: none;
+            border-radius: 0px;
+            position: absolute;
+            top: 10px;
+            background: #E65100;
+            left: 60px;
+        }
+        #mobileSearchIcon{
+            margin-right:15px;
+        }
+
+        @media only screen and (min-width : 768px) {
+             .searchInput{
+                display:block;
+            }   
+             #mobileSearchIcon{
+                 display:none;
+             }
+        }
+        .inputOpened {
+            display:block !important;
+        }
+
+
+
+        </style>
+    </template>
+</dom-module>

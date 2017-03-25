@@ -1,0 +1,157 @@
+﻿<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html" />
+<link rel="import" href="../iron-ajax/iron-ajax.html" />
+<link rel="import" href="../paper-material/paper-material.html" />
+<link rel="import" href="../iron-image/iron-image.html">
+<link rel="import" href="../paper-button/paper-button.html" />
+<link rel="import" href="../paper-spinner/paper-spinner-lite.html" />
+<link rel="import" href="../paper-toast/paper-toast.html" />
+
+<dom-module id="kaldirirmi-game-list">
+  <template>
+    <style is="custom-style">
+      :host {
+        @apply(--layout-horizontal);
+        @apply(--layout-wrap);
+        justify-content: center;
+        padding: 10px 0;
+      }
+
+      #loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        min-height: 100vh;
+        background: rgba(0,0,0,0.8);
+        @apply(--layout-vertical);
+        @apply(--layout-center);
+        z-index: 1;
+        justify-content: center;
+      }
+
+        #loader paper-spinner-lite {
+          --paper-spinner-color: #ff7800;
+        }
+
+      .game {
+        position: relative;
+        width: 163px;
+        height: 236px;
+        margin: 10px;
+        overflow: hidden;
+        background-color: #222;
+        transition: all ease .2s;
+      }
+
+        .game iron-image[background] {
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+          transition: all ease-in .2s;
+          opacity: .7;
+        }
+
+        .game .game-title {
+          font-size: 17px;
+          transition: all ease-in .2s;
+          font-weight: 400;
+          color: rgba(255,255,255,.8);
+          position: absolute;
+          bottom: 5px;
+          left: 5px;
+          right: 5px;
+          padding: 10px 5px;
+          background: rgba(255,120,0,0.9);
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          text-align: center;
+        }
+
+        .game:hover iron-image[background] {
+          opacity: 1;
+        }
+    </style>
+    <iron-ajax id="getgames" url="//api.kaldirirmi.com/api/v1/games/top/[[count]]?query=[[_getquery()]]" headers='[[headers]]' handle-as="json" last-response="{{games}}" on-response="_handleresponse" on-error="_errorresponse" auto debounce-duration="300"></iron-ajax>
+    <div id="loader" class="loader"><paper-spinner-lite id="spinner" active></paper-spinner-lite></div>
+    <template is="dom-repeat" items="[[games]]" as="item">
+      <div>
+        <a href="/oyun/[[item.url]]" tabindex="-1">
+          <paper-material elevation="1" class="game">
+            <iron-image background src="[[item.picture]]" sizing="cover"></iron-image>
+            <div class="game-title">[[item.name]]</div>
+          </paper-material>
+        </a>
+      </div>
+    </template>
+    <paper-toast id="results" duration="0">
+      <paper-button onclick="location.href='/'">Filtreyi kaldır</paper-button>
+    </paper-toast>
+    <paper-toast id="noresult" duration="0">
+      <paper-button onclick="location.href='/'">Filtreyi kaldır</paper-button>
+    </paper-toast>
+  </template>
+  <script>
+    Polymer({
+      is: 'kaldirirmi-game-list',
+
+      properties: {
+        count: {
+          type: Number,
+          value: 0
+        },
+        query: {
+          type: String,
+          value: ''
+        },
+        headers: {
+          type: Object,
+          computed: 'getHeaders(token)'
+        },
+        token: {
+          type: String,
+          value: function () {
+            var a = document.querySelector('iron-meta[key="token"]');
+            return a.getAttribute('value');
+          }
+        }
+      },
+
+      getHeaders: function (a) {
+        return { 'Authorization': 'Bearer ' + a };
+      },
+
+      _getquery: function () {
+        var regex = new RegExp("[?&]query(=([^&#]*)|&|#|$)"),
+        results = regex.exec(location.href);
+
+        if (results != null) {
+          this.count = 0;
+          this.query = results[2];
+          return results[2];
+        }
+        else {
+          this.count = 10;
+          this.query = '';
+          return "";
+        }
+      },
+
+      _handleresponse: function (a) {
+        this.$.spinner.removeAttribute('active');
+        this.$.loader.setAttribute('hidden', '');
+        this.$.results.setAttribute('text', '"' + this.query + '" ile ilgili ' + this.games.length + ' adet oyun bulundu.');
+        if (this.query != '') this.$.results.setAttribute('opened', '');
+      },
+
+      _errorresponse: function (a) {
+        this.$.spinner.removeAttribute('active');
+        this.$.loader.setAttribute('hidden', '');
+        this.$.noresult.setAttribute('text', '"' + this.query + '" ile ilgili oyun bulunamadı.');
+        this.$.noresult.setAttribute('opened', '');
+      }
+    });
+  </script>
+
+</dom-module>

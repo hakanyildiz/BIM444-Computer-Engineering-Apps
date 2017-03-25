@@ -1,0 +1,67 @@
+﻿<dom-module id="kaldirirmi-games-shared-styles">
+    <template>
+        <style>
+
+              #gamesContainer{
+            width: 100%;
+            height: calc(100vh - 64px) !important;
+            overflow-y: auto;
+        }
+            parallax-element {
+                width: 100%;
+                height: calc(100vh - 109px);
+            }
+
+
+                parallax-element::-webkit-scrollbar {
+                    width: 10px !important;
+                }
+
+                parallax-element::-webkit-scrollbar-thumb {
+                    background-color: #222;
+                    border-radius: 5px;
+                    border: 2px solid #000;
+                    min-height: 50px;
+                }
+
+                parallax-element::-webkit-scrollbar-track {
+                    background-color: #000;
+                }
+
+            #promo {
+                width: 100%;
+                position: relative;
+                pointer-events: none;
+            }
+
+                #promo iron-image[promocover] {
+                    width: 100%;
+                    height: 100%;
+                    background-color: #222;
+                }
+
+                #promo #contents {
+                    @apply(--layout-vertical);
+                    @apply(--layout-center-center);
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    color: white;
+                    background: rgba(0,0,0,0.4);
+                    text-align: center;
+                }
+
+                    #promo #contents h1 {
+                        font-size: 30px;
+                        font-weight: normal;
+                    }
+
+                    #promo #contents h2 {
+                        font-size: 18px;
+                        font-weight: normal;
+                    }
+        </style>
+    </template>
+</dom-module>

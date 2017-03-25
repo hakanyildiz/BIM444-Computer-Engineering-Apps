@@ -1,0 +1,145 @@
+﻿<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html" />
+<link rel="import" href="../iron-ajax/iron-ajax.html" />
+<link rel="import" href="../iron-list/iron-list.html" />
+<link rel="import" href="../paper-material/paper-material.html" />
+<link rel="import" href="../iron-image/iron-image.html" />
+<link rel="import" href="../paper-spinner/paper-spinner-lite.html" />
+<link rel="import" href="../iron-scroll-threshold/iron-scroll-threshold.html" />
+
+<dom-module id="kaldirirmi-infinite">
+  <style>
+    :host {
+      display: block;
+      margin-bottom: 50px;
+    }
+
+    #gamelist {
+      @apply(--layout-horizontal);
+      @apply(--layout-center-center);
+      flex-flow: row wrap;
+      -ms-flex-flow: row wrap;
+      width: 100%;
+      height: auto;
+      padding: 10px;
+      background: #222;
+    }
+
+    .game {
+      @apply(--layout-vertical);
+      @apply(--layout-center);
+      margin: 5px;
+      background-color: #222;
+      transition: all ease .2s;
+      cursor: pointer;
+      width: 183px;
+      height: 300px;
+      position: relative;
+      text-decoration: none;
+    }
+
+      .game iron-image {
+        width: 183px;
+        height: 256px;
+        pointer-events: none;
+        transition: all ease-in .2s;
+        opacity: .7;
+        background-color: #222;
+      }
+
+      .game .game-title {
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+        color: white;
+        height: 44px;
+        padding: 0 5px;
+        background: #ff7800;
+        width: 173px;
+      }
+
+        .game .game-title span {
+          width: 173px;
+          @apply(--paper-font-common-nowrap);
+          text-align: center;
+        }
+
+      .game:hover iron-image[background] {
+        opacity: 1;
+      }
+
+    .loadingIndicator {
+      text-align: center;
+      height: 40px;
+      color: white;
+    }
+
+      .loadingIndicator paper-spinner-lite {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+        --paper-spinner-color: #ff7800;
+      }
+  </style>
+  <template>
+    <iron-ajax id="getgames" debounce="3000" url="/h/main?fm=get-games&a=[[page]]&b=[[itemperpage]]&c=[[query]]" handle-as="json" on-response="_response" loading="{{loadinggames}}"></iron-ajax>
+    <iron-scroll-threshold lower-threshold="300" on-lower-threshold="_loadmoregame" id="threshold">
+      <div id="gamelist">
+        <template is="dom-repeat" items="{{games}}" as="item">
+          <a class="game" href="/oyun/[[item.url]]" onclick="load();">
+            <iron-image background src="//cdn.kaldirirmi.com/images/games/[[item.picture]]" sizing="cover" alt="[[item.name]]" preload fade></iron-image>
+            <div class="game-title"><span>[[item.name]]</span></div>
+          </a>
+        </template>
+      </div>
+    </iron-scroll-threshold>
+    <div class="loadingIndicator" hidden$="[[!loadinggames]]">
+      <paper-spinner-lite active$="[[loadinggames]]"></paper-spinner-lite> Yükleniyor
+    </div>
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: "kaldirirmi-infinite",
+    properties: {
+      page: {
+        type: Number,
+        value: 0
+      },
+      itemperpage: {
+        type: Number,
+        value: 18
+      },
+      query: {
+        type: String,
+        value: ''
+      },
+      loadinggames: {
+        type: Boolean,
+        value: false
+      },
+      games: {
+        type: Array,
+        value: []
+      }
+    },
+    _loadmoregame: function () {
+      console.log('_loadmoregame');
+
+      if (this.$.getgames.lastRequest) {
+        this.$.getgames.lastRequest.abort();
+      }
+
+      this.page++;
+      this.$.getgames.generateRequest();
+    },
+    _response: function (a) {
+      console.log('_response');
+      if (a.detail.response.length > 0) {
+        a.detail.response.forEach(function (game) {
+          this.push('games', game);
+        }, this);
+        this.$.threshold.clearTriggers();
+      }
+    }
+  });
+</script>

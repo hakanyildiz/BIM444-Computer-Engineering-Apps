@@ -1,0 +1,192 @@
+﻿<link rel="import" href="../../polymer/polymer.html">
+<dom-module id="kaldirirmi-profile-general-information">
+    <template>
+        <style is="custom-style">
+            :host {
+                  @apply(--layout-vertical);
+                }
+            :root {
+                /* Label and underline color when the input is not focused */
+                --paper-input-container-color: white;
+
+                /* Label and underline color when the input is focused */
+                --paper-input-container-focus-color: #ff7800;
+
+                /* Label and underline color when the input is invalid */
+                --paper-input-container-invalid-color: #EA4335;
+
+                /* Input foreground color */
+                --paper-input-container-input-color: white;
+
+               
+            
+            }
+            #userinformation, #changepassword{
+                margin:10px;
+                width:85%;
+            }
+            #userinformation, #changepassword{
+               box-shadow: 0 12px 16px 1px rgba(0, 0, 0, 0.14), 0 4px 22px 3px rgba(0, 0, 0, 0.12), 0 6px 7px -4px rgba(0, 0, 0, 0.4);
+            }
+
+           paper-item[heading]{
+                background-color:#ff7800;
+                border-top: 3px solid #222222;
+                border-bottom: 3px solid #222222;
+                font-size: calc(0.80em + 1vmin);
+                font-weight: 100;
+                color: white !important;
+            }
+            paper-item[info]{
+                color:white;
+                justify-content:center;
+                background: #222;
+            }
+
+            #profileform, #passwordform {
+                @apply(--layout-vertical);
+                padding: 20px;
+            }
+             #profileform .birthday {
+                    @apply(--layout-horizontal);
+                    @apply(--layout-center);
+                  }
+
+                    #profileform .birthday paper-input {
+                      display: inline-block;
+                      margin-right: 5px;
+                      max-width: 90px;
+                    }
+
+                  #profileform .buttons, #passwordform .buttons {
+                    @apply(--layout-horizontal);
+                    @apply(--layout-center);
+                    @apply(--layout-end-justified);
+                    margin-top: 15px;
+                  }
+
+                    #profileform .buttons paper-icon-button , #passwordform .buttons paper-icon-button{
+                      background-color: #ff7800;
+                      color: white;
+                    }
+
+                    #passwordform paper-input {
+                      display: inline-block;
+                      margin-right: 5px;
+                      min-width: 200px;
+                    }
+             .loadingIndicatorProfile {
+                text-align: center;
+                height: 40px;
+                font-size: calc(0.5em + 1vmin);
+                min-height:350px !important;
+            }
+             .loadingIndicatorProfile h5{
+                 font-size: 1.4em;
+             }
+          
+
+             @media only screen and (min-width : 1024px) { /* zoom %175 */
+               :host{
+                   flex-direction: row !important;
+               }
+               #userinformation, #changepassword{
+                   width:50% !important;
+                }
+
+               paper-item[heading]{
+                font-size: calc(0.50em + 1vmin);
+               }
+
+                #passwordform paper-input {
+                      min-width: 270px;
+                }
+              
+            }
+
+               #alarmaa{
+                    left: 0px !important;
+                      text-align:center !important;
+                }
+        </style>
+        <!-- dom elements here-->
+        <iron-ajax auto id="userinfo" url="/h/main?fm=user-info" method="get" handle-as="json" last-response="{{userinfo}}" loading="{{loadingProfil}}"></iron-ajax>
+        <paper-material elevation="0" id="userinformation" role="listbox">
+            <paper-item heading>Profil Bilgilerin</paper-item>
+            <paper-item info>
+                <div class="loadingIndicatorProfile" style="color:#FF7800" hidden$="[[!loadingProfil]]">
+                    <loader-pac></loader-pac>
+                    <h5>Profil Yükleniyor</h5>
+                </div>
+                <div hidden$=[[loadingProfil]]>
+                    <form id="profileform" is="iron-form" action="/h/main" method="post" on-iron-form-response="_ironFormResponseForProfile">
+                        <paper-input label="İsim Soyisim" id="namesurname" name="namesurname" value$="[[userinfo.namesurname]]" char-counter maxlength="150"></paper-input>
+                        <paper-textarea label="Hakkında" id="about" name="about" value$="[[userinfo.about]]" char-counter maxlength="500"></paper-textarea>
+                        <div class="birthday">
+                            <paper-input label="Doğum Gün" type="number" id="birthday" name="birthday" value$="[[userinfo.birthday]]" max="31" maxlength="2" auto-validate></paper-input>
+                            <paper-input label="Doğum Ay" type="number" id="birthmonth" name="birthmonth" value$="[[userinfo.birthmonth]]" max="12" maxlength="2" auto-validate></paper-input>
+                            <paper-input label="Doğum Yıl" type="number" id="birthyear" name="birthyear" value$="[[userinfo.birthyear]]" max="<%= DateTime.Now.Year %>" maxlength="4" auto-validate></paper-input>
+                        </div>
+                        <div class="buttons">
+                            <input type="hidden" name="fm" value="update-user-profile" />
+                            <paper-icon-button id="profileformsubmit" on-tap="_profileFormSubmit" icon="done"></paper-icon-button>
+                        </div>
+                    </form>
+                </div>
+            </paper-item>
+           
+        </paper-material>
+        <paper-material elevation="0" id="changepassword">
+            <paper-item heading>Şifre Değiştir</paper-item>
+            <paper-item info>
+                <form id="passwordform" is="iron-form" action="/h/main" method="post"  on-iron-form-response="_ironFormResponseForPassword">
+                    <paper-input label="Şuanki şifren" id="oldpass" name="oldpass" required auto-validate error-message="bu alanın doldurulması zorunludur" type="password"></paper-input>
+                    <paper-input label="Yeni şifren" id="newpass" name="newpass" required char-counter minlength="8" maxlength="12" auto-validate error-message="minimum 8 karakter olmalıdır" type="password"></paper-input>
+                    <paper-input label="Yeni şifreni onayla" id="newpasscon" name="newpasscon" required char-counter minlength="8" maxlength="12" auto-validate error-message="minimum 8 karakter olmalıdır" type="password"></paper-input>
+                    <div class="buttons">
+                        <input type="hidden" name="fm" value="change-password" />
+                        <paper-icon-button id="passwordsubmit" on-tap="_passwdSubmit" icon="done"></paper-icon-button>
+                    </div>
+                </form>
+            </paper-item>
+        </paper-material>
+        <paper-toast id="alarmaa" duration="10000"  class="fit-bottom"></paper-toast>
+    </template>
+    <script>
+        Polymer({
+            is: "kaldirirmi-profile-general-information",
+            properties: {
+                loadingProfil: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+            },
+            _passwdSubmit: function (a) {
+                if (this.$.oldpass.validate() && this.$.newpass.validate() && this.$.newpasscon.validate()) {
+                    document.getElementById('passwordform').submit();
+                }
+            },
+            _profileFormSubmit: function (a) {
+                if (this.$.namesurname.validate() && this.$.about.validate() && this.$.birthday.validate() && this.$.birthmonth.validate() && this.$.birthyear.validate()){
+                    document.getElementById('profileform').submit();
+                }
+            },
+            _ironFormResponseForProfile: function (event) {
+                var response = event.detail.response;
+                console.log('ironForm Profile => ' + response);
+                this._setAlarmaa(response.message);
+            },
+            _ironFormResponseForPassword: function (event) {
+                var response = event.detail.response;
+                console.log('ironForm Password => ' + response);
+                this._setAlarmaa(response.message);
+            },
+            _setAlarmaa: function (message) {
+                document.getElementById('alert').setAttribute('text', message);
+                document.getElementById('alert').open();
+            }
+        });
+        
+    </script>
+</dom-module>

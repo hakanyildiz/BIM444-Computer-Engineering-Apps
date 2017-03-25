@@ -1,0 +1,390 @@
+﻿         #default-container {
+            padding-left: 15px;
+            padding-right: 15px;
+            box-sizing: content-box !important;
+        }
+       sc-swiper-campaign .swiper-container .populercontent .populercontent-title{
+                width: 100% !important;
+            } 
+       #campaignwrapper .swiper-slide .populercontent .populercontent-title h5 {
+          width: 100% !important;
+       } 
+
+       #conslider1, #conslider2,#conslider3, #conslider4,#conslider5, #conslider6,#conslider7, #conslider8 {
+                display: none;
+            }
+
+       #default-full-container{
+           width: 100% !important;
+       }
+       
+        @media only screen and (max-width: 480px){
+            
+          
+             .populercontent .populercontent-title h5, .highlight-column figure{
+                     font-size: calc(0.60em + 1vmin) !important;
+                     font-weight:100;
+
+             }
+        }
+        @media only screen and (max-width: 768px){
+             .swiper-numbers{
+                 position: absolute !important;
+                 display:flex;
+                 width: 95% !important;
+                 bottom: 0;
+             }
+                .swiper-numbers span{
+                 width: 100% !important;
+                 height: 30px !important;
+                 line-height: 30px !important;
+             }
+
+
+             .populercontent .populercontent-title h5, .highlight-column figure{
+                     font-size: calc(0.5em + 1vmin) !important;
+                     font-weight:100;
+
+             }
+        }
+
+        
+
+        /* Custom, iPhone Retina */ 
+        @media only screen and (min-width : 320px) {
+          
+             /* swiper container */
+             .swiper-container {
+              width: 290px !important;
+               margin-left: 0px;
+            }
+             .swiper-container .swiper-wrapper div{
+               width: 95% !important;
+               height: 195px !important;
+            }
+           
+               /* campaign swiper custom settings */
+            sc-swiper-campaign .swiper-container {
+                  width: 286px !important;
+                  margin-left: 3px;
+                  height: auto !important;
+            }
+            sc-swiper-campaign img {
+                height: 85% !important;
+            }
+            
+            #campaignwrapper .swiper-slide {
+                width: 100% !important;
+                height: 200px !important;
+            }
+            #campaignwrapper .swiper-slide .populercontent .populercontent-title{
+                height: 42px !important;
+            }
+
+        }
+
+        /* Custom, Galaxy S5 */ 
+        @media only screen and (min-width : 360px) {
+             /* swiper container */
+             .swiper-container {
+              width: 330px !important;
+               margin-left: 0px;
+            }
+             .swiper-container .swiper-wrapper div{
+               width: 96% !important;
+               height: 195px !important;
+            }
+
+               /* campaign swiper custom settings */
+            sc-swiper-campaign .swiper-container {
+                width: 317px !important;
+                 margin-left: 6px;
+                    height: auto !important;
+            }
+            sc-swiper-campaign img {
+                height: 85% !important;
+            }
+            
+            #campaignwrapper .swiper-slide {
+                width: 100% !important;
+                height: 200px !important;
+            }
+            #campaignwrapper .swiper-slide .populercontent .populercontent-title{
+                height: 42px !important;
+            }
+        }
+
+         /* Iphone 6s plus */ 
+        @media only screen and (min-width : 412px) {
+        
+             /* swiper container */
+             .swiper-container {
+              width: 380px !important;
+               margin-left: 0px;
+            }
+             .swiper-container .swiper-wrapper div{
+               width: 97% !important;
+               height: 185px !important;
+            }
+
+             /* conveyor slider */
+             #conslider2 {
+                display: block;
+            }
+
+               /* campaign swiper custom settings */
+            sc-swiper-campaign .swiper-container {
+                 width: 360px !important;
+                margin-left: 10px;
+                height: auto !important;
+            }
+            sc-swiper-campaign img {
+                height: 85% !important;
+            }
+            
+            #campaignwrapper .swiper-slide {
+                width: 100% !important;
+                height: 240px !important;
+            }
+            #campaignwrapper .swiper-slide .populercontent .populercontent-title{
+                height: 42px !important;
+            }
+        }
+
+        /* Extra Small Devices, Phones */ 
+        @media only screen and (min-width : 480px) {
+           
+             /* swiper container */
+             .swiper-container {
+               width: 440px !important;
+               margin-left: 0px;
+            }
+             .swiper-container .swiper-wrapper div{
+                 width: 100% !important;    
+                 height: 230px !important;
+            }
+
+               /* campaign swiper custom settings */
+            sc-swiper-campaign .swiper-container {
+               width: 382px !important;
+                    margin-left: 33px;
+                    height: auto !important;
+            }
+            sc-swiper-campaign img {
+                height: 85% !important;
+            }
+            
+            #campaignwrapper .swiper-slide {
+                width: 100% !important;
+                height: 300px !important;
+            }
+            #campaignwrapper .swiper-slide .populercontent .populercontent-title{
+                height: 42px !important;
+            }
+
+
+
+        }
+            
+        /* Small Devices, Tablets */
+        @media only screen and (min-width : 768px) {
+             
+             /* swiper container */
+             .swiper-container {
+                width: 619px !important;
+                margin-left: 15px;
+            }
+             .swiper-container .swiper-wrapper div{
+              width: 302px !important;
+              height: 205px !important;
+            }
+              /* conveyor slider */
+               #conslider3 {
+                display: block;
+            }
+
+                 /* campaign swiper custom settings */
+            sc-swiper-campaign .swiper-container {
+                 width: 628px !important;
+                margin-left: 26px;
+                height: auto !important;
+            }
+            sc-swiper-campaign img {
+                height: 85% !important;
+            }
+            
+            #campaignwrapper .swiper-slide {
+                width: 100% !important;
+                height: 300px !important;
+            }
+            #campaignwrapper .swiper-slide .populercontent .populercontent-title{
+                height: 42px !important;
+            }
+        }
+
+        /* Desktops and laptops ----------- */
+        @media only screen and (min-width : 1024px) { /* zoom %175 */
+           
+             /* swiper container */
+             .swiper-container {
+                width: 450px !important;
+                margin-left: 0px;
+            }
+             .swiper-container .swiper-wrapper div{
+                width: 450px !important;
+                height: 270px !important;
+            }
+              /* conveyor slider */
+                #conslider4 {
+                display: block;
+            }
+
+                 /* campaign swiper custom settings */
+            sc-swiper-campaign .swiper-container {
+               width: 684px !important;
+                    margin-left: 33px;
+                    height: auto !important;
+            }
+            sc-swiper-campaign img {
+                height: 85% !important;
+            }
+            
+            #campaignwrapper .swiper-slide {
+                width: 100% !important;
+                height: 300px !important;
+            }
+            #campaignwrapper .swiper-slide .populercontent .populercontent-title{
+                height: 42px !important;
+            }
+        }
+
+        @media only screen and (min-width : 1224px) { /* zoom %150 */
+           
+             /* swiper container */
+             .swiper-container {
+                width: 280px !important;
+            }
+             .swiper-container .swiper-wrapper div{
+                   width: 280px !important;
+                 height: 210px !important;
+            }
+
+              /* conveyor slider */
+                #conslider5{
+                display: block;
+            }
+
+              /* campaign swiper custom settings */
+            sc-swiper-campaign .swiper-container {
+                     width: 740px !important;
+                    margin-left: 105px;
+                    height: auto !important;
+            }
+            sc-swiper-campaign img {
+                height: 85% !important;
+            }
+            
+            #campaignwrapper .swiper-slide {
+                width: 100% !important;
+                height: 270px !important;
+            }
+            #campaignwrapper .swiper-slide .populercontent .populercontent-title{
+                height: 42px !important;
+            }
+        }
+
+
+
+        @media only screen and (min-width : 1440px) { /* zoom % 125*/
+          
+             /* swiper container */
+             .swiper-container {
+                width: 320px !important;
+            }
+             .swiper-container .swiper-wrapper div{
+                   width: 320px !important;
+                 height: 240px !important;
+            }
+
+
+              /* conveyor slider */
+                #conslider6,#conslider7{
+                display: block;
+            }
+
+                 /* campaign swiper custom settings */
+            sc-swiper-campaign .swiper-container {
+                 width: 950px !important;
+                 margin-left: 85px;
+                 height: auto !important;
+
+            }
+            sc-swiper-campaign img {
+                height: 85% !important;
+            }
+            
+            #campaignwrapper .swiper-slide {
+                width: 100% !important;
+                height: 400px !important;
+            }
+            #campaignwrapper .swiper-slide .populercontent .populercontent-title{
+                height: 60px !important;
+            }
+        }
+
+        @media only screen and (min-width : 1640px) { /* zoom %110*/
+          
+             /* campaign swiper custom settings */
+            sc-swiper-campaign .swiper-container {
+                width: 1085px !important;
+                margin-left: 80px;
+                height: auto !important;
+
+            }
+            sc-swiper-campaign img {
+                height: 85% !important;
+            }
+            
+            #campaignwrapper .swiper-slide {
+                width: 100% !important;
+                height: 400px !important;
+            }
+            #campaignwrapper .swiper-slide .populercontent .populercontent-title{
+                height: 60px !important;
+            }
+
+        }
+        /* Large screens ----------- */
+        @media only screen and (min-width : 1824px) {
+           
+
+           /* swiper container */
+             .swiper-container {
+                width: 450px !important;
+                margin-left: 0px;
+            }
+             .swiper-container .swiper-wrapper div{
+                width: 450px !important;
+                height: 270px !important;
+            }
+
+                /* campaign swiper custom settings */
+            sc-swiper-campaign .swiper-container {
+                  width: 1160px !important;
+                  margin-left: 85px;
+                  height: auto !important;
+            }
+
+            sc-swiper-campaign img {
+                height: 85% !important;
+            }
+            
+            #campaignwrapper .swiper-slide {
+                width: 100% !important;
+                height: 440px !important;
+            }
+            #campaignwrapper .swiper-slide .populercontent .populercontent-title{
+                height: 60px !important;
+            }
+              
+        }

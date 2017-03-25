@@ -1,0 +1,850 @@
+﻿<dom-module id="do-main">
+    <template>
+        <style is="custom-style">
+              body {
+                  overflow: hidden !important;
+                  margin: 0;
+                  font-family: 'Roboto', 'Noto', sans-serif;
+                  background-color: #eee;
+              }
+
+              #alert {
+                    
+                    top: 0px !important;
+                    left: 80px !important;
+                    max-width: 100% !important;
+                    width: 100% !important;
+                    background: #ff7800 !important;
+                    color:#222 !important;
+                    font-weight: bold !important;
+                    height: 64px !important;
+                    max-height: 64px !important;
+                    margin: 0 !important;
+                    display: flex;
+                    justify-content: center !important;
+                    align-items: center !important;
+                    font-size: 18px !important;
+              }
+
+              * {
+                  @apply(--paper-font-common-base);
+              }
+
+              #pageloader paper-spinner-lite {
+                  --paper-spinner-color: #ff7800;
+              }
+
+              #appheader .options paper-icon-button {
+                  --paper-icon-button-ink-color: white;
+                  color: #ff7800;
+              }
+
+              paper-tooltip {
+                  --paper-tooltip-background: #222;
+                  --paper-tooltip-text-color: #fff;
+                  width: 160px;
+                  --paper-tooltip:{
+                                      font-size: 16px;
+                                  }
+              }
+
+              *, :before, :after {
+                  box-sizing: inherit;
+              }
+
+              html, body {
+                  box-sizing: border-box;
+              }
+
+              body {
+                  width: 100%;
+                  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                  padding: 0;
+                  margin: 0;
+                  min-height: 100vh;
+                  position: relative;
+              }
+              /*::-webkit-scrollbar {
+                  width: 10px !important;
+              }
+              ::-webkit-scrollbar-thumb {
+                  background-color: #171059;
+                  border-radius: 5px;
+                  border: 2px solid #171059;
+                  min-height: 50px;
+              }
+
+              ::-webkit-scrollbar-track {
+                  background-color: #171059;
+              }*/
+
+              app-drawer-layout {
+                  background-color: #171059;
+              }
+
+              app-drawer {
+                  box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.4);
+                  /*background-color: #222;*/
+                  @apply(--layout-vertical);
+                  --app-drawer-width: 160px;
+                  --app-drawer-content-container:{
+                        background-color: transparent !important;
+                 }
+              }
+              app-drawer .dodrawer {
+                  @apply(--layout-vertical);
+              }
+                  app-drawer .dodrawer .dologo, app-drawer .dodrawer .donavigation {
+                      @apply(--layout-vertical);
+                      @apply(--layout-center-center);
+                  }
+
+                      app-drawer .dodrawer .dologo iron-image {
+                          width: 150px;
+                          height: 150px;
+                          cursor: pointer;
+                      }
+
+                  app-drawer .dodrawer .donavigation #doNavigationMenu {
+                      --paper-menu-background-color: inherit !important;
+                      --paper-menu-color: white;
+                      --paper-menu-selected-item:{
+                                border-left: 2px solid #fff;
+                                color: #fff;
+                            } 
+                      --paper-menu-focused-item: {
+                          background: #756DBD !important;
+                          color: #222;
+                      }
+
+                      --paper-menu-focused-item-after: {
+                          background: #756DBD !important;
+                      }
+              }
+              app-drawer .dodrawer .donavigation #doNavigationMenu paper-item {
+                  padding: 12px 0px 0px 0px;
+                  display: flex;
+                  text-align: center;
+                  width: 100%;
+              }
+
+                  app-drawer .dodrawer .donavigation #doNavigationMenu paper-item a {
+                      border: none;
+                      width: 100%;
+                      height: 100%;
+                      text-decoration: none;
+                      color: inherit !important;
+                  }
+              parallax-element {
+                  height: calc(100vh - 64px) !important;
+              }
+              app-toolbar {
+                  background-color: #171059;
+                  color: #fff;
+                  box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.4);
+              }
+                 
+                      #appheader .header-search input::-webkit-input-placeholder {
+                          color: white;
+                      }
+              #app {
+                  overflow: hidden !important;
+                  width: 100%;
+                  min-height: calc(100vh - 64px);
+                  background: #fff;
+                  z-index: 0;
+              }
+              #toolbar {
+                      @apply(--layout-horizontal);
+                      @apply(--layout-center);
+                      justify-content: space-between;
+                  }
+
+              #toolbar .header-title{
+                  @apply(--layout-flex);
+                  text-transform:capitalize;
+              }
+              #toolbar .header-logout{
+                  color: #fff;
+              }
+
+
+              /* profilesalarydialog*/
+               #profilesalarydialog {
+                  position: fixed;
+                  top: 0;
+                  left: 0;
+                  right: 0;
+                  bottom: 0;
+                  margin: 0;
+                  padding: 0;
+                  background-color: #171059;
+                  color: white;
+                  @apply(--layout-vertical);
+                  @apply(--layout-center-center);
+                  overflow-y: scroll !important;
+                }
+
+                #profilesalarydialog #closecoverchanger {
+                    width: calc(100% - 20px);
+                    @apply(--layout-horizontal);
+                    @apply(--layout-end-justified);
+                  }
+                #profilesalarydialog #dialogcontainer {
+                    @apply(--layout-vertical);
+                    width: 100%;
+                    height: 100%;
+                  }
+
+            #profilesalarydialog #closecoverchanger paper-icon-button {
+              --paper-icon-button-ink-color: white;
+              color: white;
+            }
+
+         #profilesalarydialog #coverform {
+            @apply(--layout-vertical);
+            @apply(--layout-center);
+            width: calc(100% - 48px);
+            height: calc(100% - 108px);
+          }
+
+        #profilesalarydialog #coverform paper-button {
+          background-color: #ff7800;
+          color: white;
+          margin-top: 20px;
+        }
+        #profilesalarydialog .header{
+            background: #171059;
+            width: 100%;
+            min-height: 64px;
+            @apply(--layout-horizontal);
+            @apply(--layout-center);
+        }
+        #profilesalarydialog .header h3{
+                font-weight: 100;
+                font-size: 20px;
+                @apply(--layout-flex);
+        }
+        #profilesalarydialog .content{
+            background:#fff;
+            color: #000 !important;
+            width: 100%;
+        }
+        #profilesalarydialog .content .content-header{
+            text-align:center;
+            padding:10px 0px;
+        }
+        #profilesalarydialog .content .content-header h3{
+            font-weight: 400;
+        }
+        #profilesalarydialog .content #salaryform{
+            height:100%;
+            padding: 10px;
+            @apply(--layout-vertical);
+            margin-bottom:50px;
+        }
+
+        .paymentcatalog{
+                box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12), 0 3px 5px -1px rgba(0, 0, 0, 0.4);
+                padding: 15px;
+        }
+        .paymentcatalog .paymentcatalogtitle{
+                font-weight: 500;
+                margin: 9px;
+                font-size: 16px;
+        }
+
+        .payment-subcatalog{
+            padding:5px;
+            /*min-height:100px;*/
+            @apply(--shadow-elevation-3dp);
+            margin: 0px 10px;
+        }
+        .mastercolor{
+            background-color:#171059;
+            color: #fff;
+        }
+
+        .marginTopBottom15{
+            margin: 15px 0px;
+        }
+        .marginLeftRight15{
+            margin: 0px 15px;
+            min-width: 300px;
+        }
+        #salaryform h4{
+                font-size: 19px;
+        }
+        .btnWidth33{
+            width: 33%;
+        }
+        .justife-center{
+            justify-content:center;
+        }
+        .addCreditButton{
+                background: #008744;
+    color: white;
+    font-size: 13px;
+        }
+        </style>
+
+        <iron-ajax auto id="check-user-income" debounce-duration="300" url="/h/main?fm=check-user-income" handle-as="json" on-response="_responseCheckUserIncome"></iron-ajax>
+        <iron-ajax auto id="getuserinfo" debounce-duration="300" url="/h/main?fm=user-info" handle-as="json" on-response="_responseGetUserInfo"></iron-ajax>
+
+        <paper-dialog id="profilesalarydialog" entry-animation="slide-from-bottom-animation" exit-animation="slide-down-animation" modal>
+            <div id="dialogcontainer">
+                <div class="header">
+                     <h3>Duyarlı.ol</h3>  
+                    <!--<paper-icon-button icon="close" dialog-dismiss></paper-icon-button>-->
+                </div>
+                <div class="content">
+                    <paper-material elevation="3" >
+                        <paper-material elevation="1" class="content-header">
+                            <h2>Sitemize ilk kez giriş yaptığını görüyoruz.</h2>
+                            <h3>Duyarlılığa başlayabilmek için gerekli yerleri doldurunuz.</h3>
+                        </paper-material>
+                        <form id="salaryform" action="/h/main" method="post" is="iron-form" on-iron-form-response="_onAddFirstSalaryFormResponse">
+                            <div class="layout vertical">
+                                <h4>Aylık Gelirleriniz</h4>
+                                <div class="layout horizontal">
+                                    <paper-dropdown-menu class="pdmHeader" label="Meslek Seçiniz">
+                                        <paper-listbox style="background-color:#171059; color:white" class="dropdown-content"
+                                                       attr-for-selected="value"
+                                                       selected="{{jobtype}}">
+                                            <paper-item value="student">Öğrenci</paper-item>
+                                            <paper-item value="worker">Çalışan</paper-item>
+                                        </paper-listbox>
+                                    </paper-dropdown-menu>
+                                    <template is="dom-if" if="[[isStudent]]">
+                                        <div class="layout vertical marginLeftRight15">
+                                            <money-input id="studentmonthlyincome" currency="&#8378" max-value="10000" value="{{studentmonthlyincome}}" label="Öğrenci Aylık Gelir (Aileden Gelen vb.)" required></money-input>
+                                            <span class="marginTopBottom15">Net Gelir: {{studentmonthlyincome}} &#8378;</span>
+                                        </div>
+                                        <div class="layout vertical marginLeftRight15">
+                                            <money-input id="studentmonthlyadditionalincome" required currency="&#8378" max-value="10000" value="{{studentmonthlyadditionalincome}}" label="Harici Gelirler (burs, parttime iş vb.)"></money-input>
+                                            <span class="marginTopBottom15">Ek Gelir: {{studentmonthlyadditionalincome}} &#8378;</span>
+                                        </div>
+                                    </template>
+                                    <template is="dom-if" if="[[isWorker]]">
+                                        <div class="layout vertical marginLeftRight15">
+                                            <money-input id="workermonthlyincome" required currency="&#8378" max-value="10000" value="{{workermonthlyincome}}" label="Çalışan Aylık Net Gelir (maaş vb.)"></money-input>
+                                            <span class="marginTopBottom15">Net Gelir: {{workermonthlyincome}} &#8378;</span>
+                                        </div>
+                                        <div class="layout vertical marginLeftRight15">
+                                            <money-input id="workermonthlyadditionalincome" required currency="&#8378" max-value="10000" value="{{workermonthlyadditionalincome}}" label="Harici Gelirler (resmi olmayan gelirler, extra kira gelirleri vb.)"></money-input>
+                                            <span class="marginTopBottom15">Ek Gelir: {{workermonthlyadditionalincome}} &#8378;</span>
+                                        </div>
+                                    </template>
+                                </div>
+                                <!-- Aylık Giderler-->
+                                <div class="layout vertical">
+                                    <h4>Aylık Giderler</h4>
+                                    <div class="layout vertical">
+                                        <!-- Kira -->
+                                        <div class="layout vertical paymentcatalog">
+                                            <div class="layout horizontal">
+                                                <label style="margin-right:20px;">Kira Ödüyor musun?</label>
+                                                <paper-checkbox checked="{{isrentcost}}">Ödüyorsan Tıkla</paper-checkbox>
+                                            </div>
+                                           <template is="dom-if" if="[[isrentcost]]">
+                                                <money-input currency="&#8378" max-value="10000" 
+                                                             value="{{houseRent}}" label="Ev Kira Ücreti"></money-input>
+                                                <span class="marginTopBottom15">Kira Ücretin: {{houseRent}} &#8378;</span>
+                                            </template>
+                                        </div>
+
+                                        <!-- Faturalar-->
+                                        <div class="layout vertical paymentcatalog" style="min-height:300px;">
+
+                                            <paper-button class="mastercolor btnWidth33" raised on-tap="_togglePaymentMenu"><iron-icon icon="add"></iron-icon>Fatura Panelini Göster</paper-button>
+                                            <template is="dom-if" if="[[visiblePayments]]">
+                                                <div class="paymentcatalogtitle">Faturalar</div>
+                                                <div class="layout horizontal">
+                                                    <!-- elektrik-->
+                                                    <div class="layout vertical payment-subcatalog">
+                                                        <label style="margin-right:20px;">Aylık Elektrik Faturası</label>
+                                                        <money-input currency="&#8378" max-value="100000" value="{{electricbill}}" label="Elektrik Faturası"></money-input>
+                                                    </div>
+                                                    <!-- su-->
+                                                    <div class="layout vertical payment-subcatalog">
+                                                        <label style="margin-right:20px;">Aylık Su Faturası</label>
+                                                        <money-input currency="&#8378" max-value="100000" value="{{waterbill}}" label="Su Faturası"></money-input>
+                                                    </div>
+                                                    <!-- Doğalgaz-->
+                                                    <div class="layout vertical payment-subcatalog">
+                                                        <label style="margin-right:20px;">Aylık Doğalgaz Faturası</label>
+                                                        <money-input currency="&#8378" max-value="100000" value="{{gasbill}}" label="Doğalgaz Faturası"></money-input>
+                                                    </div>
+                                                    <!-- GSM -->
+                                                    <div class="layout vertical payment-subcatalog">
+                                                        <label style="margin-right:20px;">Aylık Telefon Faturası</label>
+                                                        <money-input currency="&#8378" max-value="100000" value="{{gsmbill}}" label="Telefon Faturası"></money-input>
+                                                    </div>
+                                                    <!-- Doğalgaz-->
+                                                    <div class="layout vertical payment-subcatalog">
+                                                        <label style="margin-right:20px;">Aylık Internet Faturası</label>
+                                                        <money-input currency="&#8378" max-value="100000" value="{{internetbill}}" label="Internet Faturası"></money-input>
+                                                    </div>
+                                                    <!-- Diğer-->
+                                                    <div class="layout vertical payment-subcatalog">
+                                                        <label style="margin-right:20px;">Diğer Faturalar</label>
+                                                        <money-input currency="&#8378" max-value="100000" value="{{otherbills}}" label="Diğer Faturalar"></money-input>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            <br />
+                                            <paper-button class="mastercolor btnWidth33" raised on-tap="_toggleExpenseMenu"><iron-icon icon="add"></iron-icon>Bireysel Harcama Panelini Göster</paper-button>
+                                            
+                                            <template is="dom-if" if="[[visibleExpenses]]">
+                                                <div class="paymentcatalogtitle">Bireysel Harcamalar</div>
+                                                <div class="layout horizontal">
+                                                    <!-- bireysel Harcamalar-->
+                                                    <div class="layout vertical payment-subcatalog">
+                                                        <label style="margin-right:20px;">Aylık Tahmini Bireysel Harcamalar</label>
+                                                        <money-input currency="&#8378" max-value="100000" value="{{individualexpense}}" label="Bireysel Harcamalar"></money-input>
+                                                    </div>
+                                                    <!-- aylık market alışverişi-->
+                                                    <div class="layout vertical payment-subcatalog">
+                                                        <label style="margin-right:20px;">Aylık Tahmini Market Alışverişleri</label>
+                                                        <money-input currency="&#8378" max-value="100000" value="{{marketexpense}}" label="Market Alışverişi"></money-input>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            <br />
+                                            <paper-button class="mastercolor btnWidth33" raised on-tap="_toggleCreditCardMenu"><iron-icon icon="add"></iron-icon>Kredi Kart Panelini Göster</paper-button>
+                                            <template is="dom-if" if="[[visibleCreditCards]]">
+                                                <div class="paymentcatalogtitle">Kredi Kartlarım (Yok ise boş bırakınız)</div>
+                                                <div class="layout horizontal marginTopBottom15">
+                                                    <paper-button raised on-tap="_addCardPanel" class="addCreditButton"><iron-icon icon="add"></iron-icon>Kart Ekle </paper-button>
+                                                </div>
+                                                <div class="layout vertical">
+
+                                                    <!-- Card One-->
+                                                    <div class="layout horizontal payment-subcatalog">
+                                                            <div class="layout vertical" style="justify-content:flex-end">
+                                                                <paper-input-container>
+                                                                    <label>Banka Adı</label>
+                                                                    <input is="iron-input" bind-value="{{bankNameOne}}" />
+                                                                </paper-input-container>
+                                                            </div>
+                                                            <div class="layout vertical payment-subcatalog">
+                                                                <label style="margin-right:20px;">{{bankNameOne}} Kart Limiti</label>
+                                                                <money-input currency="&#8378" max-value="100000" value="{{cardLimitOne}}" label="Kart Limiti"></money-input>
+                                                            </div>
+
+                                                            <div class="layout vertical payment-subcatalog">
+                                                                <label style="margin-right:20px;">{{bankNameOne}} Anlık Tahmini Kart Borcu</label>
+                                                                <money-input currency="&#8378" max-value="100000" value="{{cardDebtOne}}" label="Anlık Tahmini Kart Borcu"></money-input>
+                                                            </div>
+                                                    </div>
+
+                                                    <template is="dom-if" if="[[showCardTwo]]">
+                                                        <!-- Card Two-->
+                                                        <div class="layout horizontal payment-subcatalog">
+                                                            <div class="layout vertical" style="justify-content:flex-end">
+                                                                <paper-input-container>
+                                                                    <label>Banka Adı</label>
+                                                                    <input is="iron-input" bind-value="{{bankNameTwo}}" />
+                                                                </paper-input-container>
+                                                            </div>
+                                                            <div class="layout vertical payment-subcatalog">
+                                                                <label style="margin-right:20px;">{{bankNameTwo}} Kart Limiti</label>
+                                                                <money-input currency="&#8378" max-value="100000" value="{{cardLimitTwo}}" label="Kart Limiti"></money-input>
+                                                            </div>
+
+                                                            <div class="layout vertical payment-subcatalog">
+                                                                <label style="margin-right:20px;">{{bankNameTwo}} Anlık Tahmini Kart Borcu</label>
+                                                                <money-input currency="&#8378" max-value="100000" value="{{cardDebtTwo}}" label="Anlık Tahmini Kart Borcu"></money-input>
+                                                            </div>
+
+                                                        </div>
+
+                                                    </template>
+
+                                                    <template is="dom-if" if="[[showCardThree]]">
+                                                        <!-- Card Three-->
+                                                        <div class="layout horizontal payment-subcatalog">
+                                                            <div class="layout vertical" style="justify-content:flex-end">
+                                                                <paper-input-container>
+                                                                    <label>Banka Adı</label>
+                                                                    <input is="iron-input" bind-value="{{bankNameThree}}" />
+                                                                </paper-input-container>
+                                                            </div>
+                                                            <div class="layout vertical payment-subcatalog">
+                                                                <label style="margin-right:20px;">{{bankNameThree}} Kart Limiti</label>
+                                                                <money-input currency="&#8378" max-value="100000" value="{{cardLimitThree}}" label="Kart Limiti"></money-input>
+                                                            </div>
+
+                                                            <div class="layout vertical payment-subcatalog">
+                                                                <label style="margin-right:20px;">{{bankNameThree}} Anlık Tahmini Kart Borcu</label>
+                                                                <money-input currency="&#8378" max-value="100000" value="{{cardDebtThree}}" label="Anlık Tahmini Kart Borcu"></money-input>
+                                                            </div>
+                                                        </div>
+
+                                                    </template>
+
+                                                    <template is="dom-if" if="[[showCardFour]]">
+                                                        <!-- Card Four-->
+                                                        <div class="layout horizontal payment-subcatalog">
+                                                            <div class="layout vertical" style="justify-content:flex-end">
+                                                                <paper-input-container>
+                                                                    <label>Banka Adı</label>
+                                                                    <input is="iron-input" bind-value="{{bankNameFour}}" />
+                                                                </paper-input-container>
+                                                            </div>
+                                                            <div class="layout vertical payment-subcatalog">
+                                                                <label style="margin-right:20px;">{{bankNameFour}} Kart Limiti</label>
+                                                                <money-input currency="&#8378" max-value="100000" value="{{cardLimitFour}}" label="Kart Limiti"></money-input>
+                                                            </div>
+
+                                                            <div class="layout vertical payment-subcatalog">
+                                                                <label style="margin-right:20px;">{{bankNameFour}} Anlık Tahmini Kart Borcu</label>
+                                                                <money-input currency="&#8378" max-value="100000" value="{{cardDebtFour}}" label="Anlık Tahmini Kart Borcu"></money-input>
+                                                            </div>
+                                                        </div>
+
+                                                    </template>
+
+                                                    <template is="dom-if" if="[[showCardFive]]">
+                                                        <!-- Card Five-->
+                                                        <div class="layout horizontal payment-subcatalog">
+                                                            <div class="layout vertical" style="justify-content:flex-end">
+                                                                <paper-input-container>
+                                                                    <label>Banka Adı</label>
+                                                                    <input is="iron-input" bind-value="{{bankNameFive}}" />
+                                                                </paper-input-container>
+                                                            </div>
+                                                            <div class="layout vertical payment-subcatalog">
+                                                                <label style="margin-right:20px;">{{bankNameFive}} Kart Limiti</label>
+                                                                <money-input currency="&#8378" max-value="100000" value="{{cardLimitFive}}" label="Kart Limiti"></money-input>
+                                                            </div>
+
+                                                            <div class="layout vertical payment-subcatalog">
+                                                                <label style="margin-right:20px;">{{bankNameFive}} Anlık Tahmini Kart Borcu</label>
+                                                                <money-input currency="&#8378" max-value="100000" value="{{cardDebtFive}}" label="Anlık Tahmini Kart Borcu"></money-input>
+                                                            </div>
+                                                        </div>
+
+                                                    </template>
+
+                                                </div>
+                                            </template>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <input type="hidden" name="fm" value="add-first-user-data"/>
+                            <!-- User Income-->
+                            <input type="hidden" name="jobtype" value="{{jobtype}}"/>
+                            <input type="hidden" name="studentmonthlyincome" value="{{studentmonthlyincome}}" />
+                            <input type="hidden" name="studentmonthlyadditionalincome" value="{{studentmonthlyadditionalincome}}" />
+                            <input type="hidden" name="workermonthlyincome" value="{{workermonthlyincome}}" />
+                            <input type="hidden" name="workermonthlyadditionalincome" value="{{workermonthlyadditionalincome}}" />
+
+                            <!-- User Outcome-->
+                            <input type="hidden" name="houseRent" value="{{houseRent}}"/>
+                            <input type="hidden" name="electricbill" value="{{electricbill}}" />
+                            <input type="hidden" name="waterbill" value="{{waterbill}}" />
+                            <input type="hidden" name="gasbill" value="{{gasbill}}" />
+                            <input type="hidden" name="internetbill" value="{{internetbill}}" />
+                            <input type="hidden" name="gsmbills" value="{{gsmbills}}" />
+                            <input type="hidden" name="otherbills" value="{{otherbills}}" />
+                            <input type="hidden" name="individualexpense" value="{{individualexpense}}" />
+                            <input type="hidden" name="marketexpense" value="{{marketexpense}}" />
+
+                            <!-- User Credit Cards -->
+                            <input type="hidden" name="bankNameOne" value="{{bankNameOne}}"/>
+                            <input type="hidden" name="cardLimitOne" value="{{cardLimitOne}}" />
+                            <input type="hidden" name="cardDebtOne" value="{{cardDebtOne}}" />
+                            <input type="hidden" name="bankNameTwo" value="{{bankNameTwo}}" />
+                            <input type="hidden" name="cardLimitTwo" value="{{cardLimitTwo}}" />
+                            <input type="hidden" name="cardDebtTwo" value="{{cardDebtTwo}}" />
+                            <input type="hidden" name="bankNameThree" value="{{bankNameThree}}" />
+                            <input type="hidden" name="cardLimitThree" value="{{cardLimitThree}}" />
+                            <input type="hidden" name="cardDebtThree" value="{{cardDebtThree}}" />
+                            <input type="hidden" name="bankNameFour" value="{{bankNameFour}}" />
+                            <input type="hidden" name="cardLimitFour" value="{{cardLimitFour}}" />
+                            <input type="hidden" name="cardDebtFour" value="{{cardDebtFour}}" />
+                            <input type="hidden" name="bankNameFive" value="{{bankNameFive}}" />
+                            <input type="hidden" name="cardLimitFive" value="{{cardLimitFive}}" />
+                            <input type="hidden" name="cardDebtFive" value="{{cardDebtFive}}" />
+
+                            <div class="layout vertical">
+                                <paper-button raised class="mastercolor btnWidth33 marginTopBottom15" on-tap="_submitSalaryDialog">Kaydet</paper-button>
+                            </div>
+
+                            <!--<input type="hidden" name="fm" value="update-user-cover" />
+                            <input type="file" name="avatar" title="Lütfen bir resim seç" accept=".png,.jpg,.jpeg" required />
+                            <paper-button raised onclick="load(); document.getElementById('coverform').submit();">gönder</paper-button>-->
+                        </form>
+                    </paper-material>
+                </div>
+            </div>
+        </paper-dialog>
+        <app-drawer-layout>
+            <app-drawer id="drawer">
+                <div class="dodrawer">
+                    <div class="dologo">
+                        <iron-image id="ironImageMainLogo" alt="Duyarli.ol Logo" src="/assets/img/logo.png" sizing="cover" onclick="load(); location.href='/';"></iron-image>
+                    </div>
+                    <div class="donavigation">
+                        <paper-menu id="doNavigationMenu" class="dropdown-content" selected="{{selected}}" on-iron-select="_ironSelect">
+                            <paper-item id="navHome">
+                                    <paper-button raised data-hover="Anasayfa" class="btnNav btnNavb icon-remove"><span><iron-icon icon="icons:home"></iron-icon></span></paper-button>
+                            </paper-item>
+                            <paper-item id="navPlayground">
+                                    <paper-button raised data-hover="doPlay" class="btnNav btnNavb icon-remove"><span><iron-icon icon="places:casino"></iron-icon></span></paper-button>
+                            </paper-item>
+                            <paper-item id="navForum">
+                                    <paper-button raised data-hover="Forum" class="btnNav btnNavb icon-remove"><span><iron-icon icon="communication:comment"></iron-icon></span></paper-button>
+                            </paper-item>
+                        </paper-menu>
+                     </div>
+                </div>
+            </app-drawer>
+            <app-toolbar id="toolbar">
+                    <div class="header-title">{{_remakeUsername(user.username)}}</div>      
+                    <a class="header-logout" href="/uye/cikis">
+                       <paper-icon-button id="piblogout" icon="icons:exit-to-app"></paper-icon-button>
+                    </a>
+                    <paper-tooltip for="piblogout" position="left">Çıkış Yap</paper-tooltip>
+
+            </app-toolbar>
+            <div id="app">
+                <iron-pages id="mainpages">
+                    <div id="naHome">
+                        <do-home uid="[[uid]]"></do-home>
+                    </div>
+                    <div id="naProfile">
+                        <do-profile uid="[[uid]]"></do-profile>
+                    </div>
+                </iron-pages>
+            </div>
+        </app-drawer-layout>
+    </template>
+    <script>
+        Polymer({
+            is: 'do-main',
+            properties: {
+                uid: {
+                    type: Number,
+                    value: 11111,
+                    notify: true
+                },
+                user: {
+                    type: Object,
+                    notify: true
+                },
+                selected: {
+                    type: Number,
+                    value: 0
+                },
+                jobtype: {
+                    type: String,
+                    observer: '_jobTypeChanged'
+                },
+                isStudent: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                isWorker: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                isrentcost: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+
+                /* payment of rent, fatura, vb. */
+                paymentRent: {
+                    type: Number,
+                    value: 0,
+                    notify: true
+                },
+                
+                /* credit card*/
+                creditCardOneName: {
+                    type: String,
+                    observer: '_changeCardOneName'
+                },
+
+                showCardTwo: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                showCardThree: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                showCardFour: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                showCardFive: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                }
+                
+
+            },
+            ready: function () {
+                console.log('do-main run! ' + this.uid);
+
+            },
+            _responseGetUserInfo: function (event) {
+                var response = event.detail.response;
+                this.set('user', response);
+            },
+            _remakeUsername: function (name) {
+                return name + ', hoşgeldin';
+            },
+            _ironSelect: function (event) {
+                var item = event.detail.item;
+
+                var selected = event.target.selected;
+
+                this._checkImports(selected);
+                this.$.mainpages.select(selected);
+
+            },
+            _checkImports: function (selection) {
+                if (selection == 0) {
+                    if (!this._isAlreadyInstance(this.$.naHome)) {
+                        Polymer.Base.importHref('assets/duyarliol/do-home.html');
+                    }
+                }
+                if (selection == 1) {
+                    if (!this._isAlreadyInstance(this.$.naProfile)) {
+                        Polymer.Base.importHref('assets/duyarliol/do-profile.html');
+                    }
+                }
+
+            },
+            _isAlreadyInstance: function (element) {
+                if (Polymer.isInstance(element)) {
+                    return true;
+                }
+                return false;
+            },
+            _jobTypeChanged: function (newVal, oldVal) {
+                console.log(newVal);
+                console.log(oldVal);
+
+                if (newVal == 'student') {
+                    this.isStudent = true;
+                    this.isWorker = false;
+                }
+                else if(newVal == 'worker')
+                {
+                    this.isStudent = false;
+                    this.isWorker = true;
+                }
+            },
+            _togglePaymentMenu: function () {
+                this.visiblePayments = true;
+
+            },
+            _toggleExpenseMenu: function () {
+                this.visibleExpenses = true;
+
+            },
+            _toggleCreditCardMenu: function () {
+                this.visibleCreditCards = true;
+
+            },
+            _submitSalaryDialog: function () {
+                var jobtype = $('input[name=jobtype]').val();
+                var sIncome = $('input[name=studentmonthlyincome]').val();
+                var sAdditionalIncome = $('input[name=studentmonthlyadditionalincome]').val();
+                var wIncome = $('input[name=workermonthlyincome]').val();
+                var wAdditionalIncome = $('input[name=workermonthlyadditionalincome]').val();
+
+                var systemAlert = document.getElementById('alert');
+
+                if (jobtype == '') {
+                    systemAlert.setAttribute('text', 'İşlemi Tamamlamak İçin Meslek Seçimi Yapınız');
+                    systemAlert.open();
+                }
+                else if (jobtype == 'student') {
+                    if (sIncome == '' || sAdditionalIncome == '') {
+                        systemAlert.setAttribute('text', 'Öğrenci Gelir Bilgileri Boş Bırakılamaz');
+                        systemAlert.open();
+                    }
+                    else {
+                        if (this.$$('#studentmonthlyincome').validate() &&
+                            this.$$('#studentmonthlyadditionalincome').validate()) {
+
+                               this.$.salaryform.submit();
+
+                        }
+                        else {
+                            systemAlert.setAttribute('text', 'Öğrenci Gelir Bilgilerini Hatalı Girdiniz');
+                            systemAlert.open();
+                        }
+                    }
+
+                }
+                else if (jobtype == 'worker') {
+                    if (wIncome == '' || wAdditionalIncome == '') {
+                        systemAlert.setAttribute('text', 'Çalışan Gelir Bilgileri Boş Bırakılamaz');
+                        systemAlert.open();
+                    }
+                    else {
+                        if (this.$$('#workermonthlyincome').validate() &&
+                            this.$$('#workermonthlyadditionalincome').validate()) {
+                            
+                                this.$.salaryform.submit();
+
+                        }
+                        else {
+                            systemAlert.setAttribute('text', 'Çalışan Gelir Bilgilerini Hatalı Girdiniz');
+                            systemAlert.open();
+                        }
+                    }
+                       
+                }
+                
+            },
+            _onAddFirstSalaryFormResponse: function (event) {
+                var response = event.detail.response;
+
+                var systemAlert = document.getElementById('alert');
+                systemAlert.setAttribute('text', response.message);
+                systemAlert.open();
+
+                this.$.profilesalarydialog.close();
+
+            },
+            _addCardPanel: function (event) {
+                
+                if (this.showCardTwo == false) this.showCardTwo = true;
+                else if (this.showCardThree == false) this.showCardThree = true;
+                else if (this.showCardFour == false) this.showCardFour = true;
+                else if (this.showCardFive == false) this.showCardFive = true;
+                else {
+                    document.getElementById('alert').setAttribute('text', 'Bu Etapta Maksimum 5 tane Kredi Kartı Ekleyebilirsiniz.');
+                    document.getElementById('alert').open();
+                }
+                
+            },
+            _responseCheckUserIncome: function (event) {
+                var response = event.detail.response;
+                if (response != null) {
+                    if (response.success == false) {
+                        this.$.profilesalarydialog.open();
+                    }
+                }
+            }
+           
+        });
+    </script>
+</dom-module>

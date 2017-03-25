@@ -1,0 +1,416 @@
+﻿<link rel="import" href="../../polymer/polymer.html">
+<dom-module id="kaldirirmi-profile-games">
+    <template>
+        <style is="custom-style">
+            :root {
+            }
+
+            paper-item[heading] {
+                     background-color: #ff7800;
+                     border-top: 3px solid #222222;
+                     border-bottom: 3px solid #222222;
+                     color: white;
+                     font-size: calc(0.8em + 1vmin);
+                     font-weight: 100;
+                }
+
+            div[likedgames] {
+                color: white;
+                font-size: calc(0.1em + 1vmin);
+                padding: calc(0.5em + 1vmin);
+            }
+
+                div[likedgames] .acc {
+                    flex-grow: 2;
+                }
+
+            #profilelikedgames {
+                width: 90%;
+                margin: 10px;
+                box-shadow: 0 12px 16px 1px rgba(0, 0, 0, 0.14), 0 4px 22px 3px rgba(0, 0, 0, 0.12), 0 6px 7px -4px rgba(0, 0, 0, 0.4);
+            }
+
+            .loadingIndicator {
+                text-align: center;
+                min-height:300px !important;
+                color: white;
+            }
+            .loadingIndicator p{
+                    font-weight: 500;
+                  font-size: 2.5em;
+            }
+
+                .loadingIndicator paper-spinner-lite {
+                    width: 20px;
+                    height: 20px;
+                    margin-right: 10px;
+                    --paper-spinner-color: #ff7800;
+                }
+
+
+            /* u card */
+            paper-card.u-card {
+                margin: 8px;
+                @apply(--layout-horizontal);
+                width: 85%;
+                height: auto;
+            }
+
+                paper-card.u-card a {
+                    width: 100%;
+                    height: 100%;
+                    text-decoration: none;
+                }
+
+            .u-image {
+                width: calc(14em + 1vmin);
+                height: auto;
+                background-size: cover;
+            }
+
+                .u-image iron-image {
+                    width: 100%;
+                    height: 100%;
+                }
+
+            .u-content {
+                @apply(--layout-flex);
+                float: left;
+            }
+
+            .u-header {
+                @apply(--paper-font-headline);
+                border-bottom: 1px solid black;
+                line-height: 20px !important;
+            }
+
+            .u-social {
+                @apply(--layout-vertical);
+                @apply(--layout-center-center);
+                margin-top: 5px;
+            }
+
+            paper-icon-button.rate-icon {
+                --iron-icon-fill-color: white;
+                --iron-icon-stroke-color: var(--paper-grey-600);
+            }
+
+            .unlinked {
+                opacity: 0.43;
+            }
+
+        
+            /* Button 5b */
+            .btn-5 {
+                font-weight: bold;
+                background: #222;
+                color: #ff7800;
+                width: 100%;
+                text-align:center;
+                line-height: 18px;
+                font-size: calc(1.2em + 1vmin);
+                overflow: hidden;
+                -webkit-backface-visibility: hidden;
+                -moz-backface-visibility: hidden;
+                backface-visibility: hidden;
+            }
+
+                .btn-5:active {
+                    /*background: #9053a9;*/
+                    top: 2px;
+                }
+
+                .btn-5 span {
+                    display: inline-block;
+                    width: 100%;
+                    height: 100%;
+                    -webkit-transition: all 0.3s;
+                    -webkit-backface-visibility: hidden;
+                    -moz-transition: all 0.3s;
+                    -moz-backface-visibility: hidden;
+                    transition: all 0.3s;
+                    backface-visibility: hidden;
+                }
+
+                .btn-5:before {
+                    position: absolute;
+                    height: 100%;
+                    width: 100%;
+                    -webkit-transition: all 0.3s;
+                    -moz-transition: all 0.3s;
+                    transition: all 0.3s;
+                    line-height: 3;
+                    }
+
+                .btn-5:active:before {
+                    color: #703b87;
+                }
+
+            .btn-5b:hover span {
+                -webkit-transform: translateX(200%);
+                -moz-transform: translateX(200%);
+                -ms-transform: translateX(200%);
+                transform: translateX(200%);
+            }
+
+            .btn-5b:before {
+                left: -100%;
+            }
+
+            .btn-5b:hover:before {
+                left: 0;
+            }
+
+            .icon-remove:before {
+                content: attr(data-hover);
+            }
+
+            .u-social h3 {
+                font-weight: 100;
+                color: black;
+                font-size: calc(0.33em + 1vmin);
+            }
+
+            
+
+            #addsystemalert {
+                color: #222 !important;
+                background-color: #ff7800 !important;
+                font-weight: bold;
+            }
+
+            #likedGameList {
+                @apply(--layout-horizontal);
+                @apply(--layout-center);
+                @apply(--layout-start-justified);
+                flex-flow: row wrap;
+                -ms-flex-flow: row wrap;
+                width: 100%;
+                height: auto;
+                padding: 10px;
+                background: #222;
+            }
+
+            .hardware-buttons {
+                display: flex;
+                flex-direction: column; 
+
+            }
+                .u-header span {
+                color: black;
+                font-size: calc(0.56em + 1vmin);
+                text-align:center;
+                font-weight: bold;
+            }
+                .u-social h4 {
+                color: black;
+                 font-size: calc(1.20em + 1vmin);
+                margin: 0;
+            }
+
+            @media only screen and (min-width : 768px) { 
+                
+                paper-card.u-card {
+                          width: calc(28em + 1vmin);
+                 }
+                    .hardware-buttons {
+                        display: flex;
+                       flex-direction: row; 
+
+                    }
+                        .u-header span {
+                        color: black;
+                        font-size: calc(0.45em + 1vmin);
+                        font-weight: bold;
+                    }
+                        .u-social h4 {
+                        color: black;
+                        font-size: calc(0.33em + 1vmin);
+                        margin: 0;
+                    }
+                    .btn-5 {
+                        font-size: calc(0.5em + 1vmin);
+                        width: 100%;
+                        text-align: center;         
+
+                    }
+                .loadingIndicator p {
+                    font-size: 1.5em;
+                }
+
+             }
+
+            @media only screen and (min-width : 1024px) {
+            
+              paper-card.u-card {
+                    width: calc(30em + 1vmin);
+                 }
+            paper-item[heading]{
+                font-size: calc(0.50em + 1vmin);
+               }
+            }
+
+            @media only screen and (min-width : 1024px) {
+             paper-card.u-card {
+                          width: calc(25em + 1vmin);
+                 }
+            }
+
+
+            
+            .system-config-buttons paper-button{
+                background-color: #ff7800;
+                color: white;
+                width: 100%;
+                font-size: calc(0.14em + 1vmin);
+                font-weight: 100;
+                line-height: 15px;
+                margin-bottom: 5px;
+            }
+
+
+
+
+
+
+
+
+        </style>
+        <paper-toast id="addsystemalert" duration="3000" class="fit-bottom"></paper-toast>
+        <form id="cancellikedgamerequestform" is="iron-form" action="/h/main" on-iron-form-response="_responseOfCancelLikeGameRequest" method="post">
+            <input type="hidden" name="fm" value="send-request-like-game" />
+            <input type="hidden" id="gameid" name="gameid" value=[[gid]] />
+            <input type="hidden" id="isliked" name="isliked" value=1 />
+        </form>
+        <iron-ajax auto="{{likedGo}}" loading="{{loadinglikes}}" id="ironAjaxGetLikedGames" debounce="3000" url="/h/main?fm=get-liked-games-of-user" handle-as="json" on-response="_responseLikedGames"></iron-ajax>
+        <!-- dom elements here-->
+        <paper-material elevation="0" id="profilelikedgames" role="listbox">
+            <paper-item heading>
+                Beğendiğin Oyunlar
+            </paper-item>
+            <div likedgames>
+                <div class="content-detail">
+                    <div id="likedGameList">
+                        <template is="dom-if" if="[[likedGamesActive]]">
+                            <template is="dom-repeat" items="{{likedGames}}" as="games">
+                                <paper-card class="u-card" elevation="3">
+                                    <div class="u-content">
+                                        <a href="/oyun/[[games.url]]" onclick="load();">
+                                            <div class="card-content" style="position: inherit !important;">
+                                                <div class="u-header"><span>[[games.name]]</span></div>
+                                                <div class="u-social">
+                                                    <div class="hardware-buttons">
+                                                        <template is="dom-if" if="[[games.kaldirir.useradded]]">
+                                                            <template is="dom-repeat" items="[[games.kaldirir.notes]]" as="notes">
+                                                                    <img style="width:40px; height:30px;" src="assets/img/gamepage-icon/[[notes.image]]" />
+                                                            </template>
+                                                        </template>
+                                                        <template is="dom-if" if="[[!games.kaldirir.useradded]]">
+                                                            <div class="system-config-buttons">
+                                                                <paper-button onclick="load(); location.href = '/sistem-sihirbazi';" raised>Sistemini Sihirbazını Çalıştır</paper-button>
+                                                                <paper-button onclick="load(); location.href='/uye/sistemini-tanimla';" raised>Sistemini Elle Güncelle</paper-button>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                    <h4>[[games.publisher]]</h4>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="card-actions" style="position: inherit !important">
+                                            <paper-button name="[[games.id]]" raised data-hover="Beğeniyi Kaldır" class="btn-5 btn-5b icon-remove" id="pbCancelGameLikes" on-tap="_triggerCancelGameForm"><span>Beğendin</span></paper-button>
+                                        </div>
+                                    </div>
+                                    <div class="u-image">
+                                        <iron-image background src="//cdn.kaldirirmi.com/images/games/[[games.picture]]" sizing="cover" alt="[[games.name]]" preload fade></iron-image>
+                                    </div>
+                                </paper-card>
+                            </template>
+                        </template>
+                        <template is="dom-if" if="[[!likedGamesActive]]">
+                            <h3>Hiç oyun beğenilmemiş!</h3>
+                        </template>
+                    </div>
+                    <div class="loadingIndicator" hidden$="[[!loadinglikes]]">
+                         <p>Beğenilen Oyunlar Getiriliyor</p>
+                         <loader-pac></loader-pac>
+                        <!--<paper-spinner-lite active$="[[loadinglikes]]"></paper-spinner-lite> Beğenilen Oyunlar Getiriliyor-->
+                    </div>
+                </div>
+            </div>
+        </paper-material>
+
+    </template>
+    <script>
+        Polymer({
+            is: "kaldirirmi-profile-games",
+            properties: {
+                gid: {
+                    type: Number,
+                    value: 0,
+                    notify: true
+                },
+                likedGo: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                likedGames: {
+                    type: Object,
+                    notify: true
+                },
+                likedGamesActive: {
+                    type: Boolean,
+                    value: true,
+                    notify: true
+                },
+                loadinglikes: {
+                    type: Boolean,
+                    value: true
+                },
+            },
+            ready: function () {
+                this.async(function () {
+                    this.likedGo = true;
+                }, 2222);
+            },
+            _triggerCancelGameForm: function (event) {
+                this.gid = event.currentTarget.name;
+                document.getElementById('pbCancelGameLikes').disabled = true;
+                document.getElementById('cancellikedgamerequestform').submit();
+            },
+            _responseLikedGames: function (event) {
+                this.set('likedGames', []);
+                var response = event.detail.response;
+                if (response.length > 0) {
+                    this.set('likedGames', response);
+
+                    //response.forEach(function (game) {
+                    //    console.log(game);
+                    //}, this);
+
+                    this.likedGamesActive = true;
+                }
+                else {
+                    this.likedGamesActive = false;
+                }
+            },
+            _responseOfCancelLikeGameRequest: function (e) {
+                //console.log('_responseOfCancelLikeGameRequest');
+                var message = e.detail.response.message;
+                var systemAlert = document.getElementById('alert');
+                systemAlert.setAttribute('text', message);
+
+                if (e.detail.response.success) {
+                    document.getElementById('pbCancelGameLikes').disabled = false;
+                    this.$.ironAjaxGetLikedGames.generateRequest();
+                }
+                else {
+                    unload();
+                    document.getElementById('cancellikedgamerequestform').reset();
+                }
+                systemAlert.open();
+            },
+
+        });
+    </script>
+</dom-module>

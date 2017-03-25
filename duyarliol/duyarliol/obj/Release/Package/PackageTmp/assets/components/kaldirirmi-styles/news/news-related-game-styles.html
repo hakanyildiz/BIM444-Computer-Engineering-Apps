@@ -1,0 +1,332 @@
+﻿<dom-module id="news-related-game-styles">
+    <template>
+        <style>
+            :host {
+                display: block;
+                margin-bottom: 50px;
+            }
+
+            #relatedgamelist {
+                @apply(--layout-horizontal);
+                @apply(--layout-center-center);
+                flex-flow: row wrap;
+                -ms-flex-flow: row wrap;
+                width: 90%;
+                height: auto;
+                background: #222;
+                margin-top: 30px;
+            }
+
+            .relatedgame {
+                @apply(--layout-vertical);
+                @apply(--layout-center);
+                /*margin: 5px;*/
+                background-color: #222;
+                transition: all ease .2s;
+                cursor: pointer;
+                width: 100%;
+                height: 100%;
+                position: relative;
+                text-decoration: none;
+            }
+
+                .relatedgame:hover iron-image[background] {
+                    opacity: 1;
+                }
+
+
+            /* card beybi */
+            .card {
+                display: inline-block;
+                position: relative;
+                width: 100%;
+                margin: 25px 0px 0px 0px;
+                box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.14);
+                border-radius: 3px;
+                /* color: rgba(0,0,0, 0.87); */
+                background: #fff;
+            }
+
+            .card-stats .card-header {
+                float: left;
+                text-align: center;
+            }
+
+            .card [data-background-color] {
+                color: #FFFFFF;
+            }
+
+            .card [data-background-color="orange"] {
+                background: linear-gradient(60deg, #ffa726, #fb8c00);
+                box-shadow: 0 12px 20px -10px rgba(255, 152, 0, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(255, 152, 0, 0.2);
+            }
+
+            .card .card-header {
+                box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.42), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+                margin: -20px 15px 0;
+                border-radius: 4px;
+                background-color: #999999;
+                margin-bottom: 20px;
+            }
+
+            .card-stats .card-content {
+                text-align: right;
+                padding-top: 10px;
+            }
+
+            .card .card-content {
+                padding: 15px 20px;
+            }
+
+            .card .card-content-category:not([class*="text-"]) {
+                color: #fb8c00;
+                font-weight: 500;
+            }
+
+            p {
+                margin: 0 0 10px;
+            }
+
+            .card-stats .card-content {
+                color: black;
+                margin: 0;
+            }
+
+            .card-content-title {
+                color: black;
+            }
+
+            .card .card-footer {
+                margin: 0 20px 10px;
+                padding-top: 10px;
+                border-top: 1px solid #eeeeee;
+            }
+
+            .card-header .relatedgame iron-image {
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                transition: all ease-in .2s;
+                opacity: .7;
+                background-color: #222;
+            }
+
+            .star {
+                color: #fb8c00;
+            }
+
+            .game-rating {
+                float: right;
+            }
+
+
+
+
+            /* related news */
+
+            #relatednewspanel {
+                margin-bottom: 15px;
+                border-top: 1px solid #eeeeee;
+                padding-top: 10px;
+                @apply(--layout-horizontal);
+                flex-flow: row wrap;
+                -ms-flex-flow: row wrap;
+                width: 100%;
+                height: auto;
+            }
+
+                #relatednewspanel .relatedpanel-title {
+                    padding-left: 15px;
+                    margin: 0;
+                    padding-bottom: 5px;
+                    font-weight: 400;
+                    color: #fb8c00;
+                }
+
+                    #relatednewspanel .relatedpanel-title b {
+                        color: black;
+                        font-weight: 500;
+                    }
+
+            #relatednewslist {
+                @apply(--layout-vertical);
+                @apply(--layout-center);
+                align-items: flex-start !important;
+                justify-content: flex-start !important;
+                flex-flow: row wrap;
+                -ms-flex-flow: row wrap;
+                width: 100%;
+                height: auto;
+            }
+
+            .relatednews {
+                @apply(--layout-vertical);
+                @apply(--layout-center);
+                margin: 2px;
+                background-color: #222;
+                transition: all ease .2s;
+                cursor: pointer;
+                position: relative;
+                text-decoration: none;
+            }
+
+                .relatednews iron-image {
+                    width: 100%;
+                    height: 190px;
+                    pointer-events: none;
+                    transition: all ease-in .2s;
+                    opacity: .7;
+                    background-color: #222;
+                }
+
+
+                .relatednews .relatednews-title {
+                    @apply(--layout-horizontal);
+                    @apply(--layout-center);
+                    color: white;
+                    background: #ff7800;
+                    width: 100%;
+                }
+
+                    .relatednews .relatednews-title h6 {
+                        padding: 5px;
+                        font-weight: 100;
+                        font-size: calc(0.55em + 1vmin) !important;
+                    }
+
+                .relatednews:hover iron-image[background] {
+                    opacity: 1;
+                }
+
+
+            /* media query for images */
+            /* yazı ayarları anasayfasından geliyor */
+
+            /* MOBILE FIRST */
+            .card-header {
+                height: calc(6em + 1vmin);
+                width: 53%;
+                padding: 8px;
+            }
+
+            #relatednewslist .relatednews {
+                width: 90%;
+                height: calc(10em + 1vmin);
+                margin: 0 auto;
+            }
+
+                #relatednewslist .relatednews .relatednews-title {
+                    height: 35%;
+                }
+
+            @media only screen and (min-width : 768px) {
+                .card-header {
+                    height: calc(9em + 1vmin);
+                }
+
+                #relatednewslist .relatednews {
+                    width: 48%;
+                    height: calc(10em + 1vmin);
+                    margin: 0px 5px;
+                }
+            }
+
+            @media only screen and (min-width : 1024px) {
+                .card-header {
+                    height: calc(6em + 1vmin);
+                }
+
+                .relatednews .relatednews-title h6 {
+                    font-size: calc(0.25em + 1vmin) !important;
+                }
+            }
+
+            @media only screen and (min-width : 1024px) { /* zoom %175 */
+                /* game big image! */
+                .card-header {
+                    height: 180px;
+                    width: 50%;
+                    padding: 8px;
+                }
+                /* ilgili haberler kısmı */
+                #relatednewslist {
+                    flex-direction: column !important;
+                }
+
+                    #relatednewslist .relatednews {
+                        width: 32%;
+                        height: 140px;
+                    }
+
+                        #relatednewslist .relatednews .relatednews-title {
+                            height: 26%;
+                        }
+            }
+
+            @media only screen and (min-width : 1224px) { /* zoom %150 */
+                .card-header {
+                    height: 210px;
+                    width: 55%;
+                    padding: 10px;
+                }
+                /* ilgili haberler kısmı */
+                #relatednewslist .relatednews {
+                    height: 165px;
+                }
+
+                    #relatednewslist .relatednews .relatednews-title {
+                        height: 26%;
+                    }
+            }
+
+            @media only screen and (min-width : 1440px) { /* zoom % 125*/
+                .card-header {
+                    height: 250px;
+                    width: 57%;
+                    padding: 12px;
+                }
+                /* ilgili haberler kısmı */
+                #relatednewslist .relatednews {
+                    height: 180px;
+                }
+
+                    #relatednewslist .relatednews .relatednews-title {
+                        height: 26%;
+                    }
+            }
+
+            @media only screen and (min-width : 1640px) { /* zoom %110*/
+                .card-header {
+                    height: 270px;
+                    width: 60%;
+                    padding: 14px;
+                }
+                /* ilgili haberler kısmı */
+                #relatednewslist .relatednews {
+                    height: 190px;
+                }
+
+                    #relatednewslist .relatednews .relatednews-title {
+                        height: 26%;
+                    }
+            }
+            /* Large screens ----------- */
+            @media only screen and (min-width : 1824px) {
+                .card-header {
+                    padding: 15px;
+                    height: 300px;
+                    width: 65%;
+                }
+
+                /* ilgili haberler kısmı */
+                #relatednewslist .relatednews {
+                    height: 200px;
+                }
+
+                    #relatednewslist .relatednews .relatednews-title {
+                        height: 26%;
+                    }
+            }
+        </style>
+    </template>
+</dom-module>

@@ -1,0 +1,105 @@
+﻿<link rel="import" href="../../../components/polymer/polymer.html">
+<link rel="import" href="news-animated-grid.html">
+
+<dom-module id="news-full-page">
+  <template>
+    <style>
+      :host {
+        background: black;
+        visibility: hidden;
+        @apply(--layout-vertical);
+      }
+
+      news-animated-grid {
+        height: calc(100% - 72px);
+        @apply(--layout-flex);
+      }
+
+      :host {
+                @apply(--layout-fit);
+                top: 0px;
+                position: relative;
+            }
+            @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+                :host {
+                    height: 365px;
+                }
+            }
+
+            @media only screen and (min-width : 768px) and (max-width : 1024px) {
+                 :host {
+                    height: 365px;
+                }
+            }
+
+            @media only screen and (min-width : 1024px) {
+                 :host {
+                    height: 435px;
+                }
+            }
+
+            @media only screen and (min-width : 1224px) {
+                :host {
+                    height: 525px;
+                }
+            }
+
+            @media only screen and (min-width : 1440px) {
+                 :host {
+                    height: 650px;
+                }
+            }
+
+            @media only screen and (min-width : 1624px) {
+                 :host {
+                    height: 760px;
+                }
+            }
+            @media only screen and (min-width : 1824px) {
+                 :host{
+                    height: 840px;
+                }
+            }
+    </style>
+
+    <!--<div id="toolbar" class="toolbar"></div>-->
+    <news-animated-grid id="grid"></news-animated-grid>
+
+  </template>
+</dom-module>
+
+<script>
+
+Polymer({
+
+  is: 'news-full-page',
+
+  behaviors: [
+    Polymer.NeonAnimatableBehavior,
+    Polymer.NeonAnimationRunnerBehavior
+  ],
+
+  properties: {
+
+    animationConfig: {
+      type: Object,
+      value: function() {
+        return {
+          'entry': [{
+            animatable: this.$.grid,
+            type: 'entry'
+          }]
+        };
+      }
+    }
+
+  },
+
+  show: function() {
+    this.style.visibility = 'visible';
+    this.playAnimation('entry');
+  }
+
+});
+
+</script>

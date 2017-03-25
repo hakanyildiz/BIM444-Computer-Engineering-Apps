@@ -1,0 +1,101 @@
+﻿<link rel="import" href="/assets/components/polymer/polymer.html">
+<link rel="import" href="/assets/components/iron-ajax/iron-ajax.html" />
+<link rel="import" href="anasayfa-grab-cursor-swiper.html" />
+<link rel="import" href="/assets/components/iron-image/iron-image.html" />
+
+<dom-module id="anasayfa-grab-slider">
+  <template>
+    <!-- css -->
+    <style is="costum-style">
+      :host {
+        display: block;
+        margin-bottom: 50px;
+      }
+
+      #gamelist {
+        @apply(--layout-horizontal);
+        @apply(--layout-center-center);
+        flex-flow: row wrap;
+        -ms-flex-flow: row wrap;
+        width: 100%;
+        height: auto;
+        background: #222;
+      }
+
+      .game {
+        @apply(--layout-vertical);
+        @apply(--layout-center);
+        margin: 5px;
+        background-color: #222;
+        transition: all ease .2s;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        text-decoration: none;
+      }
+        .game img {
+        
+        width:220px !important;
+        height: 300px !important;
+        }
+        .game .game-title {
+          @apply(--layout-horizontal);
+          @apply(--layout-center);
+          color: white;
+          height: 44px;
+          background: #ff7800;
+          width: 100%;
+        }
+
+          .game .game-title span {
+            width: 100%;
+            @apply(--paper-font-common-nowrap);
+            text-align: center;
+          }
+
+        .game:hover iron-image[background] {
+          opacity: 1;
+        }
+    </style>
+
+    <!-- html part-->
+    <iron-ajax auto id="getgamesforgrabslider" url="/h/main?fm=get-games-for-main-slider&a=[[itemsize]]" method="get" handle-as="json" last-response="{{games}}"></iron-ajax>
+    <div id="gamelist">
+      <anasayfa-grab-cursor-swiper>
+        <template is="dom-repeat" items="{{games}}" as="item">
+          <div>
+            <a class="game" href="/oyun/[[item.url]]" onclick="load();">
+              <img src="//cdn.kaldirirmi.com/images/games/[[item.picture]]" />
+              <div class="game-title"><span>[[item.name]]</span></div>
+            </a>
+          </div>
+
+          <!--<a class="game" href="/oyun/[[item.url]]" onclick="load();">
+            <iron-image background src="//cdn.kaldirirmi.com/images/games/[[item.picture]]" sizing="cover" alt="[[item.name]]" preload fade></iron-image>
+            <div class="game-title"><span>[[item.name]]</span></div>
+          </a>-->
+
+        </template>
+      </anasayfa-grab-cursor-swiper>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: "anasayfa-grab-slider",
+      properties: {
+        galleryurl: {
+          type: "String",
+          notify: true
+        },
+        games: {
+          type: Array,
+          value: []
+        }
+      },
+
+    });
+
+  </script>
+</dom-module>

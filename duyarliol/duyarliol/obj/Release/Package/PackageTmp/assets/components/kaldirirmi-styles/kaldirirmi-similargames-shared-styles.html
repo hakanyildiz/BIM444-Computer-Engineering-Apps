@@ -1,0 +1,160 @@
+﻿<dom-module id="kaldirirmi-similargames-shared-styles">
+    <template>
+        <style>
+            :host {
+                width: 100%;
+                color: white;
+            }
+
+            .paper-tabs-games {
+                padding-top: 20px;
+            }
+
+            .paper-tab-games {
+                color: black;
+                background-color: white;
+                border: 1px solid gray;
+            }
+
+            #similargamelist {
+                @apply(--layout-horizontal);
+                @apply(--layout-center-center);
+                flex-flow: row wrap;
+                -ms-flex-flow: row wrap;
+                width: 100%;
+                height: auto;
+            }
+
+            .game {
+                @apply(--layout-vertical);
+                @apply(--layout-center);
+                margin: 5px;
+                background-color: #222;
+                transition: all ease .2s;
+                cursor: pointer;
+                position: relative;
+                text-decoration: none;
+            }
+
+                .game iron-image {
+                    width: 100%;
+                    height: 100%;
+                    pointer-events: none;
+                    transition: all ease-in .2s;
+                    opacity: .7;
+                    background-color: #222;
+                }
+
+            .game {
+                transition: all .3s;
+            }
+
+                .game:hover {
+                    transform: translateY(-40px);
+                    -webkit-transform: translateY(-40px);
+                    margin: 20px;
+                    transform: scale(1.5);
+                }
+
+                .game .game-title {
+                    @apply(--layout-horizontal);
+                    @apply(--layout-center);
+                    color: white;
+                    height: 44px;
+                    padding: 0 5px;
+                    background: #ff7800;
+                    width: 173px;
+                }
+
+                    .game .game-title span {
+                        width: 173px;
+                        @apply(--paper-font-common-nowrap);
+                        text-align: center;
+                    }
+
+                .game:hover iron-image[background] {
+                    opacity: 1;
+                }
+
+            .similir {
+                width: 100%;
+                height: auto;
+            }
+
+                .similir paper-button {
+                    display: block;
+                    color: white;
+                    opacity: 0.77;
+                    margin: 0 auto;
+                    width: 50%;
+                    text-align:center;
+                    font-size: calc(0.5em + 1vmin);
+                    font-family: 'Roboto', 'Arial Narrow', Arial, sans-serif;
+                }
+
+            @media only screen and (min-width : 1024px) { /* zoom %175 */
+                #similargamelist {
+                    margin-bottom: 1px;
+                }
+
+                    #similargamelist .game {
+                        width: 70px;
+                        height: 101px;
+                    }
+
+                    #similargamelist #game3 {
+                        display: none;
+                    }
+
+                    #similargamelist #game4 {
+                        display: none;
+                    }
+            }
+
+            @media only screen and (min-width : 1224px) { /* zoom %150 */
+                #similargamelist {
+                    margin-bottom: 1px;
+                }
+
+                    #similargamelist .game {
+                        width: 89px;
+                        height: 106px;
+                    }
+            }
+
+            @media only screen and (min-width : 1440px) { /* zoom % 125*/
+
+                #similargamelist {
+                    margin-bottom: 6px;
+                }
+
+                    #similargamelist .game {
+                        width: 90px;
+                        height: 114px;
+                    }
+
+                    #similargamelist #game3 {
+                        display: block;
+                    }
+            }
+
+            @media only screen and (min-width : 1640px) { /* zoom %110*/
+                #similargamelist .game {
+                    width: 90px;
+                    height: 123px;
+                }
+            }
+
+            @media only screen and (min-width : 1824px) {
+                #similargamelist .game {
+                    width: 95px;
+                    height: 135px;
+                }
+
+                #similargamelist #game4 {
+                    display: block;
+                }
+            }
+        </style>
+    </template>
+</dom-module>

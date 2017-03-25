@@ -1,0 +1,384 @@
+﻿<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../kaldirirmi-styles/profile/profile-forum-shared-styles.html" />
+
+<dom-module id="kaldirirmi-profile-forum">
+  <template>
+
+      <style is="custom-style" include="profile-forum-shared-styles"></style>
+
+    <iron-ajax auto="{{auto}}" id="getthreadsviauserid" url="/h/main?fm=get-threads-via-userid&a=[[searchValue]]&b=[[startDate]]&c=[[finishDate]]" method="get" on-response="_response" handle-as="json" loading="{{loading}}"></iron-ajax>
+   
+       <page-packages class="x-scope page-packages-0" style="display:flex; flex-direction:row">
+        <paper-material id="materialForumMain" elevation="5" role="listbox">
+            <paper-item heading>
+                Forum Yönetim
+            </paper-item>
+            <paper-item forumcontent>
+                <div id="drawercontent">
+                    <paper-material id="materialForumDrawer" elevation="4" role="listbox">
+                        <paper-item>
+                            <iron-icon class="iiTopSearch" icon="search"></iron-icon>
+                            <paper-input id="piSeachThread" type="search" placeholder="Konu ara" value="{{searchValue}}" maxlength="8"></paper-input>
+                        </paper-item>
+                        <paper-item info class="paperItemAllThreads">
+                            <paper-button on-click="_pbAllThreads">
+                                <span style="background-color: #3f93d3">TK</span>
+                                Tüm Konular
+                            </paper-button>
+                        </paper-item>
+                        <paper-item info>
+                            <paper-button on-click="_pbActiveThreads">
+                                <span style="background-color:#30a834;">AK</span>
+                                Aktif Konular
+                            </paper-button>
+
+                        </paper-item>
+                        <paper-item info>
+                            <paper-button on-click="_pbCanceledThreads">
+                                <span style="background-color:#a34bcc;">İK</span>
+                                İptal Konular
+                            </paper-button>
+                        </paper-item>
+                        <paper-item info>
+                            <paper-button on-click="_pbWaitingThreads">
+                                <span style="background-color:#ff9400;">BK</span>
+                                Bekleyen Konular
+                            </paper-button>
+                        </paper-item>
+                        <hr themed-reverse="" class="drawerhr style-scope package-tile">
+                        <paper-item id="piScope">
+                            <paper-input id="startInput" label="Başlangıç Tarihi" on-click="showDialogStart"s maxlength="8"></paper-input>
+                            <paper-dialog id="dialogStart" class="paper-date-picker-dialog" on-iron-overlay-closed="dismissDialogStart">
+                                <paper-date-picker min-date="October 1, 2016" id="pickerStart" date="[[date]]"></paper-date-picker>
+                                <div class="buttons">
+                                    <paper-button dialog-dismiss style="color: #3f51b5 !important;">IPTAL</paper-button>
+                                    <paper-button dialog-confirm style="color: #3f51b5 !important;">TAMAM</paper-button>
+                                </div>
+                            </paper-dialog>
+                        </paper-item>
+
+                        <paper-item id="piScope">
+                            <paper-input id="finishInput" on-click="showDialogFinish" label="Bitiş Tarihi" maxlength="8"></paper-input>
+                            <paper-dialog id="dialogFinish" class="paper-date-picker-dialog" on-iron-overlay-closed="dismissDialogFinish">
+                                <paper-date-picker min-date="October 1, 2016" id="pickerFinish" date="[[date]]"></paper-date-picker>
+                                <div class="buttons">
+                                    <paper-button dialog-dismiss style="color: #3f51b5 !important;">IPTAL</paper-button>
+                                    <paper-button dialog-confirm style="color: #3f51b5 !important;">TAMAM</paper-button>
+                                </div>
+                            </paper-dialog>
+                        </paper-item>
+                        <paper-item id="piScope">
+                            <paper-button raised on-click="_resetAll">
+                                Sıfırla
+                            </paper-button>
+                        </paper-item>
+
+                        <hr themed-reverse="" class="drawerhr style-scope package-tile">
+
+                    </paper-material>
+                    <paper-toast id="systemAlert" duration="3000" class="fit-bottom"></paper-toast>
+                </div>
+                <div id="cardcontent">
+                    <div class="loadingIndicatorForum" style="color:#FF7800" hidden$="[[!loading]]">
+                        <loader-pac></loader-pac>
+                        <p>Forum Yönetim Yükleniyor</p>
+                    </div>
+                    <div hidden$="[[loading]]">
+                        <div class="packages layout horizontal wrap style-scope page-packages">
+                            <template is="dom-if" if="[[waiting]]">
+                                <template is="dom-repeat" items="{{waitingThreads}}" as="item">
+                                    <!-- dynamic data here -->
+                                    <a is="app-link" class="package flex-none style-scope page-packages" style="text-decoration:none" href="/forum/[[item.categoryUrl]]/[[item.threadUrl]]" onclick="load();">
+                                        <package-tile class="style-scope page-packages x-scope package-tile-0 active" name="app-elements">
+                                            <theme-color id="content" class="vertical layout style-scope package-tile" themed="" themed-border="" style="color: rgba(0, 0, 0, 0.6); background-color: #FFB74D; border-color: rgb(129, 199, 132);">
+                                                <span class="version style-scope package-tile">
+                                                    <paper-icon-button id="number" icon="communication:message" alt="inbox">
+                                                    </paper-icon-button>
+                                                    <paper-badge class="blue" label="[[item.postcount]]">
+                                                    </paper-badge>
+                                                </span>
+                                                <h2 class="symbol style-scope package-tile myfont">[[item.categoryName]]</h2>
+                                                <h3 class="title style-scope package-tile">[[item.title]]</h3>
+                                                <hr themed-reverse="" class="style-scope package-tile" style="color: rgb(221, 201, 230); background-color:black;">
+                                                <div id="divBottomFlex">
+                                                    <p class="divBottomFlexItem"><span style="background-color:#ff9400;padding:8px; color:white; font-size:15px; border-radius:13px">Beklemede</span></p>
+                                                    <p class="divBottomFlexItem" style="color:black;">[[item.lastpostdate]]</p>
+                                                </div>
+                                            </theme-color>
+                                        </package-tile>
+                                    </a>
+                                </template>
+                            </template>
+                            <template is="dom-if" if="[[canceled]]">
+                                <template is="dom-repeat" items="{{canceledThreads}}" as="item">
+                                    <!-- dynamic data here -->
+                                    <a is="app-link" class="package flex-none style-scope page-packages" style="text-decoration:none" href="/forum/[[item.categoryUrl]]/[[item.threadUrl]]" onclick="load();">
+                                        <package-tile class="style-scope page-packages x-scope package-tile-0 active" name="app-elements">
+                                            <theme-color id="content" class="vertical layout style-scope package-tile" themed="" themed-border="" style="color: rgba(0, 0, 0, 0.6); background-color: #DDC9E6; border-color: rgb(129, 199, 132);">
+                                                <span class="version style-scope package-tile">
+                                                    <paper-icon-button id="number" icon="communication:message" alt="inbox">
+                                                    </paper-icon-button>
+                                                    <paper-badge class="blue" label="[[item.postcount]]">
+                                                    </paper-badge>
+                                                </span>
+
+
+                                                <h2 class="symbol style-scope package-tile myfont">[[item.categoryName]]</h2>
+                                                <h3 class="title style-scope package-tile">[[item.title]]</h3>
+                                                <hr themed-reverse="" class="style-scope package-tile" style="color: rgb(221, 201, 230); background-color:black;">
+                                                <div id="divBottomFlex">
+                                                    <p class="divBottomFlexItem"><span style="background-color:#a34bcc;padding:8px; color:white; font-size:15px; border-radius:13px">İptal</span></p>
+                                                    <p class="divBottomFlexItem" style="color:black;">[[item.lastpostdate]]</p>
+                                                </div>
+                                            </theme-color>
+                                        </package-tile>
+                                    </a>
+                                </template>
+                            </template>
+                            <template is="dom-if" if="[[active]]">
+                                <template is="dom-repeat" items="{{activeThreads}}" as="item">
+                                    <!-- dynamic data here -->
+                                    <a is="app-link" class="package flex-none style-scope page-packages" style="text-decoration:none" href="/forum/[[item.categoryUrl]]/[[item.threadUrl]]" onclick="load();">
+                                        <package-tile class="style-scope page-packages x-scope package-tile-0 active" name="app-elements">
+                                            <theme-color id="content" class="vertical layout style-scope package-tile" themed="" themed-border="" style="color: rgba(0, 0, 0, 0.6); background-color: #81C784; border-color: rgb(129, 199, 132);">
+                                                <span class="version style-scope package-tile">
+                                                    <paper-icon-button id="number" icon="communication:message" alt="inbox">
+                                                    </paper-icon-button>
+                                                    <paper-badge class="blue" label="[[item.postcount]]">
+                                                    </paper-badge>
+                                                </span>
+
+
+                                                <h2 class="symbol style-scope package-tile myfont">[[item.categoryName]]</h2>
+                                                <h3 class="title style-scope package-tile">[[item.title]]</h3>
+                                                <hr themed-reverse="" class="style-scope package-tile" style="color: rgb(221, 201, 230); background-color:black;">
+                                                <div id="divBottomFlex">
+                                                    <p class="divBottomFlexItem"><span style="background-color:#30a834;padding:8px; color:white; font-size:15px; border-radius:13px">Aktif</span></p>
+                                                    <p class="divBottomFlexItem" style="color:black;">[[item.lastpostdate]]</p>
+                                                </div>
+                                            </theme-color>
+                                        </package-tile>
+                                    </a>
+                                </template>
+                            </template>
+                        </div>
+                        <h2 style="margin: 20px; color: #ff7800;">{{resultTitle}}</h2>
+                    </div>
+                 </div>
+            </paper-item>
+        </paper-material>
+</page-packages>
+
+    
+  </template>
+    <script>
+    Polymer({
+      is: "kaldirirmi-profile-forum",
+      properties: {
+        activeThreads: {
+          type: Array,
+          value: []
+        },
+        waitingThreads: {
+          type: Array,
+          value: []
+        },
+        canceledThreads: {
+          type: Array,
+          value: []
+        },
+        active: {
+          type: Boolean,
+          value: false,
+          notify: true
+
+        },
+        waiting: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+        canceled: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+        startDate: {
+          type: String,
+          value: "",
+          notify: true
+        },
+        finishDate: {
+          type: String,
+          value: "",
+          notify: true
+        },
+        searchValue: {
+          type: String,
+          value: "",
+          notify: true
+        },
+        auto: {
+          type: Boolean,
+          value: true,
+          notify: true
+        },
+        resultTitle: {
+          type: String,
+          value: ""
+        },
+        loading: {
+            type: Boolean,
+            value: false,
+            notify: true
+        },
+        total: {
+            type: Number,
+            value: 0,
+            notify: true
+        }
+      },
+      ready: function () {
+          this.async(function () {
+              this.auto = true;
+          }, 2222);
+      },
+      _response: function (a) {
+        this.activeThreads = [];
+        this.waitingThreads = [];
+        this.canceledThreads = [];
+        var len = a.detail.response.length;
+        if (len > 0) {
+            this.total = len;
+            this._makeResultTitle(len);
+
+          a.detail.response.forEach(function (thread) {
+            if (thread.status == 1) {
+              this.push('activeThreads', thread);
+              this.active = true;
+            }
+            else if (thread.status == 0) {
+              this.push('waitingThreads', thread);
+              this.waiting = true;
+            }
+            else if (thread.status == 2) {
+              this.push('canceledThreads', thread);
+              this.canceled = true;
+            }
+            else {
+            }
+
+          }, this);
+        }
+        else {
+            this.resultTitle = "Aradığın kriterlerde hiç sonuç bulunamadı. :(";
+
+            if (this.startDate === '' && this.finishDate === '' && this.searchValue === '') {
+                this.resultTitle = "Yönetimi kullanabilmek için öncelikle konu açman gerekli!";
+            }
+
+
+          //this.$.systemAlert.setAttribute('text', 'Aradığınız kriterlerle ilgili bir sonuç bulunamadı.');
+          //this.$.systemAlert.open();
+        }
+      }, //end _response
+      _pbAllThreads: function () {
+        this.active = true;
+        this.waiting = true;
+        this.canceled = true;
+
+        this._makeResultTitle(this.total);
+
+      },
+      _pbActiveThreads: function () {
+        this.active = true;
+        this.waiting = false;
+        this.canceled = false;
+
+        var counter = 0;
+        this.activeThreads.forEach(function (current) {
+            counter++;
+        }, this);
+        this._makeResultTitle(counter);
+
+      },
+      _pbCanceledThreads: function () {
+        this.active = false;
+        this.waiting = false;
+        this.canceled = true;
+
+        var counter = 0;
+        this.canceledThreads.forEach(function (current) {
+            counter++;
+        }, this);
+        this._makeResultTitle(counter);
+      },
+      _pbWaitingThreads: function () {
+        this.active = false;
+        this.waiting = true;
+        this.canceled = false;
+
+        var counter = 0;
+        this.waitingThreads.forEach(function (current) {
+            counter++;
+        }, this);
+        this._makeResultTitle(counter);
+
+      },
+      _pbDatePickerStart: function () {
+        this.$.dialog.toggle();
+      },
+      _resetAll: function () {
+        //console.log('reset format opened');
+        this.searchValue = "";
+        this.startDate = "";
+        this.finishDate = "";
+        this.$.finishInput.value = "";
+        this.$.startInput.value = "";
+        this.active = true;
+        this.waiting = true;
+        this.canceled = true;
+      },
+      showDialogStart: function () {
+        this.$.dialogStart.toggle();
+      },
+      dismissDialogStart: function (event) {
+        if (event.detail.confirmed) {
+          //this.startDate = this.$.picker.date;
+          this.$.startInput.value = moment(this.$.pickerStart.date).format('LL');
+          var date = moment(this.$.pickerStart.date).format('L');
+          this.startDate = date.toString().split("/").join("-");
+          console.log("start:" + this.startDate);
+        }
+      },
+      showDialogFinish: function () {
+        this.$.dialogFinish.toggle();
+      },
+      dismissDialogFinish: function (event) {
+        if (event.detail.confirmed) {
+          //this.startDate = this.$.picker.date;
+          var date = moment(this.$.pickerFinish.date).format('L');
+
+          this.$.finishInput.value = moment(this.$.pickerFinish.date).format('LL');
+
+          this.finishDate = date.toString().split("/").join("-");
+          console.log("finsih:" + this.finishDate);
+
+        }
+      },
+      dateFormat: function (date, format) {
+        return moment(date).format(format);
+      },
+      _makeResultTitle: function (count) {
+            if (count > 0) {
+                this.resultTitle = count + ' tane konu buldum.';
+            }
+            else {
+                this.resultTitle = 'Hiç konu bulunamadı.';
+            }
+
+        }
+    }); //end Polymer
+
+    </script>
+</dom-module>

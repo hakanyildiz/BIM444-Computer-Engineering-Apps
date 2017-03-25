@@ -1,0 +1,184 @@
+﻿<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../incelemeler/shared-styles.html">
+<link rel="import" href="../../kaldirirmi-styles/review/review-animated-grid-styles.html">
+
+<dom-module id="review-animated-grid">
+    <template>
+        <style include="shared-styles"></style>
+        <style include="review-animated-grid-styles"></style>
+     
+        <iron-ajax id="getreviews" auto url="/h/main?fm=get-reviews" method="get" handle-as="json" on-response="_response"></iron-ajax>
+        <template itemscope itemtype="http://schema.org/Article" is="dom-repeat" items="[[reviewcast]]">
+            <div itemprop="articleBody" class="tile" id="part{{index}}" style="background-image: url('[[item.picture]]');">
+                <a itemprop="url" class="review-item" href="/inceleme/[[item.url]]" onclick="load();" style="text-decoration:none">
+                    <div class="item-content">
+                        <div itemprop="headline" class="item-content-title">[[item.title]]</div>
+                        <img src="[[item.picture]]" alt="[[item.title]]" itemprop="image" style="display:none" />
+                        <meta itemprop="publisher" content="Kaldırırmı" />
+                        <meta itemprop="author" content="Hakke" />
+                        <time property="datePublished" datetime="[[item.releasedate]]"></time>
+
+                        <div class="actions">
+                            <div itemprop="alternativeHeadline" class="actions-details" style="opacity:1;">
+                                [[item.subtitle]]
+                            </div>
+                            <div itemprop="dateCreated">
+                                <iron-icon class="ironIconDetails" style="padding-right:5px; padding-left:5px;" icon="editor:border-color"></iron-icon>[[item.releasedate]]
+                                <div itemprop="interactionCount" style="float:left;">
+                                    <iron-icon class="ironIconDetails" style="padding-right:5px;" icon="image:remove-red-eye"></iron-icon>[[item.viewcount]]
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </template>
+
+    </template>
+
+</dom-module>
+
+<script>
+
+    Polymer({
+
+        is: 'review-animated-grid',
+
+        behaviors: [
+          Polymer.NeonSharedElementAnimatableBehavior
+        ],
+
+        properties: {
+            reviewcast: {
+                type: Array,
+                value: []
+            },
+            hovered: {
+                type: String,
+                value: 'display:none',
+                notify: true
+
+            },
+
+            animationConfig: {
+                type: Object,
+                value: function () {
+                    return {
+                        'entry': [{
+                            name: 'cascaded-animation',
+                            animation: 'transform-animation',
+                            transformFrom: 'translateY(100%)',
+                            transformTo: 'none',
+                            timing: {
+                                delay: 50
+                            }
+                        }]
+                    }
+                }
+            }
+
+
+        },
+        _response: function (a) {
+            if (a.detail.response.length > 0) {
+                a.detail.response.forEach(function (review) {
+                    this.push('reviewcast', review);
+                }, this);
+
+                this.async(function () {
+                    var nodeList = Polymer.dom(this.root).querySelectorAll('.tile');
+                    this.animationConfig['entry'][0].nodes = Array.prototype.slice.call(nodeList);
+                });
+            }
+        },
+    });
+
+</script>
+<script>
+    $(document).ready(function () {
+        //part0
+        $(document).on('mouseover', '#part0', function (e) {
+            //$('#part0 > .review-item > .item-content >.actions').css('visibility', 'visible');
+            $('#part0 > .review-item > .item-content >.actions').css('max-height', '100px');
+
+        });
+        $(document).on('mouseout', '#part0', function () {
+            //$('#part0 > .review-item > .item-content >.actions').css('visibility', 'hidden');
+            $('#part0 > .review-item > .item-content >.actions').css('max-height', '0px');
+
+        });
+
+        //part1
+        $(document).on('mouseover', '#part1', function (e) {
+            $('#part1 > .review-item > .item-content >.actions').css('max-height', '100px');
+        });
+        $(document).on('mouseout', '#part1', function () {
+            $('#part1 > .review-item > .item-content >.actions').css('max-height', '0px');
+        });
+        //part2
+        $(document).on('mouseover', '#part2', function (e) {
+            $('#part2 > .review-item > .item-content >.actions').css('max-height', '100px');
+        });
+        $(document).on('mouseout', '#part2', function () {
+            $('#part2 > .review-item > .item-content >.actions').css('max-height', '0px');
+        });
+        //part3
+        $(document).on('mouseover', '#part3', function (e) {
+            $('#part3 > .review-item > .item-content >.actions').css('max-height', '100px');
+        });
+        $(document).on('mouseout', '#part3', function () {
+            $('#part3 > .review-item > .item-content >.actions').css('max-height', '0px');
+        });
+        //part4
+        $(document).on('mouseover', '#part4', function (e) {
+            $('#part4 > .review-item > .item-content >.actions').css('max-height', '100px');
+        });
+        $(document).on('mouseout', '#part4', function () {
+            $('#part4 > .review-item > .item-content >.actions').css('max-height', '0px');
+        });
+        //part5
+        $(document).on('mouseover', '#part5', function (e) {
+            $('#part5 > .review-item > .item-content >.actions').css('max-height', '100px');
+        });
+        $(document).on('mouseout', '#part5', function () {
+            $('#part5 > .review-item > .item-content >.actions').css('max-height', '0px');
+        });
+        //part6
+        $(document).on('mouseover', '#part6', function (e) {
+            $('#part6 > .review-item > .item-content >.actions').css('max-height', '100px');
+        });
+        $(document).on('mouseout', '#part6', function () {
+            $('#part6 > .review-item > .item-content >.actions').css('max-height', '0px');
+        });
+        //part7
+        $(document).on('mouseover', '#part7', function (e) {
+            $('#part7 > .review-item > .item-content >.actions').css('max-height', '100px');
+        });
+        $(document).on('mouseout', '#part7', function () {
+            $('#part7 > .review-item > .item-content >.actions').css('max-height', '0px');
+        });
+        //part8
+        $(document).on('mouseover', '#part8', function (e) {
+            $('#part8 > .review-item > .item-content >.actions').css('max-height', '100px');
+        });
+        $(document).on('mouseout', '#part8', function () {
+            $('#part8 > .review-item > .item-content >.actions').css('max-height', '0px');
+        });
+        //part9
+        $(document).on('mouseover', '#part9', function (e) {
+            $('#part9 > .review-item > .item-content >.actions').css('max-height', '100px');
+        });
+        $(document).on('mouseout', '#part9', function () {
+            $('#part9 > .review-item > .item-content >.actions').css('max-height', '0px');
+        });
+        //part10
+        $(document).on('mouseover', '#part10', function (e) {
+            $('#part10 > .review-item > .item-content >.actions').css('max-height', '100px');
+        });
+        $(document).on('mouseout', '#part10', function () {
+            $('#part10 > .review-item > .item-content >.actions').css('max-height', '0px');
+        });
+
+    });
+</script>

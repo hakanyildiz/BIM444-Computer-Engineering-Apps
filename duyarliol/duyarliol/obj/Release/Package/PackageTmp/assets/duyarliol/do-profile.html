@@ -1,0 +1,466 @@
+﻿<dom-module id="do-profile">
+    <template>
+        <style is="custom-style">
+            :root {
+                /* Label and underline color when the input is not focused */
+                --paper-input-container-color: #171059;
+                /* Label and underline color when the input is focused */
+                --paper-input-container-focus-color: blue;
+                /* Label and underline color when the input is invalid */
+                --paper-input-container-invalid-color: red;
+                /* Input foreground color */
+
+                --paper-input-container-input:{
+                    font-size:22px;
+               };
+                 --paper-input-container-label:{
+                      font-size: 18px;
+               };
+
+            }
+
+            #hardware-container {
+                width: 100%;
+                height: 100%;
+                margin: 1.5em 0em;
+            }
+
+                #hardware-container #navigation-tabs {
+                    /*border-top: 3px solid #ff7800;*/
+                    z-index: 3;
+                    width: 100%;
+                    background: #fff;
+                    /*border-bottom: 10px solid #222;*/
+                    /*box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 11px 15px -7px rgba(0, 0, 0, 0.4);*/
+                    --paper-tabs-selection-bar-color: #171059;
+                    /*--paper-tabs-selection-bar:{
+                                               height: 100%;
+                                               background: #ff7800;
+                                           }*/
+                }
+                    #hardware-container #navigation-tabs .iron-selected {
+                        color: #171059 !important;
+                        font-size: 1.5em;
+                        font-weight: bold;
+                    }
+
+                    #hardware-container #navigation-tabs paper-tab[iron-selected] {
+                        color: blue !important;
+                    }
+
+                    #hardware-container #navigation-tabs paper-tab {
+                        font-weight: 400;
+                        font-size: 1.3em;
+                        color: #222;
+                    }
+           
+                    .materialContainer{
+                        @apply(--layout-vertical);
+                        @apply(--shadow-elevation-8dp);
+                        margin: 1.25em;
+
+                    }
+                    .materialContainer:hover{
+                          box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),
+                          0 1px 10px 0 rgba(0, 0, 0, 0.12),
+                          0 2px 4px -1px rgba(0, 0, 0, 0.4) !important;
+                    }
+                    
+                    .materialContainer paper-item[heading]{
+                            background: #171059;
+                            color: white;
+                            font-size: 22px;
+                            padding: 0.25em;
+                            padding-left: 20px;
+                            font-weight: 100;
+                            letter-spacing: 0.44px;
+                    }
+                    .materialContainer paper-item[info]{
+                        background: #eee;
+                        @apply(--layout-vertical);
+                         align-items: flex-start;
+                         min-height:300px;
+                    }
+                     .materialContainer paper-item[info] .formContainer paper-input{
+                         margin: 5px 0px;
+                         color: green;
+                     }
+                     .materialContainer paper-item[info] .formContainer .buttons{
+                         margin-top:5px;
+                         margin-bottom:20px;
+                     }
+                     .materialContainer paper-item[info] .formContainer .buttons paper-button{
+                         background: green;
+                         color:white;
+                     }
+                     .materialContainer paper-item[info] .formContainer .buttons paper-button iron-icon{
+                         width: 30px;
+                         height:30px;
+                         margin-left:10px;
+                     }
+
+                    .pdmHeader{
+                        width: 100%;
+                        margin: 5px 0px;
+                    }
+
+                      paper-dropdown-menu{
+                            line-height: 0 !important;
+                            --paper-input-container-label: {
+                                      font-weight: bold;
+                                       font-size: 18px;
+                                };
+                                --paper-input-container-input: {
+                                       font-size: 22px;
+                                };
+                                 --paper-input-container-focus-color: #171059;
+                    }
+
+            .outcome-title{
+                font-size: 20px;
+                color: #0057e7;
+                letter-spacing: 0.44px;
+                border-bottom: 3px solid #0057e7;
+                text-align:center;
+                font-weight:bold;
+            }
+            #app{
+                overflow-y:auto !important;
+            }
+            div[prefix]{
+                font-size: 25px !important;
+            }
+
+            .loadingIndicatorProfile{
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    top:100px;
+            }
+            .loadingIndicatorProfile paper-spinner{
+                width: 40px;
+                height:40px;
+            }
+
+            /* creditcard*/
+            .credit-card-container{
+                position:relative;
+                @apply(--layout-horizontal);
+                @apply(--layout-center);
+                    margin: 15px;
+                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+                    padding: 10px;
+                    font-size: 18px;
+            }
+            .credit-card-container iron-icon{
+                width:30px;height:30px; padding-right:5px;color:#171059;
+            }
+            .credit-card-container .cc-name{
+                   font-size: 20px;
+                    font-weight: bold;
+                    color: #171059;
+                    letter-spacing: 0.55px;
+                    padding: 5px 0px;
+                    text-align: center;
+            }
+            .credit-card-container .cc-limit,.credit-card-container .cc-debt{
+               text-transform: lowercase;
+                font-style: italic;
+                font-weight: 100;
+                font-size: 22px;
+                padding: 5px;
+            }
+            .credit-card-container .credit-card-details{
+                @apply(--layout-flex);
+            }
+            .credit-card-container #pibDeleteCard{
+                color:red;
+            }
+            .credit-card-container #pibEditCard{
+                color:green;
+            }
+            .credit-card-container .card-interactions paper-icon-button{
+                width:45px;height:45px;
+            }
+
+            paper-item[info]:focus{
+                background:#eee;
+            }
+            div[info]{
+                    background: #eee;
+                    display: -ms-flexbox;
+                    display: -webkit-flex;
+                    display: flex;
+                    -ms-flex-direction: column;
+                    -webkit-flex-direction: column;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    min-height: 300px;
+            }
+        </style>        
+
+        <iron-ajax
+                   id="iaGetUserIncome" 
+                   debounce-duration="300"
+                    url="/h/main?fm=get-user-income" 
+                   handle-as="json" 
+                   on-response="_responseGetUserIncome"
+                   loading="{{loadingincome}}"
+                   ></iron-ajax>
+
+        <iron-ajax auto 
+                   id="iaGetUserOutcome"
+                   debounce-duration="300"
+                   url="/h/main?fm=get-user-outcome"
+                   handle-as="json"
+                   on-response="_responseGetUserOutcome"
+                   loading="{{loadingoutcome}}"></iron-ajax>
+
+        <iron-ajax auto
+                   id="iaGetUserCreditCards"
+                   debounce-duration="300"
+                   url="/h/main?fm=get-user-creditcards"
+                   handle-as="json"
+                   on-response="_responseGetUserCreditCards"
+                   loading="{{loadingcreditcards}}"></iron-ajax>
+
+        <paper-material elevation="2" id="hardware-container">
+                <paper-tabs id="navigation-tabs" selected="{{selected}}" on-iron-select="_ironSelect">
+                    <paper-tab>Gelir</paper-tab>
+                    <paper-tab>Gider</paper-tab>
+                    <paper-tab>Kredi Kartları</paper-tab>
+                </paper-tabs>
+
+            <neon-animated-pages id="profilepages" entry-animation="slide-from-right-animation" exit-animation="fade-out-animation">
+                <neon-animatable>
+                    <paper-material class="materialContainer" elevation="0" role="listbox" style="width:35%;">
+                        <paper-item heading>Gelir Bilgilerin</paper-item>
+                        <paper-item info>
+                            <paper-ripple recenters></paper-ripple>
+                            <div class="loadingIndicatorProfile" style="color:#FF7800" hidden$="[[!loadingincome]]">
+                                <paper-spinner active>...</paper-spinner>
+                            </div>
+                            <div hidden$=[[loadingincome]] class="formContainer">
+                                <form id="userincomeform" is="iron-form" action="/h/main" method="post" on-iron-form-response="_ironFormResponseUserIncome">
+                                    <paper-dropdown-menu class="pdmHeader" label="Durum">
+                                        <paper-listbox style="background-color:#171059; color:white" class="dropdown-content"
+                                                       attr-for-selected="value"
+                                                       selected="{{jobtype}}">
+                                            <paper-item value="student">Öğrenci</paper-item>
+                                            <paper-item value="worker">Çalışan</paper-item>
+                                        </paper-listbox>
+                                    </paper-dropdown-menu>
+                                    <input type="hidden" name="jobtype" value="[[jobtype]]"/>
+                                    <paper-input label="Aylık Net Gelir" id="monthlyincome" name="monthlyincome" value$="[[response.income.monthlyincome]]"  allowed-pattern="[0-9]" auto-validate maxlength="6">
+                                        <div prefix>&#x20BA;</div>
+                                    </paper-input>
+                                
+                                    <paper-input label="Aylık Ek Gelir" id="monthlyadditionalincome" name="monthlyadditionalincome" value$="[[response.income.monthlyadditionalincome]]"  allowed-pattern="[0-9]" auto-validate maxlength="6">
+                                        <div prefix>&#x20BA;</div>
+                                    </paper-input>
+
+                                    <div class="buttons">
+                                        <input type="hidden" name="fm" value="update-user-income" />
+                                        <paper-button id="userincomeformsubmit" on-tap="_pbUserIncome" raised>
+                                            <span>Güncelle</span>
+                                            <iron-icon icon="icons:system-update-alt"></iron-icon>
+                                         </paper-button>
+                                    </div>
+                                </form>
+                            </div>
+                        </paper-item>
+
+                    </paper-material>
+                </neon-animatable>
+                <neon-animatable>
+                    <paper-material class="materialContainer" elevation="0" role="listbox" style="width:70%;">
+                        <paper-item heading>Gider Bilgilerin</paper-item>
+                        <paper-item info>
+                            <paper-ripple recenters></paper-ripple>
+                            <div class="loadingIndicatorProfile" style="color:#FF7800" hidden$="[[!loadingoutcome]]">
+                                <paper-spinner active>...</paper-spinner>
+                            </div>
+                            <div hidden$=[[loadingoutcome]] class="formContainer" style="width:100%;">
+                                <form id="useroutcomeform" is="iron-form" action="/h/main" method="post" on-iron-form-response="_ironFormResponseUserOutcome">
+                                    <div class="layout vertical">
+                                        <div class="layout horizontal">
+                                            <paper-material elevation="0" style="width: 45%; padding: 20px;">
+                                                <div class="outcome-title">Ödemelerin</div>
+
+                                                <paper-input label="Ev Kiran" id="houserent" name="houserent" value$="[[response.outcome.houserent]]" allowed-pattern="[0-9]" auto-validate maxlength="6">
+                                                    <div prefix>&#x20BA;</div>
+                                                </paper-input>
+                                                <paper-input label="Elektrik Faturan" id="electricbill" name="electricbill" value$="[[response.outcome.electricbill]]" allowed-pattern="[0-9]" auto-validate maxlength="6">
+                                                    <div prefix>&#x20BA;</div>
+                                                </paper-input>
+                                                <paper-input label="Doğalgaz Faturan" id="gasbill" name="gasbill" value$="[[response.outcome.gasbill]]" allowed-pattern="[0-9]" auto-validate maxlength="6">
+                                                    <div prefix>&#x20BA;</div>
+                                                </paper-input>
+                                                <paper-input label="Telefon Faturan" id="gsmbill" name="gsmbill" value$="[[response.outcome.gsmbill]]" allowed-pattern="[0-9]" auto-validate maxlength="6">
+                                                    <div prefix>&#x20BA;</div>
+                                                </paper-input>
+                                                <paper-input label="Internet Faturan" id="internetbill" name="internetbill" value$="[[response.outcome.internetbill]]" allowed-pattern="[0-9]" auto-validate maxlength="6">
+                                                    <div prefix>&#x20BA;</div>
+                                                </paper-input>
+                                                <paper-input label="Su Faturan" id="waterbill" name="waterbill" value$="[[response.outcome.waterbill]]" allowed-pattern="[0-9]" auto-validate maxlength="6">
+                                                    <div prefix>&#x20BA;</div>
+                                                </paper-input>
+                                                <paper-input label="Diğer Faturaların" id="otherbills" name="otherbills" value$="[[response.outcome.otherbills]]" allowed-pattern="[0-9]" auto-validate maxlength="6">
+                                                    <div prefix>&#x20BA;</div>
+                                                </paper-input>
+                                            </paper-material>
+                                            <paper-material elevation="0" style="width: 45%; padding: 20px;">
+                                                <div class="outcome-title">Harcamaların</div>
+                                                <paper-input label="Aylık Tahmini Bireysel Harcamaların" id="individualexpense" name="individualexpense" value$="[[response.outcome.individualexpense]]" allowed-pattern="[0-9]" auto-validate maxlength="6">
+                                                    <div prefix>&#x20BA;</div>
+                                                </paper-input>
+                                                <paper-input label="Aylık Tahmini Alışveriş Masrafların" id="marketexpense" name="marketexpense" value$="[[response.outcome.marketexpense]]" allowed-pattern="[0-9]" auto-validate maxlength="6">
+                                                    <div prefix>&#x20BA;</div>
+                                                </paper-input>
+                                            </paper-material>
+                                        </div>
+                                        <div class="buttons">
+                                            <input type="hidden" name="fm" value="update-user-outcome" />
+                                            <paper-button id="useroutcomeformsubmit" on-tap="_pbUserOutcome" raised>
+                                                <span>Güncelle</span>
+                                                <iron-icon icon="icons:system-update-alt"></iron-icon>
+                                            </paper-button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </paper-item>
+
+                    </paper-material>
+                </neon-animatable>
+                <neon-animatable>
+                    <paper-material class="materialContainer" elevation="0" role="listbox" style="width:50%;">
+                        <paper-item heading>Kredi Kartı Bilgilerin</paper-item>
+                        <div info>
+                            <div class="loadingIndicatorProfile" style="color:#FF7800" hidden$="[[!loadingcreditcards]]">
+                                <paper-spinner active>...</paper-spinner>
+                            </div>
+                            <div hidden$=[[loadingcreditcards]] class="formContainer" style="width:100%;">
+                                   <template is="dom-repeat" items="[[response.creditcards]]">
+                                       <div class="credit-card-container">
+                                           <paper-ripple></paper-ripple>
+                                           <iron-icon icon="icons:credit-card"></iron-icon>
+                                           <div class="credit-card-details">
+                                               <div class="cc-name">[[item.bankname]]</div>
+                                               <div class="layout horizontal" style="justify-content:center;">
+                                                   <div class="cc-limit">Limit <b>[[item.cardlimit]] &#x20BA;</b></div>
+                                                   <div class="cc-debt">Borç <b>[[item.carddebt]] &#x20BA;</b></div>
+                                               </div>
+                                           </div>
+                                           <div class="card-interactions">
+                                               <paper-icon-button icon="editor:mode-edit" id="pibEditCard"></paper-icon-button>
+                                               <paper-icon-button icon="icons:delete" id="pibDeleteCard"></paper-icon-button>
+                                           </div>
+                                       </div>
+                                   </template>
+                                    <!--<paper-input label="Aylık Net Gelir" id="monthlyincome" name="monthlyincome" value$="[[response.income.monthlyincome]]" allowed-pattern="[0-9]" auto-validate maxlength="6">
+                                        <div prefix>&#x20BA;</div>
+                                    </paper-input>
+
+                                    <paper-input label="Aylık Ek Gelir" id="monthlyadditionalincome" name="monthlyadditionalincome" value$="[[response.income.monthlyadditionalincome]]" allowed-pattern="[0-9]" auto-validate maxlength="6">
+                                        <div prefix>&#x20BA;</div>
+                                    </paper-input>-->
+
+                              
+                            </div>
+                        </div>
+
+                    </paper-material>
+                </neon-animatable>
+            </neon-animated-pages>
+        </paper-material>
+    </template>
+    <script>
+        Polymer({
+            is: 'do-profile',
+            properties: {
+                uid: {
+                    type: Number,
+                    value: 111111,
+                    notify: true
+                },
+                selected: {
+                    type: Number,
+                    value: 0,
+                    notify: true
+                },
+                loadingincome: {
+                    type: Boolean,
+                    value: true,
+                    notify: true
+                },
+                loadingoutcome: {
+                    type: Boolean,
+                    value: true,
+                    notify: true
+                },
+                loadingcreditcards: {
+                    type: Boolean,
+                    value: true,
+                    notify: true
+                },
+                response: {
+                    type: Object,
+                    notify: true,
+                    value: function(){
+                        return {
+                            income: null,
+                            outcome: null,
+                            creditcards: []
+                        }
+                    }
+                }
+            },
+            ready: function () {
+                console.log('do-profile is ready now!');
+                this.async(function () {
+                    this.$.iaGetUserIncome.generateRequest();
+                }, 1111);
+            },
+            _ironSelect: function (event) {
+                var selected = event.target.selected;
+                this.$.profilepages.select(selected);
+           },
+            _responseGetUserIncome: function (event) {
+                //console.log('_response Income');
+                var response = event.detail.response;
+                //console.log(response);
+
+                if (response != null) {
+                    this.jobtype = response.jobtype;
+                    this.set('response.income', response);
+                    this.loadingincome = false;
+                }
+
+            },
+            _responseGetUserOutcome: function (event) {
+                //console.log('_response Outcome');
+                var response = event.detail.response;
+                //console.log(response);
+                if (response != null) {
+                    this.set('response.outcome', response);
+                    this.loadingoutcome = false;
+                }
+            },
+            _responseGetUserCreditCards: function (event) {
+                //console.log('_response Creditcards');
+                var response = event.detail.response;
+                //console.log(response);
+                if (response != null) {
+                    this.set('response.creditcards', response);
+                    this.loadingcreditcards = false;
+                }
+            },
+
+        });
+    </script>
+</dom-module>

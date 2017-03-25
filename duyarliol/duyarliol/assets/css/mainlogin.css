@@ -1,0 +1,449 @@
+﻿.nav-user {
+    position: fixed;
+     top: 10px;
+    right: 10px;
+    z-index: 4;
+    cursor: pointer
+}
+.nav-user .user {
+    -webkit-transition: 100ms -webkit-transform cubic-bezier(.17, .67, .6, 1.3);
+    transition: 100ms transform cubic-bezier(.17, .67, .6, 1.3);
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1)
+}
+.nav-user .user img {
+    width: 50px;
+    border-radius: 50%;
+    -webkit-transition: 500ms opacity cubic-bezier(.17, .67, .6, 1.3);
+    transition: 500ms opacity cubic-bezier(.17, .67, .6, 1.3)
+}
+.nav-user .user .badge {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 14px;
+    border: 2px solid #fff;
+    border-radius: 100%;
+    background: #d52117
+}
+.nav-user .cross {
+    position: absolute;
+     top: 20px;
+    left: 60px;
+    -webkit-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0);
+    -webkit-transition: .3s -webkit-transform cubic-bezier(.17, .67, .6, 1.3);
+    transition: .3s transform cubic-bezier(.17, .67, .6, 1.3)
+}
+.nav-user .cross .line {
+    width: 26px;
+    height: 3px;
+    display: block;
+    background: #fff;
+    -webkit-transition: .5s -webkit-transform cubic-bezier(.17, .67, .6, 1.3);
+    transition: .5s transform cubic-bezier(.17, .67, .6, 1.3)
+}
+.nav-user:hover .user img {
+    opacity: .8
+}
+.nav-user:active .user {
+    -webkit-transform: scale(.8);
+    -ms-transform: scale(.8);
+    transform: scale(.8)
+}
+.nav-user.active {
+    z-index: 11
+}
+.nav-user.active .user {
+    -webkit-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0)
+}
+.nav-user.active .cross {
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1)
+}
+.nav-user.active .cross .line:nth-child(1) {
+    -webkit-transform: rotate(45deg) translate3d(4px, 2px, 0);
+    transform: rotate(45deg) translate3d(4px, 2px, 0)
+}
+.nav-user.active .cross .line:nth-child(2) {
+    -webkit-transform: rotate(-45deg) translate3d(0, 1px, 0);
+    transform: rotate(-45deg) translate3d(0, 1px, 0)
+}
+.nav-user.active.rotating .cross {
+    -webkit-animation: spin 800ms;
+    animation: spin 800ms;
+    -webkit-transform-origin: 50% 50%;
+    -ms-transform-origin: 50% 50%;
+    transform-origin: 50% 50%
+}
+.nav-bar-border {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 81px;
+    height: 100%;
+    background: #fff;
+    border-right: 1px solid #f0f0f0
+}
+.overlay {
+    display: none;
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden
+}
+.overlay .starting-point {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    z-index: 2;
+    width: 30px;
+    height: 30px;
+    border-radius: 100%
+}
+.overlay .starting-point span {
+    position: absolute;
+    display: inline-block;
+    -webkit-transform: translateZ(0) scale(0);
+    transform: translateZ(0) scale(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    will-change: transform;
+    -webkit-transform-origin: 50% 50%;
+    -ms-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    border-radius: 50%
+}
+.overlay .logo {
+    display: block;
+    position: absolute;
+    z-index: 2;
+    bottom: 100px;
+    left: -37px;
+    -webkit-transform: rotateZ(90deg);
+    transform: rotateZ(90deg);
+    font-size: 14px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, .3);
+    letter-spacing: 10px
+}
+.overlay.overlay-nav {
+    z-index: 10;
+    width: 401px
+}
+.overlay.overlay-search {
+    z-index: 10
+}
+.overlay.overlay-search .starting-point {
+    top: 110px
+}
+.overlay.overlay-user {
+    z-index: 10
+}
+.overlay.overlay-user .starting-point {
+    bottom: 15px
+}
+.overlay.overlay-user .logo {
+    bottom: auto;
+    top: 100px
+}
+.overlay.active {
+    display: block
+}
+.overlay-secondary {
+    position: fixed;
+    z-index: -1;
+    visibility: hidden;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .3);
+    opacity: 0;
+    -webkit-transition: visibility 0s linear, opacity 500ms cubic-bezier(.35, 0, .25, 1)250ms;
+    transition: visibility 0s linear, opacity 500ms cubic-bezier(.35, 0, .25, 1)250ms
+}
+.overlay-secondary.fade-in {
+    visibility: visible;
+    z-index: 9;
+    opacity: 1;
+    cursor: url(../../globals/img/cursor-close.png), auto
+}
+
+.user-layer {
+       display: none;
+    position: fixed;
+    left: 40%;
+    top: 0;
+    right: 50%;
+    background: 0 0;
+    height: 100%;
+    padding: 0;
+    visibility: hidden;
+    z-index: 1100;
+    width: 500px;
+}
+.user-layer .nav {
+    padding: calc(0.3em + 1vmin) !important;
+    visibility: hidden;
+    -webkit-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0);
+    -webkit-transition: all 300ms cubic-bezier(.35, 0, .25, 1)100ms;
+    transition: all 300ms cubic-bezier(.35, 0, .25, 1)100ms;
+    background: #222;
+    outline: none !important;
+    display: flex;
+    justify-content: center;
+    box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.4);
+}
+
+.user-layer .nav iron-image{
+        height: 59px;
+    width: 45px;
+}
+
+.user-layer .tab-content {
+    padding: 0;
+    border: 0;
+    visibility: hidden;
+    -webkit-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0);
+    border-radius: 100%;
+    -webkit-transition: all 300ms cubic-bezier(.35, 0, .25, 1)0;
+    transition: all 300ms cubic-bezier(.35, 0, .25, 1)0;
+    border: none;
+    background: #222;
+    box-shadow: 0 12px 16px 1px rgba(0, 0, 0, 0.14), 0 4px 22px 3px rgba(0, 0, 0, 0.12), 0 6px 7px -4px rgba(0, 0, 0, 0.4);
+}
+.user-layer .tab-content>.tab-pane {
+    height: 100%
+}
+.user-layer .tab-content .message-list {
+    visibility: hidden;
+    -webkit-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0);
+    -webkit-transition: all 300ms cubic-bezier(.35, 0, .25, 1)150ms;
+    transition: all 300ms cubic-bezier(.35, 0, .25, 1)150ms;
+    padding: 0;
+    margin: 0;
+    height: 100%
+}
+.user-layer .tab-content .message-list .selected .list-content {
+    border-bottom-color: transparent
+}
+.user-layer .tab-content .message-list .list-action-left {
+    left: 20px
+}
+.user-layer .tab-content .message-list .list-action-left img {
+    width: 50px;
+    height: 50px
+}
+.user-layer .tab-content .message-list .list-content {
+    margin-left: 90px
+}
+.user-layer .tab-content .message-list .list-content .title {
+    font-size: inherit
+}
+.user-layer .tab-content .message-list .list-content .detail2 {
+    color: rgba(0, 0, 0, .8);
+    border-bottom-color: #f0f0f0
+}
+.user-layer .tab-content .message-list .list-action-right {
+    right: 30px;
+    width: 75px;
+    color: rgba(0, 0, 0, .3)
+}
+.user-layer .tab-content .send-message {
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    bottom: 0;
+    border-top: 1px solid #f0f0f0;
+    width: 100%;
+    padding: 20px 30px;
+    background: #fff
+}
+.user-layer .tab-content .send-message textarea {
+    max-height: 100px
+}
+.user-layer .tab-content .messages {
+    padding: 0 30px 0 30px;
+    height: calc(100% - 89px);
+    position: relative;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch
+}
+.user-layer .tab-content [class*=" col-"],
+.user-layer .tab-content [class^=col-] {
+    position: relative;
+    height: 100%
+}
+.user-layer .tab-content #messages>div:nth-child(1) {
+    border-right: 1px solid #f0f0f0
+}
+.user-layer .tab-content #messages .list-material {
+    background: 0 0
+}
+.user-layer .tab-content #messages .list-material a {
+    background: 0 0
+}
+.user-layer .tab-content #messages .message-list {
+    position: relative;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch
+}
+.user-layer .tab-content #messages .message-send-container {
+    height: 100%;
+    visibility: hidden;
+    -webkit-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0);
+    -webkit-transition: -webkit-transform 300ms cubic-bezier(.35, 0, .25, 1)100ms, opacity 280ms cubic-bezier(.35, 0, .25, 1);
+    transition: transform 300ms cubic-bezier(.35, 0, .25, 1)100ms, opacity 280ms cubic-bezier(.35, 0, .25, 1)
+}
+.user-layer .tab-content #messages .message-send-container .loading-bar {
+    position: absolute;
+    top: 0;
+    margin-bottom: 0
+}
+.user-layer .tab-content #messages .message-send-container.loading .messages,
+.user-layer .tab-content #messages .message-send-container.loading .send-message {
+    opacity: .1;
+    overflow: hidden!important
+}
+.user-layer .tab-content #messages .mobile-back {
+    position: absolute;
+    top: -132px;
+    left: 0;
+    width: 100%;
+    color: #fff;
+    height: 61px;
+    line-height: 61px;
+    font-size: 30px;
+    -webkit-transform: translateY(-100%);
+    -ms-transform: translateY(-100%);
+    transform: translateY(-100%);
+    visibility: hidden;
+    -webkit-transition: all 180ms cubic-bezier(.35, 0, .25, 1);
+    transition: all 180ms cubic-bezier(.35, 0, .25, 1)
+}
+.user-layer .tab-content #messages .mobile-back .mobile-back-button {
+    padding: 0 20px
+}
+.user-layer .tab-content #messages .mobile-back.active {
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
+    visibility: visible;
+    -webkit-transition: all 280ms cubic-bezier(.35, 0, .25, 1)100ms;
+    transition: all 280ms cubic-bezier(.35, 0, .25, 1)100ms
+}
+.user-layer .tab-content #notifications,
+.user-layer .tab-content #settings {
+    position: relative;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch
+}
+.user-layer .tab-content #notifications {
+    padding: 20px 0 0 0
+}
+.user-layer .tab-content #notifications .caption {
+    font-size: 16px
+}
+.user-layer .tab-content #notifications .list-material {
+    padding: 0 20px
+}
+.user-layer .tab-content #settings .checkboxer input[type=checkbox]+label {
+    margin-right: 0
+}
+.user-layer .tab-content .settings-panel {
+    padding: 40px 30px
+}
+.user-layer .tab-content .settings-panel ul {
+    padding: 0 0 0 30px
+}
+.user-layer .tab-content .settings-panel ul li {
+    list-style-type: none;
+    margin-bottom: 20px
+}
+.user-layer .tab-content .settings-panel ul li:after,
+.user-layer .tab-content .settings-panel ul li:before {
+    content: " ";
+    display: table
+}
+.user-layer .tab-content .settings-panel ul li:after {
+    clear: both
+}
+.user-layer .tab-content .settings-panel ul li:after,
+.user-layer .tab-content .settings-panel ul li:before {
+    content: " ";
+    display: table
+}
+.user-layer .tab-content .settings-panel ul li:after {
+    clear: both
+}
+.user-layer.active {
+    visibility: visible
+}
+.user-layer.active .nav {
+    visibility: visible;
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+    -webkit-transition: all 280ms cubic-bezier(.35, 0, .25, 1)350ms;
+    transition: all 280ms cubic-bezier(.35, 0, .25, 1)350ms
+}
+.user-layer.active .tab-content {
+    visibility: visible;
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+    border-radius: 0;
+    -webkit-transition: all 280ms cubic-bezier(.35, 0, .25, 1)380ms;
+    transition: all 280ms cubic-bezier(.35, 0, .25, 1)380ms
+}
+.user-layer.active .tab-content .message-list {
+    visibility: visible;
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+    -webkit-transition: all 280ms cubic-bezier(.35, 0, .25, 1)560ms;
+    transition: all 280ms cubic-bezier(.35, 0, .25, 1)560ms
+}
+.user-layer.active .tab-content #messages .message-send-container {
+    visibility: visible;
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+    -webkit-transition: -webkit-transform 280ms cubic-bezier(.35, 0, .25, 1)660ms, opacity 280ms cubic-bezier(.35, 0, .25, 1);
+    transition: transform 280ms cubic-bezier(.35, 0, .25, 1)660ms, opacity 280ms cubic-bezier(.35, 0, .25, 1)
+}
+.user-layer.active.perfect-scrollbar .tab-content #messages .message-list {
+    overflow: hidden!important
+}
+.user-layer.active.perfect-scrollbar .tab-content .messages {
+    overflow: hidden!important
+}
+.user-layer.active.perfect-scrollbar .tab-content #notifications,
+.user-layer.active.perfect-scrollbar .tab-content #settings {
+    overflow: hidden!important
+}
+.user-layer.activating {
+    display: block
+}
+.overlay .starting-point span {
+    display: block !important;
+    background-color: #ff7800;
+    opacity:0.8;
+}

@@ -1,0 +1,45 @@
+﻿<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<script src="../../../Polymer/webcomponentsjs/webcomponents-lite.min.js"></script>
+	<script src="../../../Polymer/web-component-tester/browser.js"></script>
+	<script src="../../../Polymer/test-fixture/test-fixture-mocha.js"></script>
+
+	<link rel="import" href="../../../Polymer/iron-test-helpers/iron-test-helpers.html" />
+	<link rel="import" href="../../../Polymer/test-fixture/test-fixture.html" />
+	<link rel="import" href="../demo-component.html" />
+</head>
+<body>
+
+	<test-fixture id="fixture">
+		<template>
+			<demo-component id="element"></demo-component>
+		</template>
+	</test-fixture>
+
+	<script>
+		describe('<demo-component>', function () {
+			var component;
+
+			beforeEach(function () {
+				document.getElementById('fixture').create();
+				component = document.getElementById('element');
+			});
+
+			afterEach(function () {
+				document.getElementById('fixture').restore();
+			});
+
+			it('can receive property `foo`', function () {
+				component.foo = 'bar';
+				expect(component.foo).to.be.equal('bar');
+			});
+
+			it('has a default `foo` value of `undefined`', function () {
+				expect(component.foo).to.be.equal(undefined);
+			});
+		});
+	</script>
+</body>
+</html>

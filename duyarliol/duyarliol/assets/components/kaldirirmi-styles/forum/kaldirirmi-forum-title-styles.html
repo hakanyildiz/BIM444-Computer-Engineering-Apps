@@ -1,0 +1,83 @@
+﻿<dom-module id="kaldirirmi-forum-title-styles">
+    <template>
+        <style>
+            :host {
+                display: block;
+                margin-bottom: 50px;
+            }
+
+            /*#forum {
+                height: 100%;
+            }*/
+
+            #forumheader {
+                @apply(--layout-horizontal);
+                @apply(--layout-center);
+                background: #222;
+                height: calc(2em + 1vmin);
+                padding: 0 30px;
+                left: 0;
+                right: 0;
+                @apply(--shadow-elevation-12dp);
+                border-top: 3px solid #222222;
+                border-bottom: 3px solid #222222;
+            }
+
+                #forumheader h1 {
+                    font-size: calc(0.9em + 1vmin);
+                    color: white;
+                    pointer-events: none;
+                    font-weight: normal;
+                }
+
+            #titlesholder {
+                padding: 15px;
+                width: 70% !important;
+                margin: 45px auto 0 auto;
+            }
+
+            @media only screen and (max-width: 768px) {
+                #titlesholder {
+                    width: 95% !important;
+                }
+            }
+
+            #titlesholder .forum-title {
+                @apply(--layout-horizontal);
+                @apply(--layout-center);
+                padding: calc(0.3em + 1vmin);
+                background-color: white;
+                margin-top: 10px;
+                text-decoration: none;
+                color: #333;
+                border-radius: 3px;
+            }
+
+                #titlesholder .forum-title:hover {
+                    background-color: #eee;
+                }
+
+                #titlesholder .forum-title iron-icon {
+                    width: 40px;
+                    height: 40px;
+                    margin-right: 20px;
+                    color: #ff7800;
+                }
+
+                #titlesholder .forum-title .title {
+                    @apply(--layout-vertical);
+                    flex-grow: 2;
+                }
+
+                    #titlesholder .forum-title .title .name {
+                        font-size: calc(0.9em + 1vmin);
+                    }
+
+                    #titlesholder .forum-title .title .description {
+                        font-size: calc(0.4em + 1vmin);
+                        margin-top: 5px;
+                    }
+        </style>
+
+    </template>
+</dom-module>

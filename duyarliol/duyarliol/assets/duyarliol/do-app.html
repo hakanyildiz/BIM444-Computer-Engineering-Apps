@@ -1,0 +1,63 @@
+﻿<dom-module id="do-app">
+    <template>
+        <style>
+        </style>
+        <paper-material elevation="1">
+            <iron-pages>
+                <div>
+                    <do-registration></do-registration>
+                </div>
+                <div>
+                    <do-main uid=[[uid]]></do-main>
+                </div>
+            </iron-pages>
+        </paper-material>
+    </template>
+    <script>
+        Polymer({
+            is: 'do-app',
+            properties: {
+                uid: {
+                    type: Number,
+                    value: 111111,
+                    notify: true
+                },
+                islogged: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+            },
+            ready: function (e) {
+                console.log('do-app ready');
+
+                var pages = document.querySelector('iron-pages');
+                var selected = 0;
+                if (this.uid != 0) {
+                    selected = 1;
+                }
+               
+                this._checkImports(selected);
+                pages.select(selected);
+            },
+            _checkImports: function (selection) {
+                if (selection == 0) {
+                    if (!this._isAlreadyInstance(this.$.ipGeneralInformation)) {
+                        Polymer.Base.importHref('assets/duyarliol/do-registration.html');
+                    }
+                }
+                if (selection == 1) {
+                    if (!this._isAlreadyInstance(this.$.ipUserAccounts)) {
+                        Polymer.Base.importHref('assets/duyarliol/do-main.html');
+                    }
+                }
+            },
+            _isAlreadyInstance: function (element) {
+                if (Polymer.isInstance(element)) {
+                    return true;
+                }
+                return false;
+            },
+        });
+    </script>
+</dom-module>

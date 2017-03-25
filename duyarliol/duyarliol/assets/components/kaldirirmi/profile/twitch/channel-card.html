@@ -1,0 +1,168 @@
+﻿<link rel="import" href="../../../polymer/polymer.html">
+
+
+<dom-module id="channel-card">
+    <link href="../../../flag-icon-css/css/flag-icon.min.css" rel="stylesheet" />
+    <template>
+        <style is="custom-style">
+              :host {
+                  margin: 5px !important;
+            }
+            
+        </style>
+        <style include="card-style"></style>
+        <paper-card class="white"
+                    on-tap="_onTap"
+                    animated-shadow="true"
+                    id="card">
+            <div class="card-image">
+                <iron-image id="image"
+                            on-loaded-changed="_onImageLoaded">
+                </iron-image>
+            </div>
+            <div class="card-header">
+                <textfit-div id="status" min-font-size="10" max-font-size="22" text="[[data.channel.status]]" ignore-errors="true" manual-fire></textfit-div>
+            </div>
+            <div class="card-content">
+                <paper-icon-button src="[[_formatLogo(data.channel.logo)]]" title$="[[data.channel.display_name]] kanalına git"></paper-icon-button>
+                <div class="details">
+                    <div class="heading" style="color:black !important">
+                        <textfit-div id="title" text="[[data.channel.display_name]]" ignore-errors="true" manual-fire></textfit-div>
+                        <span class$="[[formatFlag(data.channel.broadcaster_language)]]" title$="[[formatLanguage(data.channel.broadcaster_language)]]"></span>
+                    </div>
+                    <div class="viewers">
+                        <iron-icon icon="icons:visibility"></iron-icon>
+                        <span id="viewers">[[_formatViewers(data.channel.views)]]</span>
+                    </div>
+                </div>
+            </div>
+            <paper-ripple recenters should-keep-animating="true"></paper-ripple>
+        </paper-card>
+    </template>
+    <script>
+    Polymer({
+      is: "channel-card",
+      properties: {
+        data: {
+          type: Object,
+          notify: true,
+          value: function(){
+            return {
+                channel: {
+                    logo: null,
+                    display_name: null,
+                    video_banner: null,
+                    url: null,
+                    status: null,
+                    broadcaster_language: null,
+                    views: null,
+                 }
+            }
+          }
+        },
+        width: {
+          type: Number,
+          value: null
+        },
+        animationConfig: {
+          value: function() {
+            return {
+              name: 'fade-in-animation',
+              node: this.$.card
+            }
+          }
+        }
+      },
+      listeners: {
+        'neon-animation-finish': '_onNeonAnimationFinish'
+      },
+      observers: [
+        '_loadImage(data, width)',
+        '_onWidthChanged(width)'
+      ],
+      behaviors: [
+        Polymer.NeonAnimationRunnerBehavior,
+        document.StreamingList.FlagBehavior
+      ],
+      _formatViewers: function (views) {
+          numeral.locale('tr');
+          return numeral(views).format('0a') + ' görüntülenme';
+      },
+      _formatStatus: function (status) {
+        var cut = status.substr(0, 80)
+        if (status.length > cut.length) {
+          cut += '...';
+        }
+        return cut;
+      },
+      _formatLogo: function (image) {
+        if(image) {
+          return image;
+        } else {
+            return "assets/img/twitch_icon.svg";
+        }
+      },
+      _formatUrl: function (url) {
+          if (url) {
+              return url
+          }
+          else {
+              return 'https://www.twitch.tv';
+          }
+      },
+
+      _onTap: function (event) {
+        if(Polymer.dom(event).localTarget === this.$.game) {
+          window.open(this._formatUrl(this.data.channel.url), '_blank');
+          return;
+        }
+        window.open(this.data.channel.url, '_blank');
+      },
+      _onImageLoaded: function (event) {
+          this.$.status.doFitMe();
+          this.$.title.doFitMe();
+
+        //this.$.status.doFitMe();
+        //this.$.title.doFitMe();
+        // Only play animation if element was not loaded before AND there is a IMAGE loaded
+        if(!this.$.card.classList.contains('loaded')
+          && this.$.image.loaded
+        ) {
+          // console.log('Found a image, animating', event.target);
+          this.$.card.classList.add('loaded');
+          this.playAnimation();
+        }
+      },
+
+      _onNeonAnimationFinish: function(event) {
+        // simulate delay (only for testing)
+        /*
+        setTimeout(function(){
+          this.fire('loaded', this);
+        }.bind(this), Math.round(Math.random() * 2000));
+        */
+        this.fire('loaded', this);
+      },
+      _onWidthChanged: function(event) {
+        if(!this.width) {
+          this.width = this.clientWidth;
+        } else {
+          this.style.display = 'inline-block';
+        }
+        this.style.width = this.width + 'px';
+        this._loadImage();
+      },
+
+      _loadImage: function() {
+          
+          var url = this.data.channel.video_banner;
+          if (url) {
+              this.$.image.src = url;
+          }
+          else {
+              this.$.image.src = 'assets/img/twtcdefaultbackg.jpg';
+          }
+      }
+    });
+    </script>
+</dom-module>

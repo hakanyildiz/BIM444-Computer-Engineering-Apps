@@ -1,0 +1,24 @@
+﻿<!-- Essential import to allow the definition of a web component -->
+<link rel="import" href="../../Polymer/polymer/polymer.html" />
+
+<!-- This is where the behaviour specific scripting goes -->
+<script>
+	/**
+     * The is a demo behaviour
+     * Contains debugging and standard functionality
+     *
+     * @polymerBehavior DemoBehavior
+     */
+	DemoBehavior = {
+		properties: {
+			debug: {
+				type: Boolean,
+				value: true
+			}
+		},
+
+		demoBaseFunction: function() {
+			console.log("This is some function all components that implement this behaviour, will have access to.");
+		}
+	};
+</script>

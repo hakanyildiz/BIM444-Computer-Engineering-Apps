@@ -1,0 +1,99 @@
+﻿
+/* swiper costum css */
+.swiper-slide {
+  
+    background: #000 !important;
+    text-align: center;
+    font-size: 18px;
+    background: #fff;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+
+/* Kampanya Kısmı*/
+#hottagwrapper .swiper-slide {
+    width: 100% !important;
+    height: 40px !important;
+    box-shadow: none !important;
+}
+
+.swiper-campaign-images {
+    width: 100% !important;
+    margin: 0 !important;
+    position: absolute !important;
+    display: flex;
+    bottom: -30px;
+}
+
+    .swiper-campaign-images .swiper-pagination-bullet {
+        background: #222222;
+        color: #ff7800;
+        width: 20%;
+        /*height: 85px;*/
+        text-align: center;
+        height: 5px !important;
+        /*line-height: 25px;*/
+        border-bottom: 1px solid #000;
+        font-size: 20px;
+        opacity: 1;
+        border-radius: 0%;
+    }
+
+    .swiper-campaign-images .swiper-pagination-bullet-active {
+        /*color: white;
+        background: #FF7800;*/
+    }
+    #hottagswiper{
+        height:40px !important;
+    }
+
+
+    /* Desktops and laptops ----------- */
+    @media only screen and (min-width : 1024px) { /* zoom %175 */
+        #hottagswiper {
+            width: 140px !important;        
+            margin-left:0px !important;
+
+        }
+    }
+
+    @media only screen and (min-width : 1224px) { /* zoom %150 */
+        #hottagswiper {
+            width: 160px !important;            margin-left:0px !important;
+
+        }
+    }
+
+    @media only screen and (min-width : 1440px) { /* zoom % 125*/
+        /*#hottagswiper {
+            width: 180px !important;
+                        margin-left:0px !important;
+
+        }*/
+    }
+
+    @media only screen and (min-width : 1640px) { /* zoom %110*/
+        /*#hottagswiper {
+            width: 220px !important;
+                        margin-left:0px !important;
+
+        }*/
+    }
+    /* Large screens ----------- */
+    @media only screen and (min-width : 1824px) {
+        /*#hottagswiper {
+            width: 250px !important;
+            margin-left:0px !important;
+        }*/
+    }

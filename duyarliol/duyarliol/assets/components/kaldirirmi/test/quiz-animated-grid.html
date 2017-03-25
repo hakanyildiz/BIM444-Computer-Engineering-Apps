@@ -1,0 +1,635 @@
+﻿<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../neon-animation/neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../../paper-styles/typography.html">
+<link rel="import" href="../../paper-styles/color.html">
+<link rel="import" href="../haberler/shared-styles.html">
+<link rel="import" href="../../paper-styles/paper-styles.html">
+<link rel="import" href="../../iron-collapse/iron-collapse.html">
+<link rel="import" href="../test/expandable-card-container.html" />
+<link rel="import" href="../test/expandable-card.html" />
+
+<dom-module id="quiz-animated-grid">
+  <template>
+    <style include="shared-styles"></style>
+    <style>
+      :host {
+        display: block;
+        background: #000;
+      }
+
+      .tile {
+        position: relative;
+        display: inline-block;
+        float: left;
+        vertical-align: top;
+        width: calc(100% / 6);
+        height: calc(100% / 3);
+        transition: .4s all;
+        color: #292929;
+        @apply(--paper-font-title);
+        @apply(--layout-vertical);
+        @apply(--layout-center-center);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        box-shadow: 0 0 45px black inset, 0 0 10px 4px black;
+      }
+
+        /*.tile:hover {
+          box-shadow: 0 0 15px black inset, 0 0 5px 2px black;
+        }*/
+
+        .tile a {
+          color: #fff;
+        }
+
+          /* effect part */
+          .tile a:after {
+            content: "";
+            position: absolute;
+            top: -110%;
+            left: -210%;
+            width: 200%;
+            height: 200%;
+            opacity: 1;
+            transform: rotate(30deg);
+            background: linear-gradient( to right, rgba(239, 121, 20, 0.13) 0%, rgba(239, 121, 20, 0.13) 77%, rgba(239, 121, 20, 0.5) 92%, rgba(239, 121, 20, 0.0) 100% );
+          }
+
+          .tile a:hover:after {
+            opacity: 1;
+            top: -30%;
+            left: -30%;
+            transition-property: left, top, opacity;
+            transition-duration: 0.7s, 0.7s, 0.15s;
+            transition-timing-function: ease;
+          }
+
+          .tile a:active:after {
+            opacity: 1;
+          }
+
+
+        /*1.sıradakine widthin 3te1ini ve heightın 3/2sini al diyor */
+        /*.tile:nth-of-type(1) {
+          width: calc(100% / 3);
+          height: calc(100% / 3 * 2);
+        }
+
+        .tile:nth-of-type(4) {
+          width: calc(100% / 3);
+        }
+
+        .tile:nth-of-type(5) {
+          width: calc(100% / 3);
+          height: calc(100% / 3 * 2);
+        }
+
+        .tile:nth-of-type(8) {
+          width: calc(100% / 3);
+          height: calc(100% / 3);
+        }
+
+        .tile:nth-of-type(9) {
+          position: absolute;
+          top: calc(100% / 3 * 2);
+          left: 0;
+          width: calc(100% / 6);
+          height: calc(100% / 3);
+        }
+
+        .tile:nth-of-type(10) {
+          position: absolute;
+          top: calc(100% / 3 * 2);
+          left: calc(100% / 6);
+          width: calc(100% / 6);
+          height: calc(100% / 3);
+        }*/
+
+      .news-item {
+        width: 100%;
+        height: 100%;
+      }
+
+      .tile .news-item .item-content {
+        position: absolute;
+        bottom: 0;
+        text-align: left;
+        width: 100%;
+        padding-left: 5px;
+        padding-bottom: 5px;
+        background-color: #EF7914;
+        opacity: 1;
+      }
+
+        .tile .news-item .item-content .actions {
+          overflow: hidden;
+          max-height: 0;
+          -webkit-transition: .2s linear all;
+          -khtml-transition: .2s linear all;
+          -moz-transition: .2s linear all;
+          -ms-transition: .2s linear all;
+          -o-transition: .2s linear all;
+          transition: .2s linear all;
+          padding-bottom: 5px;
+        }
+
+        /*tile 1. ve 5.*/
+      .tile:nth-of-type(1) .news-item .item-content ,
+      .tile:nth-of-type(5) .news-item .item-content {
+        padding-left: 10px;
+      }
+
+      .ironIconDetails{
+          padding-right:5px;
+      }
+
+    </style>
+    <!-- ---------------------------------- MEDIA QUERIES ----------------  -->
+    <style>
+        /* font size settings*/
+        /* Desktops and laptops ----------- */
+        @media only screen and (min-width : 1024px) { /* zoom %175 */
+         .tile .news-item .item-content {
+             line-height:16px;
+             padding-bottom:0px;
+         }
+           /* default yani en ufak karenin özellikleri*/
+      .tile .news-item .item-content .item-content-title {
+          font-size: 7px;
+            font-weight:400;
+
+        }
+        .tile .news-item .item-content .actions {
+          font-size: 6px;
+            font-weight:100;
+
+        }
+      .tile:nth-of-type(1) .news-item .item-content .item-content-title,
+        .tile:nth-of-type(5) .news-item .item-content .item-content-title {
+          font-size: 15px;
+          padding-top: 1px;
+        }
+
+        .tile:nth-of-type(1) .news-item .item-content .actions,
+        .tile:nth-of-type(5) .news-item .item-content .actions {
+          font-size: 10px;
+        }
+        /*tile 4. ve 8. */
+        .tile:nth-of-type(4) .news-item .item-content .item-content-title,
+        .tile:nth-of-type(8) .news-item .item-content .item-content-title {
+          font-size: 12px;
+          padding-top: 0px;
+        }
+
+        .tile:nth-of-type(4) .news-item .item-content .actions,
+        .tile:nth-of-type(8) .news-item .item-content .actions {
+          font-size: 8px;
+        }
+        .tile .news-item .item-content .actions .ironIconDetails{
+            width: 10px !important;
+            height: 10px !important;
+
+        }
+
+        }
+
+        @media only screen and (min-width : 1224px) { /* zoom %150 */
+       .tile .news-item .item-content {
+             line-height:19px;
+             padding-bottom:1px;
+         }
+      /* default yani en ufak karenin özellikleri*/
+        .tile .news-item .item-content .item-content-title {
+          font-size: 9px;
+            font-weight:400;
+
+        }
+        .tile .news-item .item-content .actions {
+          font-size: 7px;
+            font-weight:100;
+
+        }
+      .tile:nth-of-type(1) .news-item .item-content .item-content-title,
+        .tile:nth-of-type(5) .news-item .item-content .item-content-title {
+          font-size: 17px;
+          padding-top: 2px;
+        }
+
+        .tile:nth-of-type(1) .news-item .item-content .actions,
+        .tile:nth-of-type(5) .news-item .item-content .actions {
+          font-size: 12px;
+        }
+        /*tile 4. ve 8. */
+        .tile:nth-of-type(4) .news-item .item-content .item-content-title,
+        .tile:nth-of-type(8) .news-item .item-content .item-content-title {
+          font-size: 14px;
+          padding-top: 0px;
+        }
+
+        .tile:nth-of-type(4) .news-item .item-content .actions,
+        .tile:nth-of-type(8) .news-item .item-content .actions {
+          font-size: 10px;
+        }
+        .tile .news-item .item-content .actions .ironIconDetails{
+            width: 14px !important;
+            height: 14px !important;
+        }
+
+        }
+
+        @media only screen and (min-width : 1440px) { /* zoom % 125*/
+        .tile .news-item .item-content {
+             line-height:20px;
+             padding-bottom:3px;
+         }
+           /* default yani en ufak karenin özellikleri*/
+        .tile .news-item .item-content .item-content-title {
+          font-size: 11px;
+            font-weight:400;        }
+        .tile .news-item .item-content .actions {
+          font-size: 9px;
+            font-weight:100;        }
+
+        .tile:nth-of-type(1) .news-item .item-content .item-content-title,
+        .tile:nth-of-type(5) .news-item .item-content .item-content-title {
+          font-size: 19px;
+          padding-top: 3px;
+        }
+
+        .tile:nth-of-type(1) .news-item .item-content .actions,
+        .tile:nth-of-type(5) .news-item .item-content .actions {
+          font-size: 14px;
+        }
+        /*tile 4. ve 8. */
+        .tile:nth-of-type(4) .news-item .item-content .item-content-title,
+        .tile:nth-of-type(8) .news-item .item-content .item-content-title {
+          font-size: 16px;
+          padding-top: 1px;
+        }
+
+        .tile:nth-of-type(4) .news-item .item-content .actions,
+        .tile:nth-of-type(8) .news-item .item-content .actions {
+          font-size: 12px;
+        }
+
+        .tile .news-item .item-content .actions .ironIconDetails{
+            width: 17px !important;
+            height: 17px !important;
+
+        }
+
+        }
+        @media only screen and (min-width : 1640px) { /* zoom %110*/
+        .tile .news-item .item-content {
+             line-height:22px;
+             padding-bottom:4px;
+         }
+          /* default yani en ufak karenin özellikleri*/
+        .tile .news-item .item-content .item-content-title {
+            font-weight:400;
+            font-size: 13px;
+          }
+        .tile .news-item .item-content .actions {
+            font-size: 11px;
+            font-weight:100;
+          }
+
+        .tile:nth-of-type(1) .news-item .item-content .item-content-title,
+        .tile:nth-of-type(5) .news-item .item-content .item-content-title {
+          font-size: 21px;
+          padding-top: 4px;
+        }
+
+        .tile:nth-of-type(1) .news-item .item-content .actions,
+        .tile:nth-of-type(5) .news-item .item-content .actions {
+          font-size: 16px;
+        }
+        /*tile 4. ve 8. */
+        .tile:nth-of-type(4) .news-item .item-content .item-content-title,
+        .tile:nth-of-type(8) .news-item .item-content .item-content-title {
+          font-size: 18px;
+          padding-top: 2px;
+        }
+
+        .tile:nth-of-type(4) .news-item .item-content .actions,
+        .tile:nth-of-type(8) .news-item .item-content .actions {
+          font-size: 14px;
+        }
+        .tile .news-item .item-content .actions .ironIconDetails{
+            width: 21px !important;
+            height: 21px !important;
+        }
+        }
+        /* Large screens ----------- */
+        @media only screen and (min-width : 1824px) {
+            /* default yani en ufak karenin özellikleri*/
+         .tile .news-item .item-content {
+             line-height:26px;
+             padding-bottom:5px;
+         }
+
+        .tile .news-item .item-content .item-content-title {
+            font-size: 15px;
+          }
+        .tile .news-item .item-content .actions {
+            font-size: 13px;
+          }
+
+        .tile:nth-of-type(1) .news-item .item-content .item-content-title,
+        .tile:nth-of-type(5) .news-item .item-content .item-content-title {
+          font-size: 23px;
+          padding-top: 5px;
+        }
+
+        .tile:nth-of-type(1) .news-item .item-content .actions,
+        .tile:nth-of-type(5) .news-item .item-content .actions {
+          font-size: 18px;
+        }
+        /*tile 4. ve 8. */
+        .tile:nth-of-type(4) .news-item .item-content .item-content-title,
+        .tile:nth-of-type(8) .news-item .item-content .item-content-title {
+          font-size: 20px;
+          padding-top: 3px;
+        }
+
+        .tile:nth-of-type(4) .news-item .item-content .actions,
+        .tile:nth-of-type(8) .news-item .item-content .actions {
+          font-size: 16px;
+        }
+        /*iron icons in sub headline*/
+        .tile .news-item .item-content .actions .ironIconDetails{
+            width: 24px !important;
+            height: 24px !important;
+        }
+        }
+
+    </style><!-- media queries -->
+    <!--<iron-ajax id="getnews" auto url="/h/main?fm=get-news" method="get" handle-as="json" on-response="_responseNews"></iron-ajax>-->
+    <!--<template itemscope itemtype="http://schema.org/Article" is="dom-repeat">-->
+    <!--items="[[newscast]]"-->
+
+      <div class="tile">
+          <expandable-card>
+              <div id="retracted" class="container">
+                  <paper-card heading="Retracted title">
+                      <div class="card-content">Retracted content</div>
+                      <div class="card-actions">
+                          <paper-button class="toggle" noink>Expand</paper-button>
+                      </div>
+                  </paper-card>
+              </div>
+              <div id="expanded" class="container">
+                  <div id="expandedHeader" class="container-header">
+                      <paper-icon-button class="container-header-side toggle" noink icon="arrow-back"></paper-icon-button>
+                      <div>Expanded title</div>
+                      <div class="container-header-side"></div>
+                  </div>
+                  <div id="expandedContent">Expanded content</div>
+              </div>
+          </expandable-card>
+      </div>
+          <expandable-card>
+              <div id="retracted" class="container">
+                  <paper-card heading="Retracted title">
+                      <div class="card-content">Retracted content</div>
+                      <div class="card-actions">
+                          <paper-button class="toggle" noink>Expand</paper-button>
+                      </div>
+                  </paper-card>
+              </div>
+              <div id="expanded" class="container">
+                  <div id="expandedHeader" class="container-header">
+                      <paper-icon-button class="container-header-side toggle" noink icon="arrow-back"></paper-icon-button>
+                      <div>Expanded title</div>
+                      <div class="container-header-side"></div>
+                  </div>
+                  <div id="expandedContent">Expanded content</div>
+              </div>
+          </expandable-card>
+          
+          <expandable-card>
+              <div id="retracted" class="container">
+                  <paper-card heading="Retracted title">
+                      <div class="card-content">Retracted content</div>
+                      <div class="card-actions">
+                          <paper-button class="toggle" noink>Expand</paper-button>
+                      </div>
+                  </paper-card>
+              </div>
+              <div id="expanded" class="container">
+                  <div id="expandedHeader" class="container-header">
+                      <paper-icon-button class="container-header-side toggle" noink icon="arrow-back"></paper-icon-button>
+                      <div>Expanded title</div>
+                      <div class="container-header-side"></div>
+                  </div>
+                  <div id="expandedContent">Expanded content</div>
+              </div>
+          </expandable-card>
+      <!--<expandable-card-container items='[
+            {
+                 "retractedTitle": "Retracted title 1",
+                 "retractedContent": "Retracted content 1",
+                 "expandedTitle": "Expanded title 1",
+                 "expandedContent": "Expanded content 1"
+            },
+            {
+                 "retractedTitle": "Retracted title 2",
+                 "retractedContent": "Retracted content 2",
+                 "expandedTitle": "Expanded title 2",
+                 "expandedContent": "Expanded content 2"
+           }]' as='item'>
+          <template id="card">
+              <expandable-card>
+                  <div id="retracted" class="container">
+                      <paper-card heading="[[item.retractedTitle]]">
+                          <div class="card-content">[[item.retractedContent]]</div>
+                          <div class="card-actions">
+                              <paper-button class="toggle" noink>Expand</paper-button>
+                          </div>
+                      </paper-card>
+                  </div>
+                  <div id="expanded" class="container">
+                      <div id="expandedHeader" class="container-header">
+                          <paper-icon-button class="container-header-side toggle" noink icon="arrow-back"></paper-icon-button>
+                          <div>[[item.expandedTitle]]</div>
+                          <div class="container-header-side"></div>
+                      </div>
+                      <div id="expandedContent">[[item.expandedContent]]</div>
+                  </div>
+              </expandable-card>
+          </template>
+      </expandable-card-container>-->
+      
+    <!--</template>-->
+
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'quiz-animated-grid',
+
+    behaviors: [
+      Polymer.NeonSharedElementAnimatableBehavior
+    ],
+
+    properties: {
+      //newscast: {
+      //  type: Array,
+      //  value: []
+      //},
+      hovered: {
+        type: String,
+        value: 'display:none',
+        notify: true
+
+      },
+
+      animationConfig: {
+        type: Object,
+        value: function () {
+          return {
+            'entry': [{
+              name: 'cascaded-animation',
+              animation: 'transform-animation',
+              transformFrom: 'translateY(100%)',
+              transformTo: 'none',
+              timing: {
+                delay: 50
+              }
+            }]
+          }
+        }
+      }
+
+
+    },
+
+    //listeners:{
+    //  mouseover: '_onHostHover',
+    //  mouseout : '_onHostUnhover',
+    //},
+    //attached: function()
+    //{
+    //  console.log(this.$$('#part0'));
+    //},
+    //_responseNews: function (a) {
+    //  if (a.detail.response.length > 0) {
+    //      a.detail.response.forEach(function (news) {
+    //          news.subtitle = news.subtitle.toString().substring(0, 45) + '...';
+    //      //news.subtitle = news.subtitle.toString().substring(0, 45) + "...";
+    //      this.push('newscast', news);
+    //    }, this);
+
+    //    this.async(function () {
+    //      var nodeList = Polymer.dom(this.root).querySelectorAll('.tile');
+    //      this.animationConfig['entry'][0].nodes = Array.prototype.slice.call(nodeList);
+    //    });
+    //  }
+    //},
+    //_onHostHover: function (e) {
+
+    //  this.hovered = 'display:block';
+    //},
+    //_onHostUnhover: function (e) {
+    //  this.hovered = 'display:none';
+
+    //},
+
+
+  });
+
+</script>
+<script src="../../../js/jquery-2.2.3.min.js"></script>
+
+<script>
+  //$(document).ready(function () {
+  //  //part0
+  //  $(document).on('mouseover', '#part0', function (e) {
+  //    //$('#part0 > .news-item > .item-content >.actions').css('visibility', 'visible');
+  //    $('#part0 > .news-item > .item-content >.actions').css('max-height', '100px');
+
+  //  });
+  //  $(document).on('mouseout', '#part0', function () {
+  //    //$('#part0 > .news-item > .item-content >.actions').css('visibility', 'hidden');
+  //    $('#part0 > .news-item > .item-content >.actions').css('max-height', '0px');
+
+  //  });
+
+  //  //part1
+  //  $(document).on('mouseover', '#part1', function (e) {
+  //    $('#part1 > .news-item > .item-content >.actions').css('max-height', '100px');
+  //  });
+  //  $(document).on('mouseout', '#part1', function () {
+  //    $('#part1 > .news-item > .item-content >.actions').css('max-height', '0px');
+  //  });
+  //  //part2
+  //  $(document).on('mouseover', '#part2', function (e) {
+  //    $('#part2 > .news-item > .item-content >.actions').css('max-height', '100px');
+  //  });
+  //  $(document).on('mouseout', '#part2', function () {
+  //    $('#part2 > .news-item > .item-content >.actions').css('max-height', '0px');
+  //  });
+  //  //part3
+  //  $(document).on('mouseover', '#part3', function (e) {
+  //    $('#part3 > .news-item > .item-content >.actions').css('max-height', '100px');
+  //  });
+  //  $(document).on('mouseout', '#part3', function () {
+  //    $('#part3 > .news-item > .item-content >.actions').css('max-height', '0px');
+  //  });
+  //  //part4
+  //  $(document).on('mouseover', '#part4', function (e) {
+  //    $('#part4 > .news-item > .item-content >.actions').css('max-height', '100px');
+  //  });
+  //  $(document).on('mouseout', '#part4', function () {
+  //    $('#part4 > .news-item > .item-content >.actions').css('max-height', '0px');
+  //  });
+  //  //part5
+  //  $(document).on('mouseover', '#part5', function (e) {
+  //    $('#part5 > .news-item > .item-content >.actions').css('max-height', '100px');
+  //  });
+  //  $(document).on('mouseout', '#part5', function () {
+  //    $('#part5 > .news-item > .item-content >.actions').css('max-height', '0px');
+  //  });
+  //  //part6
+  //  $(document).on('mouseover', '#part6', function (e) {
+  //    $('#part6 > .news-item > .item-content >.actions').css('max-height', '100px');
+  //  });
+  //  $(document).on('mouseout', '#part6', function () {
+  //    $('#part6 > .news-item > .item-content >.actions').css('max-height', '0px');
+  //  });
+  //  //part7
+  //  $(document).on('mouseover', '#part7', function (e) {
+  //    $('#part7 > .news-item > .item-content >.actions').css('max-height', '100px');
+  //  });
+  //  $(document).on('mouseout', '#part7', function () {
+  //    $('#part7 > .news-item > .item-content >.actions').css('max-height', '0px');
+  //  });
+  //  //part8
+  //  $(document).on('mouseover', '#part8', function (e) {
+  //    $('#part8 > .news-item > .item-content >.actions').css('max-height', '100px');
+  //  });
+  //  $(document).on('mouseout', '#part8', function () {
+  //    $('#part8 > .news-item > .item-content >.actions').css('max-height', '0px');
+  //  });
+  //  //part9
+  //  $(document).on('mouseover', '#part9', function (e) {
+  //    $('#part9 > .news-item > .item-content >.actions').css('max-height', '100px');
+  //  });
+  //  $(document).on('mouseout', '#part9', function () {
+  //    $('#part9 > .news-item > .item-content >.actions').css('max-height', '0px');
+  //  });
+  //  //part10
+  //  $(document).on('mouseover', '#part10', function (e) {
+  //    $('#part10 > .news-item > .item-content >.actions').css('max-height', '100px');
+  //  });
+  //  $(document).on('mouseout', '#part10', function () {
+  //    $('#part10 > .news-item > .item-content >.actions').css('max-height', '0px');
+  //  });
+
+  //});
+</script>

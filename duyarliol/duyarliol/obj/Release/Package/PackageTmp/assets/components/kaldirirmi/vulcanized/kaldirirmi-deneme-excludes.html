@@ -1,0 +1,1628 @@
+﻿<html><head><!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+--><meta charset="UTF-8"></head><body><div hidden="" by-vulcanize=""><link rel="import" href="../../polymer/polymer.html">
+
+<script>
+  /**
+   * `IronResizableBehavior` is a behavior that can be used in Polymer elements to
+   * coordinate the flow of resize events between "resizers" (elements that control the
+   * size or hidden state of their children) and "resizables" (elements that need to be
+   * notified when they are resized or un-hidden by their parents in order to take
+   * action on their new measurements).
+   *
+   * Elements that perform measurement should add the `IronResizableBehavior` behavior to
+   * their element definition and listen for the `iron-resize` event on themselves.
+   * This event will be fired when they become showing after having been hidden,
+   * when they are resized explicitly by another resizable, or when the window has been
+   * resized.
+   *
+   * Note, the `iron-resize` event is non-bubbling.
+   *
+   * @polymerBehavior Polymer.IronResizableBehavior
+   * @demo demo/index.html
+   **/
+  Polymer.IronResizableBehavior = {
+    properties: {
+      /**
+       * The closest ancestor element that implements `IronResizableBehavior`.
+       */
+      _parentResizable: {
+        type: Object,
+        observer: '_parentResizableChanged'
+      },
+
+      /**
+       * True if this element is currently notifying its descedant elements of
+       * resize.
+       */
+      _notifyingDescendant: {
+        type: Boolean,
+        value: false
+      }
+    },
+
+    listeners: {
+      'iron-request-resize-notifications': '_onIronRequestResizeNotifications'
+    },
+
+    created: function() {
+      // We don't really need property effects on these, and also we want them
+      // to be created before the `_parentResizable` observer fires:
+      this._interestedResizables = [];
+      this._boundNotifyResize = this.notifyResize.bind(this);
+    },
+
+    attached: function() {
+      this.fire('iron-request-resize-notifications', null, {
+        node: this,
+        bubbles: true,
+        cancelable: true
+      });
+
+      if (!this._parentResizable) {
+        window.addEventListener('resize', this._boundNotifyResize);
+        this.notifyResize();
+      }
+    },
+
+    detached: function() {
+      if (this._parentResizable) {
+        this._parentResizable.stopResizeNotificationsFor(this);
+      } else {
+        window.removeEventListener('resize', this._boundNotifyResize);
+      }
+
+      this._parentResizable = null;
+    },
+
+    /**
+     * Can be called to manually notify a resizable and its descendant
+     * resizables of a resize change.
+     */
+    notifyResize: function() {
+      if (!this.isAttached) {
+        return;
+      }
+
+      this._interestedResizables.forEach(function(resizable) {
+        if (this.resizerShouldNotify(resizable)) {
+          this._notifyDescendant(resizable);
+        }
+      }, this);
+
+      this._fireResize();
+    },
+
+    /**
+     * Used to assign the closest resizable ancestor to this resizable
+     * if the ancestor detects a request for notifications.
+     */
+    assignParentResizable: function(parentResizable) {
+      this._parentResizable = parentResizable;
+    },
+
+    /**
+     * Used to remove a resizable descendant from the list of descendants
+     * that should be notified of a resize change.
+     */
+    stopResizeNotificationsFor: function(target) {
+      var index = this._interestedResizables.indexOf(target);
+
+      if (index > -1) {
+        this._interestedResizables.splice(index, 1);
+        this.unlisten(target, 'iron-resize', '_onDescendantIronResize');
+      }
+    },
+
+    /**
+     * This method can be overridden to filter nested elements that should or
+     * should not be notified by the current element. Return true if an element
+     * should be notified, or false if it should not be notified.
+     *
+     * @param {HTMLElement} element A candidate descendant element that
+     * implements `IronResizableBehavior`.
+     * @return {boolean} True if the `element` should be notified of resize.
+     */
+    resizerShouldNotify: function(element) { return true; },
+
+    _onDescendantIronResize: function(event) {
+      if (this._notifyingDescendant) {
+        event.stopPropagation();
+        return;
+      }
+
+      // NOTE(cdata): In ShadowDOM, event retargetting makes echoing of the
+      // otherwise non-bubbling event "just work." We do it manually here for
+      // the case where Polymer is not using shadow roots for whatever reason:
+      if (!Polymer.Settings.useShadow) {
+        this._fireResize();
+      }
+    },
+
+    _fireResize: function() {
+      this.fire('iron-resize', null, {
+        node: this,
+        bubbles: false
+      });
+    },
+
+    _onIronRequestResizeNotifications: function(event) {
+      var target = event.path ? event.path[0] : event.target;
+
+      if (target === this) {
+        return;
+      }
+
+      if (this._interestedResizables.indexOf(target) === -1) {
+        this._interestedResizables.push(target);
+        this.listen(target, 'iron-resize', '_onDescendantIronResize');
+      }
+
+      target.assignParentResizable(this);
+      this._notifyDescendant(target);
+
+      event.stopPropagation();
+    },
+
+    _parentResizableChanged: function(parentResizable) {
+      if (parentResizable) {
+        window.removeEventListener('resize', this._boundNotifyResize);
+      }
+    },
+
+    _notifyDescendant: function(descendant) {
+      // NOTE(cdata): In IE10, attached is fired on children first, so it's
+      // important not to notify them if the parent is not attached yet (or
+      // else they will get redundantly notified when the parent attaches).
+      if (!this.isAttached) {
+        return;
+      }
+
+      this._notifyingDescendant = true;
+      descendant.notifyResize();
+      this._notifyingDescendant = false;
+    }
+  };
+</script><script>
+
+  /**
+   * @param {!Function} selectCallback
+   * @constructor
+   */
+  Polymer.IronSelection = function(selectCallback) {
+    this.selection = [];
+    this.selectCallback = selectCallback;
+  };
+
+  Polymer.IronSelection.prototype = {
+
+    /**
+     * Retrieves the selected item(s).
+     *
+     * @method get
+     * @returns Returns the selected item(s). If the multi property is true,
+     * `get` will return an array, otherwise it will return
+     * the selected item or undefined if there is no selection.
+     */
+    get: function() {
+      return this.multi ? this.selection.slice() : this.selection[0];
+    },
+
+    /**
+     * Clears all the selection except the ones indicated.
+     *
+     * @method clear
+     * @param {Array} excludes items to be excluded.
+     */
+    clear: function(excludes) {
+      this.selection.slice().forEach(function(item) {
+        if (!excludes || excludes.indexOf(item) < 0) {
+          this.setItemSelected(item, false);
+        }
+      }, this);
+    },
+
+    /**
+     * Indicates if a given item is selected.
+     *
+     * @method isSelected
+     * @param {*} item The item whose selection state should be checked.
+     * @returns Returns true if `item` is selected.
+     */
+    isSelected: function(item) {
+      return this.selection.indexOf(item) >= 0;
+    },
+
+    /**
+     * Sets the selection state for a given item to either selected or deselected.
+     *
+     * @method setItemSelected
+     * @param {*} item The item to select.
+     * @param {boolean} isSelected True for selected, false for deselected.
+     */
+    setItemSelected: function(item, isSelected) {
+      if (item != null) {
+        if (isSelected !== this.isSelected(item)) {
+          // proceed to update selection only if requested state differs from current
+          if (isSelected) {
+            this.selection.push(item);
+          } else {
+            var i = this.selection.indexOf(item);
+            if (i >= 0) {
+              this.selection.splice(i, 1);
+            }
+          }
+          if (this.selectCallback) {
+            this.selectCallback(item, isSelected);
+          }
+        }
+      }
+    },
+
+    /**
+     * Sets the selection state for a given item. If the `multi` property
+     * is true, then the selected state of `item` will be toggled; otherwise
+     * the `item` will be selected.
+     *
+     * @method select
+     * @param {*} item The item to select.
+     */
+    select: function(item) {
+      if (this.multi) {
+        this.toggle(item);
+      } else if (this.get() !== item) {
+        this.setItemSelected(this.get(), false);
+        this.setItemSelected(item, true);
+      }
+    },
+
+    /**
+     * Toggles the selection state for `item`.
+     *
+     * @method toggle
+     * @param {*} item The item to toggle.
+     */
+    toggle: function(item) {
+      this.setItemSelected(item, !this.isSelected(item));
+    }
+
+  };
+
+</script><script>
+
+  /** @polymerBehavior */
+  Polymer.IronSelectableBehavior = {
+
+      /**
+       * Fired when iron-selector is activated (selected or deselected).
+       * It is fired before the selected items are changed.
+       * Cancel the event to abort selection.
+       *
+       * @event iron-activate
+       */
+
+      /**
+       * Fired when an item is selected
+       *
+       * @event iron-select
+       */
+
+      /**
+       * Fired when an item is deselected
+       *
+       * @event iron-deselect
+       */
+
+      /**
+       * Fired when the list of selectable items changes (e.g., items are
+       * added or removed). The detail of the event is a list of mutation
+       * records that describe what changed.
+       *
+       * @event iron-items-changed
+       */
+
+    properties: {
+
+      /**
+       * If you want to use an attribute value or property of an element for
+       * `selected` instead of the index, set this to the name of the attribute
+       * or property. Hyphenated values are converted to camel case when used to
+       * look up the property of a selectable element. Camel cased values are
+       * *not* converted to hyphenated values for attribute lookup. It's
+       * recommended that you provide the hyphenated form of the name so that
+       * selection works in both cases. (Use `attr-or-property-name` instead of
+       * `attrOrPropertyName`.)
+       */
+      attrForSelected: {
+        type: String,
+        value: null
+      },
+
+      /**
+       * Gets or sets the selected element. The default is to use the index of the item.
+       * @type {string|number}
+       */
+      selected: {
+        type: String,
+        notify: true
+      },
+
+      /**
+       * Returns the currently selected item.
+       *
+       * @type {?Object}
+       */
+      selectedItem: {
+        type: Object,
+        readOnly: true,
+        notify: true
+      },
+
+      /**
+       * The event that fires from items when they are selected. Selectable
+       * will listen for this event from items and update the selection state.
+       * Set to empty string to listen to no events.
+       */
+      activateEvent: {
+        type: String,
+        value: 'tap',
+        observer: '_activateEventChanged'
+      },
+
+      /**
+       * This is a CSS selector string.  If this is set, only items that match the CSS selector
+       * are selectable.
+       */
+      selectable: String,
+
+      /**
+       * The class to set on elements when selected.
+       */
+      selectedClass: {
+        type: String,
+        value: 'iron-selected'
+      },
+
+      /**
+       * The attribute to set on elements when selected.
+       */
+      selectedAttribute: {
+        type: String,
+        value: null
+      },
+
+      /**
+       * The list of items from which a selection can be made.
+       */
+      items: {
+        type: Array,
+        readOnly: true,
+        notify: true,
+        value: function() {
+          return [];
+        }
+      },
+
+      /**
+       * The set of excluded elements where the key is the `localName`
+       * of the element that will be ignored from the item list.
+       *
+       * @default {template: 1}
+       */
+      _excludedLocalNames: {
+        type: Object,
+        value: function() {
+          return {
+            'template': 1
+          };
+        }
+      }
+    },
+
+    observers: [
+      '_updateAttrForSelected(attrForSelected)',
+      '_updateSelected(selected)'
+    ],
+
+    created: function() {
+      this._bindFilterItem = this._filterItem.bind(this);
+      this._selection = new Polymer.IronSelection(this._applySelection.bind(this));
+    },
+
+    attached: function() {
+      this._observer = this._observeItems(this);
+      this._updateItems();
+      if (!this._shouldUpdateSelection) {
+        this._updateSelected();
+      }
+      this._addListener(this.activateEvent);
+    },
+
+    detached: function() {
+      if (this._observer) {
+        Polymer.dom(this).unobserveNodes(this._observer);
+      }
+      this._removeListener(this.activateEvent);
+    },
+
+    /**
+     * Returns the index of the given item.
+     *
+     * @method indexOf
+     * @param {Object} item
+     * @returns Returns the index of the item
+     */
+    indexOf: function(item) {
+      return this.items.indexOf(item);
+    },
+
+    /**
+     * Selects the given value.
+     *
+     * @method select
+     * @param {string|number} value the value to select.
+     */
+    select: function(value) {
+      this.selected = value;
+    },
+
+    /**
+     * Selects the previous item.
+     *
+     * @method selectPrevious
+     */
+    selectPrevious: function() {
+      var length = this.items.length;
+      var index = (Number(this._valueToIndex(this.selected)) - 1 + length) % length;
+      this.selected = this._indexToValue(index);
+    },
+
+    /**
+     * Selects the next item.
+     *
+     * @method selectNext
+     */
+    selectNext: function() {
+      var index = (Number(this._valueToIndex(this.selected)) + 1) % this.items.length;
+      this.selected = this._indexToValue(index);
+    },
+
+    /**
+     * Force a synchronous update of the `items` property.
+     *
+     * NOTE: Consider listening for the `iron-items-changed` event to respond to
+     * updates to the set of selectable items after updates to the DOM list and
+     * selection state have been made.
+     *
+     * WARNING: If you are using this method, you should probably consider an
+     * alternate approach. Synchronously querying for items is potentially
+     * slow for many use cases. The `items` property will update asynchronously
+     * on its own to reflect selectable items in the DOM.
+     */
+    forceSynchronousItemUpdate: function() {
+      this._updateItems();
+    },
+
+    get _shouldUpdateSelection() {
+      return this.selected != null;
+    },
+
+    _addListener: function(eventName) {
+      this.listen(this, eventName, '_activateHandler');
+    },
+
+    _removeListener: function(eventName) {
+      this.unlisten(this, eventName, '_activateHandler');
+    },
+
+    _activateEventChanged: function(eventName, old) {
+      this._removeListener(old);
+      this._addListener(eventName);
+    },
+
+    _updateItems: function() {
+      var nodes = Polymer.dom(this).queryDistributedElements(this.selectable || '*');
+      nodes = Array.prototype.filter.call(nodes, this._bindFilterItem);
+      this._setItems(nodes);
+    },
+
+    _updateAttrForSelected: function() {
+      if (this._shouldUpdateSelection) {
+        this.selected = this._indexToValue(this.indexOf(this.selectedItem));        
+      }
+    },
+
+    _updateSelected: function() {
+      this._selectSelected(this.selected);
+    },
+
+    _selectSelected: function(selected) {
+      this._selection.select(this._valueToItem(this.selected));
+    },
+
+    _filterItem: function(node) {
+      return !this._excludedLocalNames[node.localName];
+    },
+
+    _valueToItem: function(value) {
+      return (value == null) ? null : this.items[this._valueToIndex(value)];
+    },
+
+    _valueToIndex: function(value) {
+      if (this.attrForSelected) {
+        for (var i = 0, item; item = this.items[i]; i++) {
+          if (this._valueForItem(item) == value) {
+            return i;
+          }
+        }
+      } else {
+        return Number(value);
+      }
+    },
+
+    _indexToValue: function(index) {
+      if (this.attrForSelected) {
+        var item = this.items[index];
+        if (item) {
+          return this._valueForItem(item);
+        }
+      } else {
+        return index;
+      }
+    },
+
+    _valueForItem: function(item) {
+      var propValue = item[Polymer.CaseMap.dashToCamelCase(this.attrForSelected)];
+      return propValue != undefined ? propValue : item.getAttribute(this.attrForSelected);
+    },
+
+    _applySelection: function(item, isSelected) {
+      if (this.selectedClass) {
+        this.toggleClass(this.selectedClass, isSelected, item);
+      }
+      if (this.selectedAttribute) {
+        this.toggleAttribute(this.selectedAttribute, isSelected, item);
+      }
+      this._selectionChange();
+      this.fire('iron-' + (isSelected ? 'select' : 'deselect'), {item: item});
+    },
+
+    _selectionChange: function() {
+      this._setSelectedItem(this._selection.get());
+    },
+
+    // observe items change under the given node.
+    _observeItems: function(node) {
+      return Polymer.dom(node).observeNodes(function(mutations) {
+        this._updateItems();
+
+        if (this._shouldUpdateSelection) {
+          this._updateSelected();
+        }
+
+        // Let other interested parties know about the change so that
+        // we don't have to recreate mutation observers everywhere.
+        this.fire('iron-items-changed', mutations, {
+          bubbles: false,
+          cancelable: false
+        });
+      });
+    },
+
+    _activateHandler: function(e) {
+      var t = e.target;
+      var items = this.items;
+      while (t && t != this) {
+        var i = items.indexOf(t);
+        if (i >= 0) {
+          var value = this._indexToValue(i);
+          this._itemActivate(value, t);
+          return;
+        }
+        t = t.parentNode;
+      }
+    },
+
+    _itemActivate: function(value, item) {
+      if (!this.fire('iron-activate',
+          {selected: value, item: item}, {cancelable: true}).defaultPrevented) {
+        this.select(value);
+      }
+    }
+
+  };
+
+</script><dom-module id="iron-pages" assetpath="../iron-pages/">
+
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      :host > ::content > :not(.iron-selected) {
+        display: none !important;
+      }
+    </style>
+
+    <content></content>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'iron-pages',
+
+      behaviors: [
+        Polymer.IronResizableBehavior,
+        Polymer.IronSelectableBehavior
+      ],
+
+      properties: {
+
+        // as the selected page is the only one visible, activateEvent
+        // is both non-sensical and problematic; e.g. in cases where a user
+        // handler attempts to change the page and the activateEvent
+        // handler immediately changes it back
+        activateEvent: {
+          type: String,
+          value: null
+        }
+
+      },
+
+      observers: [
+        '_selectedPageChanged(selected)'
+      ],
+
+      _selectedPageChanged: function(selected, old) {
+        this.async(this.notifyResize);
+      }
+    });
+
+  </script>
+</dom-module>
+<dom-module id="kaldirirmi-top-menu" assetpath="./">
+    <template>
+        <style is="custom-style">
+          
+            body, h1, h2, h3, h4, h5, h6, paper-button, span, p, paper-input, input, label, div {
+                font-family: oktofont !important;
+            }
+            :root {
+                /* Label and underline color when the input is not focused */
+                --paper-input-container-color: white;
+                /* Label and underline color when the input is focused */
+                --paper-input-container-focus-color: #EE7813;
+                /* Label and underline color when the input is invalid */
+                --paper-input-container-invalid-color: red;
+                /* Input foreground color */
+                --paper-input-container-input-color: white;
+            }
+        </style>
+        <style>
+            .md-perspective,
+            .md-perspective body {
+                height: 100%;
+                overflow: hidden;
+            }
+
+                .md-perspective body {
+                    background: #222;
+                    -webkit-perspective: 600px;
+                    -moz-perspective: 600px;
+                    perspective: 600px;
+                }
+
+            .container {
+                background: #e74c3c;
+                min-height: 100%;
+            }
+
+            .md-modal {
+                max-width: 480px;
+                position: fixed;
+                top: 28%;
+                left: 50%;
+                width: 100%;
+                margin-top: -9px;
+                height: auto;
+                z-index: 2000;
+                visibility: hidden;
+                -webkit-backface-visibility: hidden;
+                -moz-backface-visibility: hidden;
+                backface-visibility: hidden;
+                -webkit-transform: translateX(-50%) translateY(-50%);
+                -moz-transform: translateX(-50%) translateY(-50%);
+                -ms-transform: translateX(-50%) translateY(-50%);
+                transform: translateX(-50%) translateY(-50%);
+            }
+
+            .md-show {
+                visibility: visible;
+            }
+
+            .md-overlay {
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                visibility: hidden;
+                top: 0;
+                left: 0;
+                z-index: 3;
+                opacity: 0;
+                background: rgba(8, 7, 6, 0.8); /*rgba(232, 116, 13, 0.8);*/
+                -webkit-transition: all 0.3s;
+                -moz-transition: all 0.3s;
+                transition: all 0.3s;
+            }
+
+            .md-show ~ .md-overlay {
+                opacity: 1;
+                visibility: visible;
+                margin-top: 109px;
+            }
+
+            /* Content styles */
+            .md-content {
+                width: 100%;
+                color: #fff;
+                background: #292929;
+                position: relative;
+                margin: 0 auto;
+            }
+
+                .md-content h3 {
+                    margin: 0;
+                    padding: 0.3em;
+                    text-align: center;
+                    font-size: 2em;
+                    font-weight: 300;
+                    opacity: 1;
+                    color: white;
+                    background: rgba(0,0,0,0.1);
+                    border-radius: 3px 3px 0 0;
+                }
+                /* menu details oluyor burası*/
+                .md-content > div {
+                    padding: 15px 0px;
+                    margin: 0;
+                    font-weight: 300;
+                    font-size: calc(0.25em + 1vmin);
+                    display: flex;
+                }
+
+                    .md-content > div p {
+                        margin: 0;
+                        padding: 10px 0;
+                    }
+
+                    .md-content > div ul {
+                        margin: 0;
+                        padding: 0 0 30px 20px;
+                    }
+
+                        .md-content > div ul li {
+                            padding: 5px 0;
+                        }
+
+                .md-content button {
+                    display: block;
+                    margin: 0 auto;
+                    font-size: 0.8em;
+                }
+            /* Effect 19:  Slip in from the top with perspective on container */
+            .md-show.md-effect-19 ~ .container {
+                height: 100%;
+                overflow: hidden;
+            }
+
+            .md-show.md-effect-19 ~ .md-overlay {
+                -webkit-transition: all 0.5s;
+                -moz-transition: all 0.5s;
+                transition: all 0.5s;
+            }
+
+            .md-show.md-effect-19 ~ .container,
+            .md-show.md-effect-19 ~ .md-overlay {
+                -webkit-transform-style: preserve-3d;
+                -webkit-transform-origin: 50% 100%;
+                -webkit-animation: OpenTop 0.5s forwards ease-in;
+                -moz-transform-style: preserve-3d;
+                -moz-transform-origin: 50% 100%;
+                -moz-animation: OpenTop 0.5s forwards ease-in;
+                transform-style: preserve-3d;
+                transform-origin: 50% 100%;
+                animation: OpenTop 0.5s forwards ease-in;
+            }
+
+            @-webkit-keyframes OpenTop {
+                50% {
+                    -webkit-transform: rotateX(10deg);
+                    -webkit-animation-timing-function: ease-out;
+                }
+            }
+
+            @-moz-keyframes OpenTop {
+                50% {
+                    -moz-transform: rotateX(10deg);
+                    -moz-animation-timing-function: ease-out;
+                }
+            }
+
+            @keyframes OpenTop {
+                50% {
+                    transform: rotateX(10deg);
+                    animation-timing-function: ease-out;
+                }
+            }
+
+            .md-effect-19 .md-content {
+                -webkit-transform: translateY(-200%);
+                -moz-transform: translateY(-200%);
+                -ms-transform: translateY(-200%);
+                transform: translateY(-200%);
+                opacity: 0;
+            }
+
+            .md-show.md-effect-19 .md-content {
+                -webkit-transform: translateY(0);
+                -moz-transform: translateY(0);
+                -ms-transform: translateY(0);
+                transform: translateY(0);
+                opacity: 1;
+                -webkit-transition: all 0.5s 0.1s;
+                -moz-transition: all 0.5s 0.1s;
+                transition: all 0.5s 0.1s;
+            }
+
+            @media screen and (max-width: 32em) {
+                body {
+                    font-size: 75%;
+                }
+            }
+        </style>
+        <style>
+            #menu-details iron-pages {
+                padding: 0;
+                margin: 0;
+                width: 100%;
+            }
+
+                #menu-details iron-pages div:not(.divider) {
+                    padding: 0;
+                    margin: 0;
+                    @apply(--layout-vertical);
+                    @apply(--layout-center-center);
+                }
+
+            #menu-details paper-button {
+               width: calc(100% - 48px);
+                color: white;
+                font-size: 11px;
+                margin: 5px;
+                padding: 15px 0px;
+            }
+
+            #menu-details #loginform {
+                width: calc(100% - 48px);
+            }
+
+                #menu-details #loginform .btns {
+                    @apply(--layout-horizontal);
+                    @apply(--layout-center);
+                    @apply(--layout-end-justified);
+                    margin-top: 10px;
+                }
+
+                    #menu-details #loginform .btns paper-button {
+                        width: auto;
+                    }
+
+            #menu-details .divider {
+                font-size: 13px;
+                padding: 10px 0;
+            }
+
+            #menu-details paper-button.google {
+                background: #D73D32;
+            }
+
+            #menu-details paper-button.twitch {
+                background: #6441A4;
+            }
+
+            #menu-details paper-button.facebook {
+                background: #3B5998;
+            }
+
+            #menu-details paper-button.darkred {
+                background: #D50000;
+            }
+
+            #menu-details paper-button.theme-color {
+                background: #EE7813;
+            }
+
+
+            #profile-group {
+                display: flex;
+                flex-flow: row wrap;
+                margin: 0 auto !important;
+            }
+
+                #profile-group .profile-child-group .child-detail {
+                    /*width: 165px;*/
+                }
+
+                    #profile-group .profile-child-group .child-detail a paper-card {
+                        box-sizing: border-box;
+                        flex: 0 0 auto;
+                        background-color: #4f4e4e;
+                        color: white;
+                    }
+
+            paper-fab.main-color {
+                --paper-fab-background: #ee7813;
+                --paper-fab-keyboard-focus-background:#d36308;
+                margin: 0 auto;
+                margin-top: 10px;
+            }
+
+            .login-modal {
+                top: 42%;
+            }
+
+            .profile-modal {
+                top: 28%;
+            }
+
+            .md-content #kaydol {
+                padding: 0.4em;
+                text-align: center;
+                font-size: 1.6em;
+                font-weight: 300;
+                color: white;
+                opacity: 1;
+                background: rgba(0,0,0,0.1);
+                border-radius: 3px 3px 0 0;
+            }
+
+
+            .login-area {
+                display: flex;
+                font-size: calc(0.3em + 1vmin);
+            }
+            .login-area paper-button{
+                text-transform: capitalize;
+                    background: #ff7800;
+                    color: #222;
+            }
+            .login-area paper-button p{
+                padding: 0px 0.4em;
+                margin: 0px !important;
+            }
+
+                .login-area h4 {
+                    margin: 0 !important;
+                    padding-top: 12px !important;
+                    padding-right: 4px !important;
+                }
+
+                .login-area paper-icon-button {
+                    margin-right: 10px;
+                }
+        </style>
+
+        <style>
+               #piloginusername, #piloginpassword {
+                --paper-input-container-input: {
+                
+                            font-family: oktofont !important;
+                };
+
+                --paper-input-container-label: {
+                           font-family: oktofont !important;
+                };
+            }
+
+            @media only screen and (min-width : 320px) {
+                   .login-area h4 {
+                        padding-right: 1px !important;
+                        padding-top: 26px !important;
+                    }
+
+                    .login-area paper-icon-button {
+                         width: 49px !important;
+                        height: 49px !important;
+                        padding-left: 0px;
+                        margin-right: 3px !important;
+                        margin-top: 5px !important;
+                    } 
+                    
+                    
+                    /* MODAL */
+                     .login-modal {
+                      top: 45%;
+                    }
+
+                    .profile-modal {
+                        top: 42%;
+                    }
+
+                      #profile-group .profile-child-group .child-detail a paper-card {
+                   width: 98px;
+                    height: 101px;
+                    max-width: 184px;
+                    margin: 3px;
+                    padding-top: 3px;
+                }
+
+                paper-card .card-content {
+                    padding: 8px !important;
+                }
+            }
+            @media only screen and (min-width : 360px) {
+                   .login-area h4 {
+                        padding-right: 1px !important;
+                        padding-top: 26px !important;
+                    }
+
+                    .login-area paper-icon-button {
+                         width: 49px !important;
+                        height: 49px !important;
+                        padding-left: 0px;
+                        margin-right: 3px !important;
+                        margin-top: 5px !important;
+                    }
+
+                     /* MODAL */
+                     .login-modal {
+                      top: 48%;
+                    }
+
+                    .profile-modal {
+                        top: 37%;
+                    }
+
+                      #profile-group .profile-child-group .child-detail a paper-card {
+                        width: 112px;
+                        height: 111px;
+                        max-width: 184px;
+                        margin: 3px;
+                        padding-top: 5px;
+                }
+
+                paper-card .card-content {
+                    padding: 11px !important;
+                }
+            }
+            @media only screen and (min-width : 412px) {
+                   .login-area h4 {
+                        padding-right: 1px !important;
+                        padding-top: 26px !important;
+                    }
+
+                    .login-area paper-icon-button {
+                         width: 49px !important;
+                        height: 49px !important;
+                        padding-left: 0px;
+                        margin-right: 3px !important;
+                        margin-top: 7px !important;
+                    }
+
+                     /* MODAL */
+                     .login-modal {
+                     top: 44%;
+                    }
+
+                    .profile-modal {
+                        top: 35%;
+                    }
+
+                      #profile-group .profile-child-group .child-detail a paper-card {
+                    width: 122px;
+                    height: 120px;
+                    max-width: 184px;
+                    margin: 3px;
+                    padding-top: 9px;
+                }
+
+                paper-card .card-content {
+                    padding: 11px !important;
+                }
+            }
+            @media only screen and (min-width : 480px) {
+                     .login-area h4 {
+                        padding-right: 1px !important;
+                        padding-top: 26px !important;
+                    }
+
+                    .login-area paper-icon-button {
+                         width: 49px !important;
+                        height: 49px !important;
+                        padding-left: 0px;
+                        margin-right: 3px !important;
+                        margin-top: 7px !important;
+                    }
+
+                     /* MODAL */
+                    .login-modal {
+                      top: 46%;
+                    }
+
+                    .profile-modal {
+                        top: 38%;
+                    }
+
+                      #profile-group .profile-child-group .child-detail a paper-card {
+                       width: 145px;
+                    height: 127px;
+                    max-width: 184px;
+                    margin: 4px;
+                    padding-top: 10px;
+                }
+
+                paper-card .card-content {
+                    padding: 13px !important;
+                }
+            }
+            @media only screen and (min-width : 768px) {
+                  .login-area h4 {
+                        padding-right: 1px !important;
+                        padding-top: 19px !important;
+                    }
+
+                    .login-area paper-icon-button {
+                         width: 51px !important;
+                        height: 51px !important;
+                        padding-left: 0px;
+                        margin-right: 3px !important;
+                        margin-top: 0px !important;
+                    }
+
+                    /* MODAL */
+                     .md-modal {
+                         width: 50% !important;
+                    }
+                    .login-modal {
+                         top: 35%;
+                    }
+
+                    .profile-modal {
+                        top: 24%;
+                    }
+
+                      #profile-group .profile-child-group .child-detail a paper-card {
+                    width: 112px;
+                    height: 112px;
+                    max-width: 184px;
+                    margin: 1px;
+                    padding-top:0px;
+                }
+
+                paper-card .card-content {
+                    padding: 8px !important;
+                }
+            }
+            @media only screen and (min-width : 1024px) { /* zoom %175 */
+              .md-content h3 {
+                  font-size: 1.6em;
+              }
+                    .login-area h4 {
+                        padding-right: 1px !important;
+                        padding-top: 19px !important;
+                    }
+
+                    .login-area paper-icon-button {
+                         width: 49px !important;
+                        height: 49px !important;
+                        padding-left: 0px;
+                        margin-right: 3px !important;
+                    }
+
+                /* modal ve içindeki card elementlerinin boyutlanması*/
+                .md-modal {
+                    max-width: 440px !important;
+                }
+
+                .login-modal {
+                    top: 41%;
+                }
+
+                .profile-modal {
+                    top: 33%;
+                }
+
+                #profile-group .profile-child-group .child-detail a paper-card {
+                   width: 125px;
+                    height: 115px;
+                    max-width: 184px;
+                    margin: 5px;
+                }
+
+                paper-card .card-content {
+                    padding: 8px !important;
+                }
+            }
+            @media only screen and (min-width : 1224px) { /* zoom %150 */
+              #piloginusername, #piloginpassword {
+                --paper-input-container-input: {
+                font-size: calc(0.33em + 1vmin) !important;
+                font-family: oktofont !important;
+                };
+
+                --paper-input-container-label: {
+                font-family: oktofont !important;
+                font-size: calc(0.3em + 1vmin);
+                };
+            }
+             /* font of butttons */
+            .facebook, .twitch, .google, .darkred, .theme-color, .divider {
+                font-size: 0.9em !important;
+            }
+                
+                .login-modal {
+                    top: 45%;
+                }
+
+                .profile-modal {
+                    top: 30%;
+                }
+
+                    .login-area h4 {
+                        padding-top: 19px !important;
+                        padding-right: 0px !important;
+                    }
+
+                    .login-area paper-icon-button {
+                        width: 50px !important;
+                        height: 50px !important;
+                    }
+
+                /* modal ve içindeki card elementlerinin boyutlanması*/
+                .md-modal {
+                    max-width: 470px !important;
+                }
+
+                #profile-group .profile-child-group .child-detail a paper-card {
+                        width: 126px;
+                        height: 110px;
+                        max-width: 184px;
+                        margin: 4px;
+                }
+
+                paper-card .card-content {
+                    padding: 10px !important;
+                }
+            }
+            @media only screen and (min-width : 1440px) { /* zoom % 125*/
+                .login-modal {
+                    /*top: 46.2%;*/
+                    top: 41%;
+                }
+
+                .profile-modal {
+                    top: 27.3%;
+                }
+
+                    .login-area h4 {
+                        padding-top: 18px !important;
+                        padding-right: 0px !important;
+                    }
+
+                    .login-area paper-icon-button {
+                        width: 49px !important;
+                        height: 49px !important;
+                    }
+                /* modal ve içindeki card elementlerinin boyutlanması*/
+                .md-modal {
+                    max-width: 445px !important;
+                }
+
+                #profile-group .profile-child-group .child-detail a paper-card {
+                        width: 137px;
+                        height: 115px;
+                        max-width: 184px;
+                        margin: 3px;
+                }
+
+                paper-card .card-content {
+                    padding: 12px !important;
+                }
+            }
+            @media only screen and (min-width : 1640px) { /* zoom %110*/
+                .login-modal {
+                    /*top: 46.2%;*/
+                    top: 41.7%;
+                }
+
+                .profile-modal {
+                    /*top: 30.7%;*/
+                    top: 28.7%;
+                }
+
+                    .login-area h4 {
+                        padding-top: 19px !important;
+                    }
+
+                    .login-area paper-icon-button {
+                        width: 52px !important;
+                        height: 52px !important;
+                    }
+                /* modal ve içindeki card elementlerinin boyutlanması*/
+                .md-modal {
+                    max-width: 460px !important;
+                }
+
+                #profile-group .profile-child-group .child-detail a paper-card {
+                    width: 143px;
+                    height: 115px;
+                    max-width: 184px;
+                    margin: 3px;
+                }
+
+                paper-card .card-content {
+                    padding: 14px !important;
+                }
+            }
+            @media only screen and (min-width : 1824px) {
+                .login-modal {
+                    top: 38.8%;
+                }
+
+                .profile-modal {
+                    top: 28%;
+                }
+
+                    .login-area h4 {
+                        padding-top: 20px !important;
+                    }
+
+                    .login-area paper-icon-button {
+                            width: 55px !important;
+                        height: 55px !important;
+                    }
+
+                /* modal ve içindeki card elementlerinin boyutlanması*/
+                .md-modal {
+                    max-width: 510px !important;
+                }
+
+                #profile-group .profile-child-group .child-detail a paper-card {
+                    width: 157px;
+                    height: 125px;
+                    max-width: 184px;
+                    margin: 4px;
+                }
+
+                paper-card .card-content {
+                    padding: 16px !important;
+                }
+            }
+
+            .btns #loginbtn{
+                margin-top: 20px; margin: 0 auto; width: 50% !important;
+            }
+
+           
+
+       
+        </style>
+
+
+        <template is="dom-if" if="[[loginstatus]]">
+            <div class="md-modal md-effect-19 login-modal" id="modal-19">
+                <div class="md-content">
+                    <div id="menu-details">
+                        
+                        <iron-pages id="ironpageloginregister" selected="0">
+                            
+                            <div>
+                                <h3>Giriş Yap</h3>
+
+                                <form id="loginform" is="iron-form" action="/h/main" method="post">
+                                    <input type="hidden" name="fm" value="login">
+                                    <paper-input id="piloginusername" type="text" label="Kullanıcı Adı" name="username" required="" auto-validate="" error-message="bu alanın doldurulması zorunludur" maxlength="12"></paper-input>
+                                    <paper-input id="piloginpassword" type="password" label="Şifre" name="password" required="" auto-validate="" error-message="bu alanın doldurulması zorunludur" maxlenght="16"></paper-input>
+                                    <div id="loginmessage"></div>
+                                    <div class="btns">
+                                        <paper-button id="loginbtn" class="theme-color" on-click="_loginbtnClick" type="submit" raised="">Giriş</paper-button>
+                                    </div>
+                                </form>
+                                <div class="divider">ya da</div>
+                                <paper-button raised="" class="google" onclick="load(); location.href='/auth/google/login';">Google ile Giriş Yap</paper-button>
+                                <paper-button raised="" class="twitch" onclick="load(); location.href='/auth/twitch/login';">Twitch ile  Giriş Yap</paper-button>
+                                <paper-button raised="" class="facebook" onclick="load(); location.href='/auth/facebook/login';">Facebook ile  Giriş Yap</paper-button>
+                                <div class="divider">Üyeliğin yok mu?</div>
+                                <paper-button id="btngoregisterpage" class="darkred" on-click="_goregisterpage" raised="">Hemen Kayıt Ol</paper-button>
+                            </div>
+                            
+                            <div style="padding-bottom: 154px;">
+                                <h3 id="kaydol">Kayıt Ol</h3>
+                                <div class="divider"></div>
+                                <paper-button raised="" class="google" onclick="load(); location.href='/auth/google/login';">Google ile Kayıt Ol</paper-button>
+                                <paper-button raised="" class="twitch" onclick="load(); location.href='/auth/twitch/login';">Twitch ile Kayıt Ol</paper-button>
+                                <paper-button raised="" class="facebook" onclick="load(); location.href='/auth/facebook/login';">Facebook ile Kayıt Ol</paper-button>
+                                <div class="divider">Zaten üye misin?</div>
+                                <paper-button id="btngologinpage" class="darkred" on-click="_gologinpage" raised="">Hemen Giriş Yap</paper-button>
+                            </div>
+                        </iron-pages>
+
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template is="dom-if" if="[[profilestatus]]">
+            <div class="md-modal md-effect-19 profile-modal" id="modal-19">
+                <div class="md-content">
+                    <div id="menu-details">
+                        <div id="profile-group">
+                            <div class="profile-child-group">
+                                <div class="child-detail">
+                                    <a href="/uye/profil">
+                                        <paper-card>
+                                            <paper-fab class="main-color" icon="icons:accessibility" title="Profil"></paper-fab>
+                                            <div class="card-content" style="text-align:center">Profil</div>
+                                        </paper-card>
+                                    </a>
+                                </div>
+                                <div class="child-detail">
+                                    <a href="/">
+                                        <paper-card>
+                                            <paper-fab class="main-color" icon="favorite" title="Editör"></paper-fab>
+
+                                            <div class="card-content" style="text-align:center; font-style:italic">Editör Yakında..</div>
+                                        </paper-card>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="profile-child-group">
+                                <div class="profile-child-group">
+                                    <div class="child-detail">
+                                        <a href="/uye/profil#system">
+                                            <paper-card>
+                                                <div>
+                                                    <paper-fab class="main-color" icon="icons:system-update-alt" title="Sistem"></paper-fab>
+                                                </div>
+                                                <div class="card-content" style="text-align:center">Sistem</div>
+                                            </paper-card>
+                                        </a>
+                                    </div>
+                                    <div class="child-detail">
+                                        <a href="/uye/mod-islemleri">
+                                            <paper-card>
+                                                <div>
+                                                    <paper-fab class="main-color" icon="icons:gavel" title="Moderator"></paper-fab>
+                                                </div>
+                                                <div class="card-content" style="text-align:center">Moderatör</div>
+                                            </paper-card>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-child-group">
+                                <div class="child-detail">
+                                    <a href="/uye/profil#forum">
+                                        <paper-card>
+                                            <paper-fab class="main-color" icon="communication:forum" title="Forum"></paper-fab>
+                                            <div class="card-content" style="text-align:center">Forum</div>
+                                        </paper-card>
+                                    </a>
+                                </div>
+                                <div class="child-detail">
+                                    <a href="/uye/cikis">
+                                        <paper-card>
+                                            <paper-fab class="main-color" icon="icons:exit-to-app" title="Çıkış"></paper-fab>
+                                            <div class="card-content" style="text-align:center">Çıkış</div>
+                                        </paper-card>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </template> 
+
+        <div class="login-area">
+            <paper-button raised="" class="md-trigger md-setperspective" data-modal="modal-19">
+                <iron-icon icon="[[icondetail]]"></iron-icon>
+                <p>[[menutitle]]</p>
+            </paper-button>
+        </div>
+        <div class="md-overlay"></div>
+    </template>
+    <script>
+        Polymer({
+            is: "kaldirirmi-top-menu",
+            properties: {
+                menutype: {
+                    type: String,
+                    notify: true
+                },
+                menutitle: {
+                    type: String,
+                    notify: true
+                },
+                loginstatus: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                alertstatus: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                profilestatus: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                icondetail: {
+                    type: "String",
+                    value: 'social:person-add',
+                    notify: true
+                },
+                bemoderator: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                }
+            },
+            ready: function () {
+                if (this.menutype == 'loginmenu') {
+                    this.icondetail = 'hardware:videogame-asset';
+                    this.loginstatus = true;
+                }
+                else if (this.menutype == 'profilemenu') { 
+                    this.icondetail = 'social:person-outline';
+                    this.profilestatus = true;
+
+                }
+            },
+            _loginbtnClick: function () {
+                if (document.getElementById('piloginusername').validate() && document.getElementById('piloginpassword').validate()) {
+                    load();
+                    setTimeout(function () { document.getElementById('loginform').submit(); }, 500);
+                };
+
+                document.getElementById('loginform').addEventListener('iron-form-response', function (a) {
+                    unload();
+                    document.getElementById('loginform').reset();
+                    if (a.detail.response.success) {
+                        loginmessage.innerHTML = a.detail.response.message;
+                        loginmessage.style.color = "#ff7800";
+
+                        location.reload();
+
+                    } else {
+                        loginmessage.innerHTML = a.detail.response.message;
+                        loginmessage.style.color = "#D50000";
+                        
+                    }
+                });
+
+            },
+            _gologinpage: function () {
+                document.getElementById('ironpageloginregister').select(0);
+            },
+            _goregisterpage: function () {
+                document.getElementById('ironpageloginregister').select(1);
+
+            }
+        });
+    </script>
+
+
+</dom-module>
+</div></body></html>

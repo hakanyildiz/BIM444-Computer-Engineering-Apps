@@ -1,0 +1,56 @@
+﻿<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../kaldirirmi-styles/kaldirirmi-similargames-shared-styles.html"/>
+<dom-module id="kaldirirmi-similar-games">
+    <template>
+        <style is="custom-style" include="kaldirirmi-similargames-shared-styles"></style>
+    
+        <iron-ajax auto id="getsimilargames" url="/h/main?fm=get-similar-games-via-genres&a=[[genre]]" method="get" handle-as="json" on-response="_response"></iron-ajax>
+        <div class="similir"><paper-button id="btnSimilir" raised>Benzer oyunlar</paper-button></div>
+        <div id="similargamelist">
+            <template is="dom-repeat" items="{{games}}" as="item">
+                <a id="game{{index}}" class="game" href="/oyun/[[item.url]]" onclick="load();">
+                    <iron-image background src="//cdn.kaldirirmi.com/images/games/[[item.picture]]" sizing="cover" alt="[[item.name]]" preload fade></iron-image>
+                </a>
+            </template>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: "kaldirirmi-similar-games",
+            properties: {
+                genre: {
+                    type: "String",
+                    value: "Action", //default selected genre --> action
+                    notify: true
+                },
+                games: {
+                    type: Array,
+                    value: []
+                }
+            },
+            created: function () {
+
+            },
+            _response: function (a) {
+                if (a.detail.response.length > 0) {
+
+                    a.detail.response.forEach(function (game) {
+                        this.push('games', game);
+                    }, this);
+                }
+            }
+
+        });
+
+        $(document).ready(function () {
+            $('#similargamelist').mouseover(function () {
+                $('#btnSimilir').css('display', 'none');
+            });
+            $('#similargamelist').mouseout(function () {
+                $('#btnSimilir').css('display', 'block');
+            });
+        });
+
+    </script>
+
+</dom-module>

@@ -1,0 +1,488 @@
+﻿<link rel="import" href="../../polymer/polymer.html"/>
+<dom-module id="kaldirirmi-profile-steam">
+    <template>
+        <style is="custom-style">
+            :host {
+                display: flex;
+                color:white !important;
+            }
+
+            #steammaterial {
+                width: 100%;
+                margin: 10px;
+            }
+
+            .notconnectedalert {
+                @apply(--layout-horizontal);
+                @apply(--layout-center);
+                color: #4285F4;
+                font-size: calc(0.40em + 1vmin);
+            }
+
+                .notconnectedalert paper-button {
+                    text-transform: none;
+                    background-color: #4285F4;
+                    color: #222;
+                    font-weight: bold;
+                    margin-left: 20px;
+                }
+
+            paper-item[heading] {
+                background-color: #ff7800;
+                border-top: 3px solid #222222;
+                border-bottom: 3px solid #222222;
+                color: white;
+                font-weight: 100;
+               font-size: calc(0.5em + 1vmin);
+            }
+
+            #notconnecteddiv {
+                width: 100%;
+                min-height: 500px;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+
+                #notconnecteddiv p {
+                    width: 100%;
+                    text-align: center;
+                    color: white;
+                    position: absolute;
+                    top: 0;
+                    font-size: calc(0.8em + 1vmin);
+                }
+
+                #notconnecteddiv paper-button {
+                    margin: 0;
+                    color: white;
+                    width: 100%;
+                    position: absolute;
+                    bottom: 16%;
+                    left: 0;
+                    font-size: calc(1em + 1vmin);
+                }
+
+                    #notconnecteddiv paper-button iron-icon {
+                        height: calc(0.8em + 1vmin) !important;
+                        width: calc(0.8em + 1vmin) !important;
+                    }
+
+            div[info] {
+                @apply(--layout-vertical);
+                @apply(--layout-center);
+                min-height: 333px;
+                padding: 0px 16px;
+                font-size: calc(0.33em + 1vmin);
+                height: auto !important;
+            }
+
+            .paperSubMaterial {
+                margin: 10px;
+                width: 100%;
+            }
+
+                .paperSubMaterial paper-item[heading] {
+                    background-color: #8254d8;
+                }
+
+            paper-item[heading] div h2 {
+                font-size: calc(0.7em + 1vmin) !important;
+                text-align: left;
+                font-weight: 100;
+            }
+
+            .pdmHeader {
+                line-height: 0 !important;
+                --paper-input-container-label:{
+                color: #ff7800;
+                text-align: center;
+                font-weight: bold;
+                }   
+
+                --paper-input-container-input: {
+                    color: white;
+                    text-align: center;
+                    text-transform: uppercase;
+                }
+
+                 --paper-input-container-focus-color: #ff7800; --paper-input-container-underline: {
+                    display: none;
+                }
+            }
+
+           
+             .item {
+                @apply(--layout-vertical);
+                padding: 20px;
+                background-color: white;
+                border: 1px solid #ddd;
+                cursor: pointer;
+                margin-bottom: 10px;
+            }
+
+                .item .item-column {
+                    @apply(--layout-horizontal);
+                    @apply(--layout-center);
+                    color: black !important;
+                    justify-content: space-between !important;
+
+                }
+                .item .item-column .avatar{
+                    width: 130px;
+                    height:48px;
+                }
+
+                .item .item-column span[name]{
+                    font-weight:bold;
+                    font-size:18px;
+                    color:#ff7800;
+                }
+                .item .item-column span[version]{
+                    font-style:italic;
+                    font-size: 13px;
+                    font-weight: 100;
+                   
+                }
+                .item .item-column span[date]{
+                     font-size: 14px;
+                }
+           
+
+                .item .item-column-rowler {
+                    @apply(--layout-vertical);
+                    margin-top: 20px;
+                    border-top: 1.5px solid black;
+                    font-weight: 400;
+                    width: 100%;
+                }
+
+                .item .item-column .benchmark {
+                    background: #E65100;
+                    border-radius: 40%;
+                    padding: 10px;
+                    margin-right: 10px;
+                    color: white;
+                }
+                .item .item-column .pad{
+                    padding: 0 16px;
+                    -ms-flex: 1 1 0.000000001px;
+                    -webkit-flex: 1;
+                    flex: 1;
+                    -webkit-flex-basis: 0.000000001px;
+                    flex-basis: 0.000000001px;
+                    display: -ms-flexbox;
+                    display: -webkit-flex;
+                    display: flex;
+                    -ms-flex-direction: column;
+                    -webkit-flex-direction: column;
+                    flex-direction: column;
+                }
+
+                .item .item-column-invisible {
+                    display: none;
+                    opacity: 0;
+                    transition: opacity 1s linear;
+                }
+                .paperMaterialGames{
+                    width: 100%;
+                }
+
+                 .paperMaterialGames div[header]{
+                    @apply(--layout-horizontal);
+                    @apply(--layout-center);
+                    justify-content:space-between !important;
+                    margin: 15px 0px;
+                    padding-bottom: 5px;
+                    border-bottom: 3px solid #ff7800;
+                    font-size: 18px;
+                    color: white;
+                    font-weight: 100;
+                    padding: 5px 10px;
+                }
+                .paperMaterialGames .empty-message{
+                    padding: 5px 10px;
+                    text-align: center !important;
+                    font-size: 1.25em;
+                    line-height: 10em;
+                    font-weight: 100;
+                }
+                .paperMaterialGames .gamelist{
+                    margin-bottom:50px !important;
+                }
+                
+                .makeVisible{
+                    display: none !important;
+                }
+     
+        </style>
+        <iron-ajax id="getrecentlyplayedgames" url="/auth/steam/kalapi?fm=get-recently-played-games"
+                   handle-as="json"
+                   on-response="_responseRecentlyPlayedGames"
+                   loading={{loadingRecently}}
+                   debounce-duration="300"></iron-ajax>
+
+        <iron-ajax id="getownedgames" url="/auth/steam/kalapi?fm=get-owned-games-remade"
+                   handle-as="json"
+                   on-response="_responseOwnedGames"    
+                   loading={{loadingOwned}}
+                   debounce-duration="300"></iron-ajax>
+
+        <!-- dom elements here-->
+        <paper-material elevation="5" id="steammaterial" role="listbox">
+            <!-- Not connected part-->
+            <template is="dom-if" if="[[!connected]]">
+                <div id="notconnecteddiv" style="background-image:url('/assets/img/steambackground.jpg')">
+                    <p>Buradaki içeriklere erişebilmek için steam hesabının bağlı olması gerekmektedir</p>
+                    <paper-button id="steamhauthbtn" onclick="load(); location.href='/auth/steam/login';" raised>Bağlan<iron-icon icon="av:loop"></iron-icon> </paper-button>
+                </div>
+            </template>
+            <!-- Connected Part -->
+            <template is="dom-if" if="[[connected]]">
+                <paper-item heading>Steam Dünyan</paper-item>
+                <div info>
+                    <!-- Recently PLayed Games -->
+                    <paper-material elevation="2" class="paperMaterialGames">
+                        <div header>
+                            <span>Son Oynadığın Oyunlar</span>
+                            <paper-icon-button icon="[[recentlyicon]]" on-tap="_expandRecentlyPlayedList"></paper-icon-button>
+                        </div>
+                        <div class="gamelist" id="recentlyPlayedGameList">
+                            <iron-list items="[[response.recentlyplayedgames]]" as="item">
+                                <template>
+                                    <div>
+                                        <div class="item" tabindex$="[[tabIndex]]">
+                                            <div class="item-column">
+                                                <iron-image class="avatar" sizing="contain" src="{{_remakeBrandImage(item.appid, item.img_logo_url)}}"></iron-image>
+                                                 <div class="pad"><span name>[[item.name]]</span></div>
+                                                <span date>{{_reMakeTwoWeeks(item.playtime_2weeks, item.playtime_forever)}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </iron-list>
+                            <div class="loadingIndicator" style="color:#FF7800;" hidden$="[[!loadingRecently]]">
+                                <loader-pac></loader-pac>
+                            </div>
+                            <div class="empty-message" hidden$="[[!emptyrecentlygames]]">
+                                Son Oynadığın oyun bulunmamaktadır.
+                            </div>
+                        </div>
+                    </paper-material>
+
+                    <!-- Owned Games -->
+                    <paper-material elevation="2" class="paperMaterialGames">
+                        <div header>
+                            <span>Satın Aldığın Oyunlar</span>
+                            <paper-icon-button icon="[[ownedicon]]" on-tap="_expandOwnedList"></paper-icon-button>
+                        </div>
+                        <div class="gamelist" id="ownedGameList">
+                            <iron-list items="[[response.ownedgames]]" as="item">
+                                <template>
+                                    <div>
+                                        <div class="item" tabindex$="[[tabIndex]]" style="position:relative !important;">
+                                            <div class="item-column">
+                                                <paper-ripple></paper-ripple>
+                                                <span name>[[item.gamedetails.gameName]]</span>
+                                                <span date>{{_reMakeTwoWeeks(item.playtime_2weeks, item.playtime_forever)}}</span>
+                                            </div>
+                                            <div class="item-column">
+                                                <paper-ripple></paper-ripple>
+                                                <span version>Versiyon <b>[[item.gamedetails.gameVersion]]</b></span>
+                                                <span date>{{_remakeAllTimes(item.playtime_forever)}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </iron-list>
+                            <div class="loadingIndicator" style="color:#FF7800;" hidden$="[[!loadingOwned]]">
+                                <loader-pac></loader-pac>
+                            </div>
+                            <div class="empty-message" hidden$="[[!emptyownedgames]]">
+                                Steam'den daha önce oyun satın almamışsın
+                            </div>
+                        </div>
+                    </paper-material>
+
+                </div>
+            </template>
+        </paper-material>
+
+
+    </template>
+    <script>
+        Polymer({
+            is: 'kaldirirmi-profile-steam',
+            properties: {
+                connected: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                emptyownedgames: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                emptyrecentlygames:{
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                loadingRecently: {
+                    type: Boolean,
+                    value: true,
+                    notify: true
+                },
+                loadingOwned:{
+                    type: Boolean,
+                    value: true,
+                    notify: true,
+                },
+                response: {
+                    type: Object,
+                    value: function () {
+                        return {
+                            ownedgames: [],
+                            recentlyplayedgames: []
+                        }
+                    }
+                },
+                recentlyicon: {
+                    type: String,
+                    value: 'expand-more',
+                    notify: true
+                },
+                ownedicon: {
+                    type: String,
+                    value: 'expand-more',
+                    notify: true
+                }
+            },
+            ready: function () {
+                if (this.connected) {
+                    this.async(function () {
+                        document.getElementById('getrecentlyplayedgames').generateRequest();
+                        document.getElementById('getownedgames').generateRequest();
+                    }, 1000);
+                }
+            },
+            _expandRecentlyPlayedList: function(){
+                if (this.recentlyicon == 'expand-less') this.recentlyicon = 'expand-more';
+                else this.recentlyicon = 'expand-less';
+
+                $('#recentlyPlayedGameList').toggleClass('makeVisible');
+            },
+            _expandOwnedList: function(){
+                if (this.ownedicon == 'expand-less') this.ownedicon = 'expand-more';
+                else this.ownedicon = 'expand-less';
+
+                $('#ownedGameList').toggleClass('makeVisible');
+
+            },
+            _responseOwnedGames: function (event) {
+                var steam = event.detail.response;
+                console.log(steam);
+                var response = steam.response;
+                var game_count = response.game_count;
+                if (game_count > 0) {
+                    response.games.forEach(function (game) {
+
+                        // game.appid
+                        // game.playtime_forever
+                        // game.playtime_2weeks
+
+                        // game.gamedetails.gameName
+                        // game.gamedetails.gameVersion
+
+                        var gamedetails = game.gamedetails;
+
+                        //if (game.appid == 340) gamedetails.gameName = 'Half-Life 2: Lost Coast';
+                        //if (game.appid == 320) gamedetails.gameName = 'Half-Life 2: Deathmatch';
+                        //if (game.appid == 360) gamedetails.gameName = 'Half-Life Deathmatch: Source';
+                        //if (game.appid == 295270) gamedetails.gameName = 'Football Manager 2015';
+                        //if (game.appid == 518790) gamedetails.gameName = 'theHunter™: Call of the Wild';
+                        //if (game.appid == 375960) gamedetails.gameName = 'Pro Evolution Soccer 2016';
+                        //if (game.appid == 105450) gamedetails.gameName = 'Age of Empires® III: Complete Collection';
+                        //if (game.appid == 211050) gamedetails.gameName = 'Battle vs Chess';
+                        //if (game.appid == 254020) gamedetails.gameName = 'Commander: Conquest of the Americas Gold';
+                        //if (game.appid == 730) gamedetails.gameName = 'Counter-Strike: Global Offensive';
+                        //if (game.appid == 236110) gamedetails.gameName = 'Dungeon Defenders II';
+                        //if (game.appid == 253980) gamedetails.gameName = 'Enclave';
+                        //if (game.appid == 313160) gamedetails.gameName = 'Farming Simulator 15';
+                        //if (game.appid == 380600) gamedetails.gameName = 'Fishing Planet';
+                        //if (game.appid == 378120) gamedetails.gameName = 'Football Manager 2016';
+                        //if (game.appid == 227940) gamedetails.gameName = 'Heroes & Generals';
+                        //if (game.appid == 43110) gamedetails.gameName = 'Metro 2033';
+                        //if (game.appid == 287450) gamedetails.gameName = 'Rise of Nations: Extended Edition';
+                        //if (game.appid == 221680) gamedetails.gameName = 'Rocksmith® 2014 Edition - Remastered';
+                        //if (game.appid == 8930) gamedetails.gameName = 'Sid Meier\'s Civilization V';
+                        //if (game.appid == 235580) gamedetails.gameName = 'Sid Meier\'s Civilization V: Brave New World';
+                        //if (game.appid == 235584) gamedetails.gameName = 'Sid Meier\'s Civilization V: Scrambled Continents Map Pack';
+                        //if (game.appid == 241560) gamedetails.gameName = 'The Crew';
+                        //if (game.appid == 284441) gamedetails.gameName = 'Tropico 5 - Espionage';
+                        //if (game.appid == 306396) gamedetails.gameName = 'Tropico 5 - Generalissimo';
+                        //if (game.appid == 306390) gamedetails.gameName = 'Tropico 5 - Inquisition';
+                        //if (game.appid == 306393) gamedetails.gameName = 'Tropico 5 - Mad World';
+                 
+
+                        //if (gamedetails.gameName.length === 0 || gamedetails.gameName.includes("ValveTestApp")) {
+                        //}
+                        //else {
+                        //    //console.log(game);
+                        //    this.push('response.ownedgames', game);
+                        //}
+
+                        this.push('response.ownedgames', game);
+                    }, this);
+                }
+
+                if (this.response.ownedgames.length == 0) {
+                    this.emptyownedgames = true;
+                }
+            },
+            _responseRecentlyPlayedGames: function (event) {
+                var steam = event.detail.response;
+
+                var response = steam.response;
+                if (response.total_count > 0) {
+                    this.set('response.recentlyplayedgames', response.games);
+                }
+                else {
+                    this.emptyrecentlygames = true;
+
+                }
+            },
+            _isEmpty: function (str) {
+                return (!str || 0 === str.length);
+            },
+            _reMakeTwoWeeks: function (minutes, all) {
+                if (all == 0) {
+                    return 'Oyunu Hiç Oynamamışsın';
+                }
+                else {
+                    if (minutes == 0) {
+                        return 'Son 2 Haftada Hiç Oynamamışsın';
+                    }
+                    else {
+                        return 'Son 2 Haftada ' + (minutes / 60).toFixed(2) + ' Saat Oynamışsın';
+                    }
+                }
+
+            },
+            _remakeAllTimes: function (minutes) {
+                if (minutes == 0) {
+                    return '';
+                }
+                else {
+                    return 'Oyunu Toplam ' + (minutes / 60).toFixed(2) + ' Saat Oynamışsın';
+                }
+
+            },
+            _remakeBrandImage: function (appid,hash) {
+                return 'http://media.steampowered.com/steamcommunity/public/images/apps/' + appid + '/' + hash + '.jpg';
+            }
+                
+        });
+    </script>
+</dom-module>

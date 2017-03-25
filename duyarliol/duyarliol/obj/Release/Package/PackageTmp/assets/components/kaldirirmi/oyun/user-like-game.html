@@ -1,0 +1,248 @@
+﻿<link rel="import" href="../../polymer/polymer.html" />
+
+<dom-module id="user-like-game">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+
+            .loadingIndicator {
+                text-align: center;
+                height: 40px;
+                color: white;
+            }
+
+                .loadingIndicator paper-spinner-lite {
+                    width: 20px;
+                    height: 20px;
+                    margin-right: 10px;
+                    --paper-spinner-color: #ff7800;
+                }
+
+
+            #pibInteractionButton{
+                opacity: 0.8;
+                padding: 5px !important;
+                transition: all ease-in-out .3s;
+            }
+            #pibInteractionButton:hover{
+                opacity: 1;
+                padding: 2px !important;
+            }
+
+            .like-container{
+                    background: #DD9105;
+                    padding: 1.25px;
+                    display:flex;
+                    justify-content:center;
+            }
+
+               
+             paper-tooltip.custom-tooltip{
+                 --paper-tooltip-background: #ff7800;
+                 --paper-tooltip-text-color: #fff;
+                 width: 160px;
+                 --paper-tooltip: { font-size: 16px;}
+             }
+           
+        </style>
+        <!--<paper-toast id="userlikealert" duration="3000" class="fit-bottom" style$="background-color: [[mc]]; color: [[bc]]; font-weight: bold"></paper-toast>-->
+
+        <iron-ajax auto id="iaCheckGame" debounce="3000" url="/h/main?fm=check-is-game-liked&a=[[gid]]" handle-as="json" on-response="_responseCheck" loading="{{loadingcheck}}"></iron-ajax>
+        <form id="formInteractionRequest" is="iron-form" action="/h/main" on-iron-form-response="_responseInteractionRequestForm" method="post">
+            <input type="hidden" name="fm" value="send-request-like-game" />
+            <input type="hidden" id="gameid" name="gameid" value=[[gid]] />
+            <input type="hidden" id="isliked" name="isliked" value=[[likeState]] />
+        </form>
+
+        <div class="loadingIndicator" hidden$="[[!loadingcheck]]">
+            <paper-spinner-lite active$="[[loadingcheck]]"></paper-spinner-lite>
+        </div>
+        <div hidden$=[[loadingcheck]] class="like-container">
+            <paper-icon-button icon="[[icon]]" id="pibInteractionButton" on-tap="_clickInteractionButton"></paper-icon-button>
+            <paper-tooltip class="custom-tooltip" for="pibInteractionButton" position="bottom">[[likedstatus]]</paper-tooltip>
+
+        </div>
+
+    </template>
+    <script>
+        Polymer({
+            is: "user-like-game",
+            properties: {
+                gid: {
+                    type: Number,
+                },
+                likeState:{
+                    type: Number,
+                    value: 0,
+                    notify: true
+                },
+                go: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                isliked: {
+                    type: Boolean,
+                    value: true,
+                    notify: true
+                },
+                loadingcheck: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                firstTime: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                icon: {
+                    type: String,
+                    value: 'thumb-up',
+                    notify: true
+                },
+                counter: {
+                    type: Number,
+                    value: 0,
+                    notify: true
+                },
+                bc: {
+                    type: String,
+                    value: '',
+                    notify: true
+                },
+                mc: {
+                    type: String,
+                    value: '',
+                    notify: true
+                },
+                likedstatus: {
+                    type: String,
+                    value: 'Oyunu beğenmek için Tıkla!',
+                    notify: true
+                },
+                username: {
+                    type: String,
+                    value: '',
+                    notify: true
+                }
+            },
+            _responseCheck: function (event) {
+                var response = event.detail.response;
+                //console.log('_responseCheck' + response.message);
+                var message = response.message;
+                var result = message.split(' ')[1];
+                var time = message.split(' ')[3];
+                if (result === 'True') {
+                    this.isliked = true;
+                    this.likedstatus = 'Oyunu Beğendin!';
+                }
+                else {
+                    this.isliked = false;
+                    this.likedstatus = 'Oyunu Beğenmedin!';
+                }
+
+                if (time === 'True') {
+                    this.firstTime = true;
+                    this.likedstatus = 'Oyunu beğenmek için Tıkla!';
+                }
+                else {
+                    this.firstTime = false;
+                }
+
+                if (this.username === '') {
+                    this.firstTime = true;
+                    this.likedstatus = 'Oyunu beğenmek için Giriş Yapmalısın';
+
+                }
+                this._designIcons();
+                //console.log('Eend checj => isLiked' +  this.isliked  + ' , firstTime => ' + this.firstTime);
+            },
+            _clickInteractionButton: function (event) {
+                var systemAlert = document.getElementById('alert');
+
+                if (this.username === '') {
+
+                    document.getElementById('pibInteractionButton').disabled = true;
+                    systemAlert.setAttribute('text', 'Oyunu Beğenmek için Giriş Yapmalısın');
+                    systemAlert.open();
+
+                }
+                else {
+                    //console.log('_clickInteractionButton');
+                    if (this.isliked) {
+                        //eğer likelı ise dislike için 1 ata!
+                        this.likeState = 1;
+                    }
+                    else if (!this.isliked) {
+                        //likelı değil ise like için 1 ata!
+                        this.likeState = 0;
+                    }
+
+                    this.counter++;
+
+                    if (this.counter >= 4) {
+                       
+                        systemAlert.setAttribute('text', 'Al Kırdın Kırdın ! :/');
+                        systemAlert.open();
+
+                        document.getElementById('pibInteractionButton').disabled = true;
+                    }
+                    else {
+                        document.getElementById('formInteractionRequest').submit();
+                    }
+
+                    //this.isliked = !this.isliked;
+                    //this._designIcons();
+
+                }
+            },
+            _responseInteractionRequestForm: function (event) {
+                var response = event.detail.response;
+                //console.log('_responseInteractionRequestForm');
+
+                var systemAlert = document.getElementById('alert');
+                systemAlert.setAttribute('text', response.message);
+
+                if (response.success) {
+                    this.$.iaCheckGame.generateRequest();
+                }
+                else {
+                    unload();
+                    document.getElementById('formInteractionRequest').reset();
+                }
+                systemAlert.open();
+            },
+            _designIcons: function () {
+                if (this.firstTime) {
+                    this.icon = 'thumb-up';
+                    this._colorChanger(false);
+                }
+                else if (!this.firstTime) {
+                    if (this.isliked) {
+                        this.icon = 'thumb-up';
+                        this._colorChanger(true);
+                    }
+                    else if (!this.isliked) {
+                        this.icon = 'thumb-down';
+                        this._colorChanger(false);
+                    }
+                }
+
+
+            },
+            _colorChanger: function (status) {
+                if (status) {
+                    document.getElementById('pibInteractionButton').style.color = '#E5DBCF';
+                }
+                else {
+                    document.getElementById('pibInteractionButton').style.color = '#1b1616';
+                }
+            },
+
+        });
+
+    </script>
+</dom-module>

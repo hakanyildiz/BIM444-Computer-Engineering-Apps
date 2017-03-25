@@ -1,0 +1,54 @@
+﻿<dom-module id="kaldirirmi-template-shared-styles">
+    <template>
+        <style>
+            body {
+                @apply(--layout-fullbleed);
+            }
+            news-full-page {
+                @apply(--layout-fit);
+                top: 0px;
+                position: relative;
+            }
+            @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+                news-full-page {
+                    height: 365px;
+                }
+            }
+
+            @media only screen and (min-width : 768px) and (max-width : 1024px) {
+                news-full-page {
+                    height: 365px;
+                }
+            }
+
+            @media only screen and (min-width : 1024px) {
+                news-full-page {
+                    height: 435px;
+                }
+            }
+
+            @media only screen and (min-width : 1224px) {
+                news-full-page {
+                    height: 525px;
+                }
+            }
+
+            @media only screen and (min-width : 1440px) {
+                news-full-page {
+                    height: 650px;
+                }
+            }
+
+            @media only screen and (min-width : 1624px) {
+                news-full-page {
+                    height: 760px;
+                }
+            }
+            @media only screen and (min-width : 1824px) {
+                news-full-page {
+                    height: 840px;
+                }
+            }
+        </style>
+    </template>
+</dom-module>

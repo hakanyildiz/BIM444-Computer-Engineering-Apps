@@ -1,0 +1,242 @@
+﻿<link rel="import" href="../../polymer/polymer.html">
+
+<dom-module id="kaldirirmi-mod-user-ban">
+  <template>
+    <style>
+      paper-item[heading] {
+        background: rgba(255,120,0,.8);
+        color: white;
+        font-size: 20px;
+      }
+
+      paper-item[attributes] {
+        background: rgba(255,120,0,.8);
+        color: white;
+        font-size: 18px;
+      }
+
+      paper-item[heading] paper-button {
+        font-size: 14px;
+      }
+
+      paper-item[empty-info], paper-item[info] {
+        color: white;
+        font-size: 16px;
+        padding: 20px;
+      }
+
+      paper-item[attributes] >p{
+        /*@apply(--layout-horizontal);*/
+      }
+
+      #listbox {
+        margin: 10px;
+      }
+
+      .piInfoButtons {
+        @apply(--layout-vertical);
+        @apply(--layout-center);
+      }
+
+
+      table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      td, th {
+        text-align: left;
+        padding: 8px;
+      }
+
+      tr:nth-child(even) {
+        background-color: #dddddd;
+      }
+
+    </style>
+    <style is="custom-style">
+      :root {
+        /* Label and underline color when the input is not focused */
+        --paper-input-container-color: white;
+        /* Label and underline color when the input is focused */
+        --paper-input-container-focus-color: blue;
+        /* Label and underline color when the input is invalid */
+        --paper-input-container-invalid-color: green;
+        /* Input foreground color */
+        --paper-input-container-input-color: white;
+      }
+        .pb_heading {
+        display: flex;
+        text-transform: none;
+        margin-left: -10px;
+        padding:0;
+        margin-left: 0px;
+
+        /* extra özellikler bu bölüm için*/
+            border: 1px solid white;
+            width:172px;
+      }
+
+        .pb_heading .ic_heading{
+          padding-top: 18px;
+          padding-left: 6px;
+        }
+
+        .banColor{
+          background-color:red;
+        }
+         .unbanColor{
+          background-color:green;
+        }
+
+    </style>
+    <!-- get user details -> if status = 1  user active if status = 0 user is banned! -->
+    <iron-ajax id="getusers" url="/h/main?fm=get-all-users&a=[[searchUser]]" method="get" handle-as="json" on-response="_response"></iron-ajax>
+
+    <paper-material elevation="0" role="listbox">
+      <paper-item>
+        <iron-icon style="padding-top: 20px; padding-left:40px;color:white;" icon="search"></iron-icon>
+        <paper-input id="piSeachThread" type="search" placeholder="Kullanıcı ara" value="{{searchUser}}" maxlength="12"></paper-input>
+      </paper-item>
+      <template is="dom-repeat" items="{{users}}" as="user">
+        <paper-item info mypath="[[user.username]]">
+          <div id="piInfo" style="width:100%; display:flex;">
+            <div style="width:20%"><p>[[user.id]]</p></div>
+            <div style="width:20%"><p>[[user.username]]</p></div>
+            <div style="width:23%"><p>[[user.status]]</p></div>
+            <div class="piInfoButtons" style="width:10%; margin-left:50px;">
+              <template is="dom-if" if="[[!user.blocked]]"><!-- Eğer Kullanıcı engelli değilse engelleme buttonunu göster-->
+                <form is="iron-form" id="formblock" method="post" action="/h/main">
+                  <input type="hidden" name="fm" value="mod-block-user" />
+                  <paper-input type="number" id="userid" name="userid" value="[[user.id]]" hidden></paper-input>
+                  <paper-button class="pb_heading banColor" style="font-size:15px; padding:0 10px;" name="{{user.id}}" raised on-click="_blockUser">
+                    <p>Kullanıcıyı Engelle</p>
+                    <iron-icon class="ic_heading" icon="icons:assignment-late"></iron-icon>
+                  </paper-button>
+                </form><!-- end formblock-->
+              </template> 
+              <template is="dom-if" if="[[user.blocked]]"> <!-- Eğer kullanıcı engelliyse , engel kaldırma buttonunu göster-->
+                <form is="iron-form" id="formunblock" method="post" action="/h/main">
+                  <input type="hidden" name="fm" value="mod-unblock-user" />
+                  <paper-input type="number" id="userid" name="userid" value="[[user.id]]" hidden></paper-input>
+                  <paper-button class="pb_heading unbanColor" style="font-size:15px; padding:0 10px;" name="{{user.id}}" raised on-click="_unblockUser">
+                    <p>Engeli Kaldır</p>
+                    <iron-icon class="ic_heading" icon="icons:assignment-turned-in"></iron-icon>
+                  </paper-button>
+                </form><!-- end formblock-->
+              </template>
+
+            </div>
+          </div>
+        </paper-item>
+      </template>
+    </paper-material>
+    <p style="color:white; padding-left: 10px;">{{resultText}}</p>
+
+    <paper-toast id="systemAlert" duration="4000" class="fit-bottom"></paper-toast>
+
+  </template>
+  <script>
+    Polymer({
+      is: "kaldirirmi-mod-user-ban",
+      properties: {
+        users: {
+          type: Array,
+          value: []
+        },
+        searchUser: {
+          type: String,
+          observer: '_searchUserChanged'
+          //value: "",
+          //notify: true
+        },
+        resultText: {
+          type: String,
+          value: '',
+          notify: true
+        },
+        
+        
+      },
+      _searchUserChanged: function () {
+        console.log('_searchUserChanged');
+        if (this.searchUser == '')
+        {
+          this.users = [];
+          this.resultText = "Üyeler üzerinde işlem yapabilmek için kullanıcı adını aratınız.";
+        }
+        else 
+          this.$.getusers.generateRequest();
+
+      },
+      _response: function (a) {
+        console.log('_response');
+        
+
+        this.users = [];
+        if (a.detail.response.length > 0) {
+          this.resultText = a.detail.response.length + " tane sonuç bulundu";
+          a.detail.response.forEach(function (user) {
+            if (user.status == 1)
+              user.blocked = false;
+            else {
+              user.blocked = true;
+            }
+            console.log(user.blocked);
+            this.push('users', user);
+          }, this);
+        }
+        else
+          this.resultText = "Hiç sonuç bulunmadı";
+
+
+      },
+      _unblockUser: function (e) {
+        console.log('_unblockUser clic');
+        var form = document.querySelector("#formunblock");
+        form.$$('#userid').value = e.currentTarget.name;
+        var systemAlert = this.$.systemAlert;
+        var getusers = this.$$('#getusers');
+
+        load();
+        setTimeout(function () { form.submit(); }, 1000);
+        form.addEventListener('iron-form-response', function (e) {
+          unload();
+          systemAlert.removeAttribute('opened');
+          systemAlert.setAttribute('text', e.detail.response.message);
+          systemAlert.setAttribute('opened', '');
+
+          if (getusers.lastRequest)
+            getusers.lastRequest.abort();
+          getusers.generateRequest();
+        });
+      },
+      _blockUser: function (e) {
+
+      console.log('_blockUser clic');
+      var form = document.querySelector("#formblock");
+      form.$$('#userid').value = e.currentTarget.name;
+      var systemAlert = this.$.systemAlert;
+      var getusers = this.$.getusers;
+     
+      load();
+      setTimeout(function () { form.submit(); }, 1000);
+      form.addEventListener('iron-form-response', function (e) {
+        unload();
+        systemAlert.removeAttribute('opened');
+        systemAlert.setAttribute('text', e.detail.response.message);
+        systemAlert.setAttribute('opened', '');
+
+        if (getusers.lastRequest)
+          getusers.lastRequest.abort();
+        getusers.generateRequest();
+      });
+    }
+
+    });
+
+  </script>
+
+</dom-module>
+s

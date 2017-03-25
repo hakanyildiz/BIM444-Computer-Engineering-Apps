@@ -1,0 +1,802 @@
+﻿<dom-module id="kaldirirmi-masterpage-shared-styles">
+    <template>
+        <style is="custom-style">
+              body {
+                  overflow: hidden !important;
+                  margin: 0;
+                  font-family: 'Roboto', 'Noto', sans-serif;
+                  background-color: #eee;
+              }
+
+              #alert {
+                    
+                    top: 0px !important;
+                    left: 80px !important;
+                    max-width: 100% !important;
+                    width: 100% !important;
+                    background: #ff7800 !important;
+                    color:#222 !important;
+                    font-weight: bold !important;
+                    height: 64px !important;
+                    max-height: 64px !important;
+                    margin: 0 !important;
+                    display: flex;
+                    justify-content: center !important;
+                    align-items: center !important;
+                    font-size: 18px !important;
+              }
+
+              * {
+                  @apply(--paper-font-common-base);
+              }
+
+              #pageloader paper-spinner-lite {
+                  --paper-spinner-color: #ff7800;
+              }
+
+              #appheader .options paper-icon-button {
+                  --paper-icon-button-ink-color: white;
+                  color: #ff7800;
+              }
+
+              #searchlayer #searching {
+                  --paper-spinner-color: #ff7800;
+              }
+
+              paper-tooltip {
+                  --paper-tooltip-background: #222;
+                  --paper-tooltip-text-color: #fff;
+                  width: 160px;
+                  --paper-tooltip:{
+                                      font-size: 16px;
+                                  }
+              }
+
+              *, :before, :after {
+                  box-sizing: inherit;
+              }
+
+              html, body {
+                  box-sizing: border-box;
+              }
+
+
+              body {
+                  width: 100%;
+                  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                  padding: 0;
+                  margin: 0;
+                  min-height: 100vh;
+                  position: relative;
+              }
+
+              ::-webkit-scrollbar {
+                  width: 10px !important;
+              }
+
+              ::-webkit-scrollbar-thumb {
+                  background-color: #222;
+                  border-radius: 5px;
+                  border: 2px solid #000;
+                  min-height: 50px;
+              }
+
+              ::-webkit-scrollbar-track {
+                  background-color: #000;
+              }
+
+              parallax-element {
+                  width: 100%;
+                  height: calc(100vh - 159px);
+              }
+
+              #pageloader {
+                  position: fixed;
+                  top: 0;
+                  left: 0;
+                  right: 0;
+                  bottom: 0;
+                  background: rgba(0,0,0,0.8);
+                  display: -ms-flexbox;
+                  display: -webkit-flex;
+                  display: flex;
+                  -ms-flex-direction: column;
+                  -webkit-flex-direction: column;
+                  flex-direction: column;
+                  -ms-flex-align: center;
+                  -webkit-align-items: center;
+                  align-items: center;
+                  -ms-flex-pack: center;
+                  -webkit-justify-content: center;
+                  justify-content: center;
+                  z-index: 110;
+              }
+
+              app-drawer-layout {
+                  background-color: #222;
+              }
+
+              app-drawer {
+                  z-index: 10 !important;
+                  box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.4);
+                  /*background-color: #222;*/
+                  @apply(--layout-vertical);
+                  --app-drawer-width: 80px;
+                  --app-drawer-content-container:{
+                       background-color: transparent !important;
+                   }
+
+              }
+
+              app-drawer .kaldrawer {
+                  @apply(--layout-vertical);
+              }
+
+                  app-drawer .kaldrawer .kallogo, app-drawer .kaldrawer .kalnavigation {
+                      @apply(--layout-vertical);
+                      @apply(--layout-center-center);
+                  }
+
+                  app-drawer .kaldrawer .kallogo {
+                      background-color: #ff7800;
+                      height: 64px;
+                      z-index: 5;
+                  }
+
+                      app-drawer .kaldrawer .kallogo iron-image {
+                          width: 34px;
+                          height: 50px;
+                          cursor: pointer;
+                      }
+
+                  app-drawer .kaldrawer .kalnavigation #kalNavigationMenu {
+                      padding: 0 !important;
+                      --paper-menu-background-color: inherit !important;
+                      --paper-menu-color: white;
+                      --paper-menu-selected-item:{
+                                border-left: 2px solid #ff7800;
+                                color: #ff7800;
+                            } 
+              
+
+                      --paper-menu-focused-item: {
+                          background: #222 !important;
+                          color: #ff7800;
+                      }
+
+                      --paper-menu-focused-item-after: {
+                          background: #222 !important;
+                      }
+
+              /*--paper-menu-focused-item:{
+                background: #ff7800;
+                color:#222;
+            }*/
+              }
+
+              app-drawer .kaldrawer .kalnavigation #kalNavigationMenu paper-item:focus::before,
+              app-drawer .kaldrawer .kalnavigation #kalNavigationMenu paper-item:focus::after {
+                  color: white;
+                  opacity: 0;
+              }
+
+
+              app-drawer .kaldrawer .kalnavigation #kalNavigationMenu paper-item {
+                  padding: 12px 0px;
+                  display: flex;
+                  text-align: center;
+                  width: 78px;
+              }
+
+                  app-drawer .kaldrawer .kalnavigation #kalNavigationMenu paper-item a {
+                      border: none;
+                      width: 100%;
+                      height: 100%;
+                      text-decoration: none;
+                      color: inherit !important;
+                  }
+
+                      app-drawer .kaldrawer .kalnavigation #kalNavigationMenu paper-item a:focus {
+                          outline: none !important;
+                      }
+
+                      app-drawer .kaldrawer .kalnavigation #kalNavigationMenu paper-item a iron-icon {
+                          width: 30px;
+                          height: 30px;
+                      }
+
+              parallax-element {
+                  height: calc(100vh - 64px) !important;
+              }
+
+              #ironImageSecretLogo {
+                  width: 169px;
+                  height: 64px;
+                  -webkit-transform: translateX(-250%);
+                  transform: translateX(-250%);
+                  -webkit-transition: .3s;
+                  transition: .3s;
+                  z-index: 4;
+                  position: absolute;
+              }
+
+              .secretOpener {
+                  -webkit-transform: translateX(-11%) !important;
+                  transform: translateX(-11%) !important;
+              }
+
+              /* toolbar */
+              app-toolbar {
+                  background-color: #222;
+                  color: #fff;
+                  box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.4);
+              }
+
+                  /* new search part */
+                  app-toolbar #appheader {
+                      @apply(--layout-horizontal);
+                      @apply(--layout-center);
+                      justify-content: space-between;
+                      width: 100%;
+                  }
+
+              #appheader .options {
+                  display: -ms-flexbox;
+                  display: -webkit-flex;
+                  display: flex;
+                  -ms-flex-direction: row;
+                  -webkit-flex-direction: row;
+                  flex-direction: row;
+                  -ms-flex-align: center;
+                  -webkit-align-items: center;
+                  align-items: center;
+              }
+
+              #appheader .header-search {
+                  width: 100%;
+                  max-width: 620px;
+                  /*height: 42px;
+                  margin: 0 100px;*/
+                  position: relative;
+                  -ms-flex: 1 1 0.000000001px;
+                  -webkit-flex: 1;
+                  flex: 1;
+                  -webkit-flex-basis: 0.000000001px;
+                  flex-basis: 0.000000001px;
+              }
+
+                  #appheader .header-search .search {
+                      width: 20px;
+                      height: 20px;
+                      position: absolute;
+                      left: 20px;
+                      top: 45%;
+                      opacity: 1;
+                      -webkit-transform: translateY(-50%);
+                      transform: translateY(-50%);
+                      -webkit-transition: .3s;
+                      transition: .3s;
+                      opacity: 0;
+                  }
+
+                  #appheader .header-search input {
+                      width: 85%;
+                      height: 100%;
+                      background: rgba(255, 120, 0, 0.5) !important;
+                      padding: 12px 0;
+                      border-radius: 2px;
+                      color: inherit;
+                      text-align: center;
+                      font-size: 16px;
+                      background: transparent;
+                      border: none;
+                      outline: none;
+                      font-weight: 100;
+                      font-size: calc(0.3em + 1vmin);
+                  }
+
+                      #appheader .header-search input::-webkit-input-placeholder {
+                          color: white;
+                      }
+
+                      #appheader .header-search input::-webkit-search-cancel-button {
+                          /*-webkit-appearance: none;*/
+                      }
+
+                      #appheader .header-search input:focus {
+                          /*padding: 12px 0 12px 45px;
+                        text-align:left;*/
+                      }
+
+                          #appheader .header-search input:focus ~ .search {
+                              opacity: 1;
+                          }
+
+                          #appheader .header-search input:focus::-webkit-input-placeholder {
+                              text-align: center;
+                          }
+
+              #ironImageMobileLogo {
+                  width: 30px;
+                  height: 42px;
+                  opacity: 0.9;
+                  transition: all ease-in-out .3s;
+              }
+
+              .makeVisible {
+                  opacity: 0 !important;
+              }
+
+              @media (max-width: 700px) {
+
+                  app-drawer {
+                      --app-drawer-content-container:{
+                                                         background-color: #222;
+                                                     }
+
+              }
+
+              #appheader .header-search {
+                  display: none !important;
+              }
+
+              }
+
+              @media (min-width: 700px) {
+                  #appheader .options .search-btn {
+                      display: none !important;
+                  }
+
+                  #mobileMenuOpener {
+                      display: none !important;
+                  }
+
+                  #ironImageMobileLogo {
+                      display: none !important;
+                  }
+              }
+
+              #appheader .options .search-btn {
+                  text-transform: capitalize;
+                  color: #fff;
+                  /*background: #222;*/
+                  font-size: calc(0.3em + 1vmin) !important;
+                  /*margin-left:2em;*/
+              }
+
+                  #appheader .options .search-btn p {
+                      margin: 0px !important;
+                      font-size: 14px;
+                  }
+
+
+              #appheader .options .mobile-search {
+                  position: fixed;
+                  top: 150%;
+                  left: 0;
+                  height: 100%;
+                  width: 100%;
+                  background: #222;
+                  opacity: 0.9;
+                  -webkit-transition: -webkit-transform .3s;
+                  transition: -webkit-transform .3s;
+                  transition: transform .3s;
+                  transition: transform .3s, -webkit-transform .3s;
+                  -webkit-transform: translateY(0);
+                  transform: translateY(0);
+                  z-index: 2000;
+              }
+
+              .ios-web-app .mobile-search {
+                  border-top: 20px solid #d0d0d0;
+              }
+
+              #appheader .options .mobile-search.searching {
+                  -webkit-transform: translateY(-142%);
+                  transform: translateY(-142%);
+              }
+
+              #appheader .options .mobile-search .header {
+                  align-items: center;
+                  display: -webkit-box;
+                  display: -ms-flexbox;
+                  display: flex;
+                  -webkit-box-pack: start;
+                  -ms-flex-pack: start;
+                  justify-content: flex-start;
+                  background: #ff7800;
+                  height: 55px;
+                  box-shadow: 0 1.5px 4px rgba(0, 0, 0, 0.24), 0 1.5px 6px rgba(0, 0, 0, 0.12);
+              }
+
+                  #appheader .options .mobile-search .header paper-icon-button {
+                      color: #222;
+                      width: 45px;
+                      height: 45px;
+                  }
+
+
+                  #appheader .options .mobile-search .header .back {
+                      width: 58px;
+                      height: 58px;
+                      margin-left: 10px;
+                      background: url('../img/arrowbackblack.svg') center no-repeat;
+                  }
+
+                  #appheader .options .mobile-search .header input {
+                      font-size: 23px;
+                      font-weight: 100;
+                      margin-left: 20px;
+                      width: calc(100vw - 100px);
+                      outline: none;
+                      border: none;
+                      background: #ff7800;
+                  }
+
+                      #appheader .options .mobile-search .header input::-webkit-input-placeholder {
+                          color: #444;
+                          font-size: 20px;
+                          text-align: left;
+                      }
+
+                      #appheader .options .mobile-search .header input ::-moz-placeholder {
+                          color: rgba(255, 120, 0, 0.7);
+                          font-size: 20px;
+                          text-align: center;
+                      }
+
+                      #appheader .options .mobile-search .header input :-ms-input-placeholder {
+                          color: rgba(255, 120, 0, 0.7);
+                          font-size: 20px;
+                          text-align: center;
+                      }
+
+
+              /* seaarch layers */
+              #app {
+                  overflow: hidden !important;
+                  width: 100%;
+                  min-height: calc(100vh - 64px);
+                  background: #222;
+                  z-index: 0;
+              }
+
+              #username {
+                  display: block;
+                  pointer-events: none;
+                  padding-top: 5px;
+              }
+
+              #searchlayer {
+                  position: absolute;
+                  top: 64px;
+                  left: 0;
+                  right: 0;
+                  min-height: calc(100vh - 64px);
+                  background: rgba(0,0,0,.7);
+                  z-index: 2000;
+                  overflow: hidden;
+                  height: 500px !important;
+                  overflow-y: scroll !important;
+              }
+
+              #searchlayermobile {
+                  min-height: calc(100vh - 64px);
+                  z-index: 3;
+                  height: 500px !important;
+                  overflow: scroll;
+                  overflow-x: hidden;
+              }
+
+                  #searchlayer #searching, #searchlayermobile #searchingmobile {
+                      display: flex;
+                      flex-direction: row;
+                      margin: 10px auto;
+                  }
+
+              #searchlayer #searchresults {
+                  display: flex;
+                  flex-direction: column;
+                  background-color: #222;
+                  padding: 5px 0;
+                  margin: 0px 15px;
+                  max-width: 527px;
+                  box-shadow: 0 12px 16px 1px rgba(0, 0, 0, 0.14), 0 4px 22px 3px rgba(0, 0, 0, 0.12), 0 6px 7px -4px rgba(0, 0, 0, 0.4);
+              }
+
+              #searchlayermobile #searchresultsmobile {
+                  display: flex;
+                  flex-direction: column;
+                  background-color: #222;
+                  margin: 5px 0px;
+                  padding-left: 10px;
+              }
+
+              #searchlayer #searchresults .game:hover {
+                  background: #121212;
+              }
+
+              #searchlayermobile #searchresultsmobile .game:hover {
+                  background: #ddd;
+              }
+
+              #searchlayer #searchresults .game {
+                  display: -ms-flexbox;
+                  display: -webkit-flex;
+                  display: flex;
+                  -ms-flex-direction: row;
+                  -webkit-flex-direction: row;
+                  flex-direction: row;
+                  -ms-flex-align: center;
+                  -webkit-align-items: center;
+                  align-items: center;
+                  padding: calc(0.1em + 1vmin) calc(0.3em + 1vmin);
+                  cursor: pointer;
+                  border-left: 4px solid #ff7800;
+                  box-shadow: 0 12px 16px 1px rgba(0, 0, 0, 0.14), 0 4px 22px 3px rgba(0, 0, 0, 0.12), 0 6px 7px -4px rgba(0, 0, 0, 0.4);
+                  margin-bottom: 10px;
+              }
+
+              #searchlayermobile #searchresultsmobile .game {
+                  display: -ms-flexbox;
+                  display: -webkit-flex;
+                  display: flex;
+                  -ms-flex-direction: row;
+                  -webkit-flex-direction: row;
+                  flex-direction: row;
+                  -ms-flex-align: center;
+                  -webkit-align-items: center;
+                  align-items: center;
+                  cursor: pointer;
+                  border-left: 4px solid #ff7800;
+                  box-shadow: 0 12px 16px 1px rgba(0, 0, 0, 0.14), 0 4px 22px 3px rgba(0, 0, 0, 0.12), 0 6px 7px -4px rgba(0, 0, 0, 0.4);
+                  margin-bottom: 10px;
+              }
+
+                  #searchlayermobile #searchresultsmobile .game .picture {
+                      margin-right: 20px;
+                      max-width: calc(4.5em + 1vmin);
+                      width: 50%;
+                      box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12), 0 3px 5px -1px rgba(0, 0, 0, 0.4);
+                      margin-left: 5px;
+                  }
+
+              #searchlayer #searchresults .game .picture {
+                  margin-right: 20px;
+                  max-width: calc(4.5em + 1vmin);
+                  width: 50%;
+                  box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12), 0 3px 5px -1px rgba(0, 0, 0, 0.4);
+              }
+
+                  #searchlayer #searchresults .game .picture img, #searchlayermobile #searchresultsmobile .game .picture img {
+                      width: 100%;
+                      height: auto;
+                  }
+
+              #searchlayermobile #searchresultsmobile .game .title span {
+                  font-size: calc(0.6em + 1vmin);
+              }
+
+              #searchlayer #searchresults .game .picture {
+                  box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12), 0 3px 5px -1px rgba(0, 0, 0, 0.4);
+              }
+
+              #searchlayer #searchresults .game .title {
+                  font-size: 16px !important;
+              }
+
+
+              #searchlayer #defaultsearch {
+                  margin: 0px 15px;
+                  padding: 0px 0px 5px 0px;
+                  background-color: #222;
+                  max-width: 527px;
+              }
+
+                  #searchlayer #defaultsearch a {
+                      display: -ms-flexbox;
+                      display: -webkit-flex;
+                      display: flex;
+                      -ms-flex-direction: row;
+                      -webkit-flex-direction: row;
+                      flex-direction: row;
+                      -ms-flex-align: center;
+                      -webkit-align-items: center;
+                      align-items: center;
+                      width: calc(100% - 40px);
+                      text-decoration: none;
+                      padding: 15px 20px;
+                      color: white;
+                      border-left: 4px solid #ff7800;
+                  }
+
+                      #searchlayer #defaultsearch a iron-icon {
+                          margin-right: 10px;
+                      }
+
+                      #searchlayer #defaultsearch a .title {
+                          font-size: 14px;
+                      }
+
+
+              #searchlayermobile #defaultsearchmobile a {
+                  background-color: #222 !important;
+                  color: white;
+                  display: -ms-flexbox;
+                  display: -webkit-flex;
+                  display: flex;
+                  -ms-flex-direction: row;
+                  -webkit-flex-direction: row;
+                  flex-direction: row;
+                  -ms-flex-align: center;
+                  -webkit-align-items: center;
+                  align-items: center;
+                  width: calc(100% - 40px);
+                  text-decoration: none;
+                  color: white;
+                  border-left: 4px solid #ff7800;
+                  margin-left: 10px;
+                  margin-bottom: 20px;
+                  padding: 5px;
+              }
+
+              #searchlayer #defaultsearch:hover a {
+                  background: #121212;
+              }
+
+              #searchlayermobile #defaultsearchmobile:hover a {
+                  background: #121212;
+              }
+
+              #searchlayermobile #defaultsearchmobile a iron-icon {
+                  margin-right: 10px;
+              }
+
+              #searchlayermobile #defaultsearchmobile .title {
+                  font-size: calc(0.6em + 1vmin);
+              }
+
+              .pb_heading {
+                  display: flex;
+                  text-transform: none;
+                  margin-left: -10px;
+                  padding: 0;
+                  font-size: 20px;
+                  margin-left: 0px;
+              }
+
+                  .pb_heading .ic_heading {
+                      padding-top: 18px;
+                      padding-left: 6px;
+                  }
+
+              #apphottags {
+                  display: none !important;
+              }
+              /* hottags */
+              #apphottags {
+                  margin-left: 30px;
+                  @apply(--layout-horizontal);
+                  @apply(--layout-center-center);
+              }
+
+                  #apphottags #hottagslist {
+                      color: white !important;
+                      width: 100%;
+                      display: -ms-flexbox;
+                      display: -webkit-flex;
+                      display: flex;
+                      -ms-flex-direction: row;
+                      -webkit-flex-direction: row;
+                      flex-direction: row;
+                      -ms-flex-align: center;
+                      -webkit-align-items: center;
+                      align-items: center;
+                      -ms-flex-pack: center;
+                      -webkit-justify-content: center;
+                      justify-content: center;
+                  }
+
+                      #apphottags #hottagslist h3 {
+                          font-size: calc(0.44em + 1vmin) !important;
+                          font-weight: 400;
+                          text-transform: capitalize !important;
+                      }
+
+                      #apphottags #hottagslist a {
+                          text-decoration: none;
+                          background-color: inherit !important;
+                      }
+
+                          #apphottags #hottagslist a span {
+                              color: #E65100 !important;
+                              font-size: calc(0.4em + 1vmin) !important;
+                              font-weight: 500 !important;
+                              display: -webkit-inline-flex;
+                              display: inline-flex;
+                              -ms-flex-align: center;
+                              -webkit-align-items: center;
+                              align-items: center;
+                              -ms-flex-pack: center;
+                              -webkit-justify-content: center;
+                              justify-content: center;
+                              position: relative;
+                              box-sizing: border-box;
+                              min-width: 5.14em;
+                              background: transparent;
+                              -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+                              -webkit-tap-highlight-color: transparent;
+                              font: inherit;
+                              outline-width: 0;
+                              border-radius: 3px;
+                              -ms-user-select: none;
+                              -webkit-user-select: none;
+                              user-select: none;
+                              cursor: pointer;
+                              z-index: 0;
+                              padding: 0.7em 0.57em;
+                              -webkit-font-smoothing: antialiased;
+                          }
+
+
+              /* header media queries */
+              @media only screen and (min-width : 320px) {
+              }
+
+              @media only screen and (min-width : 360px) {
+              }
+
+              @media only screen and (min-width : 412px) {
+              }
+
+              @media only screen and (min-width : 480px) {
+              }
+
+              @media only screen and (min-width : 768px) {
+
+                  #searchresults .game {
+                      height: calc(4em + 1vmin) !important;
+                  }
+
+                      #searchresults .game .picture {
+                          max-width: calc(2.5em + 1vmin) !important;
+                      }
+
+                      #searchresults .game .title {
+                          font-size: calc(0.15em + 1vmin) !important;
+                      }
+              }
+
+              @media only screen and (min-width : 1024px) { /* zoom %175 */
+                  /* hottags */
+                  #apphottags {
+                      display: block !important;
+                  }
+              }
+
+              @media only screen and (min-width : 1224px) { /* zoom %150 */
+                  #searchresults .game {
+                      height: calc(5em + 1vmin) !important;
+                  }
+
+                      #searchresults .game .picture {
+                          max-width: calc(3.3em + 1vmin) !important;
+                      }
+
+                      #searchresults .game .title {
+                          font-size: calc(0.15em + 1vmin) !important;
+                      }
+
+                  #appheader .header-search input {
+                      font-size: calc(0.5em + 1vmin) !important;
+                  }
+              }
+
+              @media only screen and (min-width : 1440px) { /* zoom %125 */
+                  #appheader .header-search input {
+                      font-size: calc(0.3em + 1vmin) !important;
+                  }
+              }
+        </style>
+    </template>
+</dom-module>

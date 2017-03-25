@@ -1,0 +1,81 @@
+﻿<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../kaldirirmi-styles/kaldirirmi-tagdetails-shared-styles.html" />
+<link rel="import" href="../textfit-div/textfit-div.html"/>
+<dom-module id="kaldirirmi-tagdetails">
+    <style is="custom-style" include="kaldirirmi-tagdetails-shared-styles"></style>
+    <template>
+        <iron-ajax auto="{{go}}" id="gettagdetails" debounce="3000" url="/h/main?fm=get-tagdetails&a=[[datatable]]&b=[[dataurl]]" handle-as="json" on-response="_response" loading="{{loading}}"></iron-ajax>
+        <paper-material elevation="3" id="tagmaterial">
+            <div class="tag-header">
+                <h3>{{_makeHeaderTitle(datatable, dataurl)}}</h3>
+            </div>
+            <div class="tag-content">
+                <template is="dom-repeat" items="{{contents}}" as="item">
+                    <a class="taghreflink" href="[[item.url]]" onclick="load();">
+                        <paper-card tagcard>
+                            <div class="card-content">
+                                <iron-image sizing="cover" background src="[[item.picture]]" alt="[[item.title]]" preload fade></iron-image>
+                            </div>
+                            <div class="card-actions">
+                                <textfit-div text="{{item.title}}"></textfit-div>
+                            </div>
+                        </paper-card>
+                    </a>
+                </template>
+            </div>
+            <div class="loadingIndicator" hidden$="[[!loading]]">
+                <h3 class="loadingIndicatorTitle">{{_loadingTitle(datatable)}}</h3>
+                <loader-pac></loader-pac>
+            </div>
+        </paper-material>
+
+    </template>
+</dom-module>
+<script>
+    Polymer({
+        is: "kaldirirmi-tagdetails",
+        properties: {
+            datatable: {
+                type: String,
+                value: ""
+            },
+            dataurl: {
+                type: String,
+                value: ""
+            },
+            contents: {
+                type: Array,
+                value: []
+            },
+            loading: {
+                type: Boolean,
+                value: true,
+                notify: true
+            },
+            go: {
+                type: Boolean,
+                value: false,
+                notify: true
+            }
+        },
+        ready: function () {
+            this.async(function () {
+                this.go = true;
+            }, 2000);
+        },
+        _response: function (a) {
+            if (a.detail.response.length > 0) {
+                a.detail.response.forEach(function (content) {
+                    this.push('contents', content);
+                }, this);
+            }
+        },
+        _makeHeaderTitle: function (table, url) {
+            return url.toString().split('-').join(' ') + ' ile ilgili ' + table + ' etiketleri';
+        },
+        _loadingTitle: function (name) {
+            //var capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
+            return name + ' etiketleri yükleniyor';
+        }
+    });
+</script>

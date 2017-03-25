@@ -1,0 +1,162 @@
+﻿<dom-module id="kaldirirmi-forum-posts-styles">
+    <template>
+        <style>
+            #forum {
+               width: 100%;
+                   height: calc(100vh - 64px);
+                   overflow-y: auto;
+            }
+
+            #forumheader {
+                @apply(--layout-horizontal);
+                @apply(--layout-center);
+                background: #222;
+                height: 45px;
+                padding: 0 30px;
+                left: 0;
+                right: 0;
+                @apply(--shadow-elevation-12dp);
+                border-top: 3px solid #222222;
+                border-bottom: 3px solid #222222;
+            }
+
+                #forumheader paper-icon-button {
+                    --paper-icon-button-ink-color: white;
+                    color: white;
+                    margin-right: 10px;
+                }
+
+                #forumheader h1 {
+                    font-size: 20px;
+                    color: white;
+                    pointer-events: none;
+                    font-weight: normal;
+                }
+
+            #forumcontent {
+                padding: 15px;
+                max-width: 1170px;
+                margin: 45px auto 0 auto;
+            }
+
+                #forumcontent .postform {
+                    @apply(--layout-horizontal);
+                    background-color: white;
+                    border-radius: 3px;
+                    padding: 20px;
+                    margin-bottom: 5px;
+                }
+
+                    #forumcontent .postform .alert {
+                        font-size: 18px;
+                        margin-right: 15px;
+                        @apply(--layout-self-center);
+                        flex-grow: 2;
+                    }
+
+                    #forumcontent .postform paper-textarea {
+                        flex-grow: 2;
+                        padding-right: 15px;
+                    }
+
+                    #forumcontent .postform .buttons {
+                        @apply(--layout-self-start);
+                    }
+
+                        #forumcontent .postform .buttons paper-button {
+                            background: #ff7800;
+                            color: white;
+                            margin: 0;
+                        }
+
+                #forumcontent .forum-post {
+                    @apply(--layout-horizontal);
+                    background-color: white;
+                    color: #333;
+                    padding: 15px;
+                    border-radius: 3px;
+                    margin-top: 10px;
+                }
+
+                    #forumcontent .forum-post .user {
+                        @apply(--layout-vertical);
+                        @apply(--layout-center);
+                        padding: 10px;
+                        background-color: rgba(0,0,0,.4);
+                        border-radius: 3px;
+                        text-decoration: none;
+                        max-height: 105px;
+                    }
+
+                        #forumcontent .forum-post .user .avatar {
+                            width: 75px;
+                            height: 75px;
+                            overflow: hidden;
+                            border-radius: 50%;
+                            margin-bottom: 5px;
+                        }
+
+                            #forumcontent .forum-post .user .avatar iron-image {
+                                width: 100%;
+                                height: 100%;
+                                overflow: hidden;
+                                border-radius: 50%;
+                            }
+
+                        #forumcontent .forum-post .user .username {
+                            font-size: 16px;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            color: white;
+                        }
+
+                    #forumcontent .forum-post .content {
+                        @apply(--layout-vertical);
+                        padding-left: 15px;
+                        width: calc(100% - 15px);
+                    }
+
+                        #forumcontent .forum-post .content .message {
+                            font-size: 18px;
+                            min-height: 100px;
+                            pointer-events: none;
+                        }
+
+                        #forumcontent .forum-post .content .options {
+                            @apply(--layout-horizontal);
+                            @apply(--layout-center);
+                            @apply(--layout-self-end);
+                            margin-top: 10px;
+                        }
+
+                            #forumcontent .forum-post .content .options .postdate {
+                                font-size: 13px;
+                                font-style: italic;
+                            }
+
+                            #forumcontent .forum-post .content .options paper-icon-button.like {
+                                color: green;
+                            }
+
+                            #forumcontent .forum-post .content .options paper-icon-button.dislike {
+                                color: red;
+                            }
+
+                            #forumcontent .forum-post .content .options paper-badge {
+                                --paper-badge-background: rgba(0,0,0,.4);
+                                --paper-badge-margin-left: -15px;
+                            }
+
+            .pb_heading {
+                font-size: 18px;
+                padding: 15px;
+                min-width: 130px;
+            }
+
+                .pb_heading iron-icon {
+                    padding: 0 !important;
+                }
+        </style>
+    </template>
+</dom-module>

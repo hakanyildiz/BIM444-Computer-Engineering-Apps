@@ -1,0 +1,45 @@
+﻿
+/* Custom, iPhone Retina */
+@media only screen and (min-width : 320px) {
+
+}
+
+/* Custom, Galaxy S5 */
+@media only screen and (min-width : 360px) {
+
+}
+
+/* Iphone 6s plus */
+@media only screen and (min-width : 412px) {
+
+}
+
+/* Extra Small Devices, Phones */
+@media only screen and (min-width : 480px) {
+
+}
+
+/* Small Devices, Tablets */
+@media only screen and (min-width : 768px) {
+
+}
+
+/* Desktops and laptops ----------- */
+@media only screen and (min-width : 1024px) { /* zoom %175 */
+
+}
+
+@media only screen and (min-width : 1224px) { /* zoom %150 */
+
+}
+
+@media only screen and (min-width : 1440px) { /* zoom % 125*/
+
+}
+
+@media only screen and (min-width : 1640px) { /* zoom %110*/
+
+}
+/* Large screens ----------- */
+@media only screen and (min-width : 1824px) {
+}

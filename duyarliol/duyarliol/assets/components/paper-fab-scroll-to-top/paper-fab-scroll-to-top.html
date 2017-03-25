@@ -1,0 +1,200 @@
+﻿<!--
+##### Example
+
+    <grass-paper-fab-scroll-to-top></grass-paper-fab-scroll-to-top>
+
+@element grass-paper-fab-scroll-to-top
+@demo demo/index.html
+@hero hero.svg
+-->
+
+<dom-module name="paper-fab-scroll-to-top">
+    <style>
+        .mg-bottomright {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            
+        }
+        #fab{
+            background:#ff7800 !important;
+        }
+    </style>
+    <template>
+        <paper-fab id="fab" icon="expand-less" title="To top"></paper-fab>
+    </template>
+    <script>
+        var _self,
+            _scrollElement = window,
+            _bottomRightClass = 'mg-bottomright',
+            _isWindow = window === _scrollElement,
+            _hide = function() {
+                if (!_self.alwaysShow) {
+                    _self.style.display = 'none';
+                }
+            },
+            _show = function() {
+                if (_self.style.display === 'none') {
+                    _self.style.display = 'initial';
+                }
+            },
+            _onScroll = function() {
+                _getScrollY() === 0 ? _hide() : _show();
+            },
+            _getScrollY = function() {
+                return _isWindow ? _scrollElement.scrollY : _scrollElement.scrollTop;
+            },
+            _scrollToTop = function() {
+                var scrollStep = -_getScrollY() / (_self.duration / 15),
+                    doScrollStep = function() {
+                        if (_isWindow) {
+                            _scrollElement.scrollBy(0, scrollStep);
+                        } else {
+                            _scrollElement.scrollTop += scrollStep;
+                        }
+                    },
+                    scrollInterval = setInterval(function() {
+                        if (_getScrollY() != 0) {
+                            doScrollStep();
+                        } else {
+                            clearInterval(scrollInterval);
+                            _hide();
+                        }
+                    }, 15);
+            };
+
+        Polymer({
+            is: 'paper-fab-scroll-to-top',
+            listeners: {
+                tap: 'scrollToTop'
+            },
+            properties: {
+                /**
+                 * `alwaysShow` shows the button even if the scroll element is on the top
+                 */
+                alwaysShow: {
+                    reflectToAttribute: true,
+                    notify: true,
+                    type: Boolean,
+                    value: false,
+                    observer: '_alwaysShowChanged'
+                },
+                /**
+                 * `pinBottomRight` pins the scroll button to the bottom right edge,
+                 * set it to `false` to use custom position or let it be a part of normal layout
+                 */
+                pinBottomRight: {
+                    reflectToAttribute: true,
+                    notify: true,
+                    type: Boolean,
+                    value: true,
+                    observer: '_pinBottomRightChanged'
+                },
+                /**
+                 * `forElement` stores the ID of a div to scroll to top and
+                 * to track scrolling of this element
+                 */
+                forElement: {
+                    reflectToAttribute: true,
+                    notify: true,
+                    type: String,
+                    value: 'window',
+                    observer: '_forElementChanged'
+                },
+                /**
+                 * `duration` in ms of the animation for scrolling to top
+                 */
+                duration: {
+                    reflectToAttribute: true,
+                    notify: true,
+                    type: Number,
+                    value: 500,
+                }
+            },
+            //
+            // Programmatic constructor support
+            //
+            factoryImpl: function(options) {
+                var _options = options || {};
+                if (_options.duration) {
+                    this.duration = _options.duration;
+                }
+                if (_options.alwaysShow !== false) {
+                    this.alwaysShow = true;
+                }
+                if (_options.forElement) {
+                    this._setScrollElement(_options.forElement);
+                }
+            },
+            //
+            // Element initialization
+            //
+            created: function() {
+                _self = this;
+            },
+            attached: function() {
+                this._setScrollElement(this.forElement);
+
+                if (this.pinBottomRight) {
+                    this.$.fab.classList.add(_bottomRightClass);
+                }
+
+                this.alwaysShow ? _show() : _onScroll();
+            },
+            //
+            // PRIVATE
+            //
+            /*
+            * Sets new ID for the scroll element, cleans the scroll handler for the old one.
+            *
+            * @param {string} scrollElementId A selector (tag or ID with `#` and so on).
+            */
+            _setScrollElement: function(scrollElementId) {
+                // clean up handler for current/previous element
+                if(_scrollElement){
+                    _scrollElement.removeEventListener("scroll", _onScroll);
+                }
+
+                if (typeof scrollElementId === 'string') {
+                    _isWindow = false;
+                    _scrollElement = document.getElementById(scrollElementId);
+                    if(!_scrollElement){
+                        this.forElement = undefined;
+                        console.warn('no element with id: ' + scrollElementId);
+                    }
+                }
+
+                if (!_scrollElement) {
+                    _isWindow = true;
+                    _scrollElement = window;
+                }
+
+                _scrollElement.addEventListener("scroll", _onScroll);
+
+                _onScroll();
+            },
+            //
+            // OBSERVERS
+            //
+            _alwaysShowChanged: function(newVal, oldVal) {
+                this.alwaysShow = !!newVal;
+                newVal ? _show() : _onScroll();
+            },
+            _forElementChanged: function(newVal, oldVal) {
+                this._setScrollElement(newVal);
+            },
+            _pinBottomRightChanged: function(newVal, oldVal) {
+                this.$.fab.classList[newVal ? 'add' : 'remove'](_bottomRightClass);
+            },
+            //
+            // PUBLIC
+            //
+            /**
+             * Trigger scroll to top
+             */
+            scrollToTop: function() {
+                _scrollToTop();
+            }
+        });
+    </script>
+</dom-module>
