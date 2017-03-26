@@ -216,7 +216,7 @@ namespace core
                 List<creditcard> list = new List<creditcard>();
                 using (conn)
                 {
-                    cmd.CommandText = "select bankname, cardlimit, carddebt, updatedate from usercreditcards where userid=@a";
+                    cmd.CommandText = "select id, bankname, cardlimit, carddebt, updatedate from usercreditcards where userid=@a";
                     cmd.Parameters.Clear();
                     cmd.Parameters.AddWithValue("@a", id);
                     if (conn.State == ConnectionState.Open) conn.Close();
@@ -227,10 +227,11 @@ namespace core
                         {
                             list.Add(new creditcard()
                             {
-                                bankname = !r.IsDBNull(0) ? r.GetString(0) : "",
-                                cardlimit = !r.IsDBNull(1) ? r.GetInt32(1) : 0,
-                                carddebt = !r.IsDBNull(2) ? r.GetInt32(2) : 0,
-                                date = !r.IsDBNull(3) ? r.GetDateTime(3) : DateTime.Now 
+                                id = !r.IsDBNull(0) ? r.GetInt32(0) : 0,
+                                bankname = !r.IsDBNull(1) ? r.GetString(1) : "",
+                                cardlimit = !r.IsDBNull(2) ? r.GetInt32(2) : 0,
+                                carddebt = !r.IsDBNull(3) ? r.GetInt32(3) : 0,
+                                date = !r.IsDBNull(4) ? r.GetDateTime(4) : DateTime.Now 
                             });
                         }
                     }
@@ -796,6 +797,7 @@ namespace core
     }
     public class creditcard
     {
+        public int id { get; set; }
         public string bankname { get; set; }
         public int cardlimit { get; set; }
         public int carddebt { get; set; }

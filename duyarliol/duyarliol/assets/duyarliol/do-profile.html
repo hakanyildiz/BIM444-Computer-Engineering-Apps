@@ -201,6 +201,29 @@
                     align-items: flex-start;
                     min-height: 300px;
             }
+           div[dialoginfo]{
+                    display: -ms-flexbox;
+                    display: -webkit-flex;
+                    display: flex;
+                    -ms-flex-direction: column;
+                    -webkit-flex-direction: column;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    min-height: 300px;
+                    min-width:600px;
+            }
+           div[dialoginfo] paper-input{
+               min-width: 440px;
+           }
+
+           paper-dialog .buttons{
+               font-size: 20px !important;
+           }
+           .addcardbutton{
+                background: #171059;
+                color: white;
+                margin: 5px 15px;
+           }
         </style>        
 
         <iron-ajax
@@ -258,7 +281,7 @@
                                     <paper-input label="Aylık Net Gelir" id="monthlyincome" name="monthlyincome" value$="[[response.income.monthlyincome]]"  allowed-pattern="[0-9]" auto-validate maxlength="6">
                                         <div prefix>&#x20BA;</div>
                                     </paper-input>
-                                
+
                                     <paper-input label="Aylık Ek Gelir" id="monthlyadditionalincome" name="monthlyadditionalincome" value$="[[response.income.monthlyadditionalincome]]"  allowed-pattern="[0-9]" auto-validate maxlength="6">
                                         <div prefix>&#x20BA;</div>
                                     </paper-input>
@@ -357,20 +380,63 @@
                                                </div>
                                            </div>
                                            <div class="card-interactions">
-                                               <paper-icon-button icon="editor:mode-edit" id="pibEditCard"></paper-icon-button>
-                                               <paper-icon-button icon="icons:delete" id="pibDeleteCard"></paper-icon-button>
+                                               <paper-icon-button icon="editor:mode-edit" id="pibEditCard" on-tap="_pibOpenUpdateCard"></paper-icon-button>
+                                               <paper-icon-button icon="icons:delete" id="pibDeleteCard" on-tap="_pibDeleteSelectedCard"></paper-icon-button>
                                            </div>
                                        </div>
                                    </template>
-                                    <!--<paper-input label="Aylık Net Gelir" id="monthlyincome" name="monthlyincome" value$="[[response.income.monthlyincome]]" allowed-pattern="[0-9]" auto-validate maxlength="6">
-                                        <div prefix>&#x20BA;</div>
-                                    </paper-input>
-
-                                    <paper-input label="Aylık Ek Gelir" id="monthlyadditionalincome" name="monthlyadditionalincome" value$="[[response.income.monthlyadditionalincome]]" allowed-pattern="[0-9]" auto-validate maxlength="6">
-                                        <div prefix>&#x20BA;</div>
-                                    </paper-input>-->
-
-                              
+                                   <paper-button class="addcardbutton" raised onclick="addcard.open()">Yeni Kart Ekle</paper-button>
+                                       <paper-dialog id="updatecard" modal>
+                                            <paper-material elevation="1">
+                                                <paper-item heading>Kredi Kartı Bilgilerini Güncelle</paper-item>
+                                                <div dialoginfo>
+                                                    <form id="updatecreditcardform" is="iron-form" action="/h/main" method="post" on-iron-form-response="_ironFormResponseUpdateCard">
+                                                        <paper-input label="Banka Adı" id="bankname" name="bankname" value$="[[updatingdata.bankname]]" auto-validate maxlength="15">
+                                                            <div prefix>&#x20BA;</div>
+                                                        </paper-input>
+                                                        <paper-input label="Kartı Limiti" id="cardlimit" name="cardlimit" value$="[[updatingdata.cardlimit]]" allowed-pattern="[0-9]" auto-validate maxlength="6">
+                                                            <div prefix>&#x20BA;</div>
+                                                        </paper-input>
+                                                        <paper-input label="Anlık Kartın Borcu" id="carddebt" name="carddebt" value$="[[updatingdata.carddebt]]" allowed-pattern="[0-9]" auto-validate maxlength="6">
+                                                            <div prefix>&#x20BA;</div>
+                                                        </paper-input>
+                                                        <input type="hidden" name="creditcardid" value$="[[updatingdata.id]]" />
+                                                        <input type="hidden" name="fm" value="update-credit-card" />
+                                                    </form>
+                                                </div>
+                                            </paper-material>
+                                            <div class="buttons">
+                                                <paper-button on-tap="_pbUpdateSelectedCard">Kartı Kaydet</paper-button>
+                                                <paper-button dialog-dismiss>İptal</paper-button>
+                                            </div>
+                                        </paper-dialog>
+                                        <paper-dialog id="addcard" modal>
+                                            <paper-material elevation="1">
+                                                <paper-item heading>Yeni Kredi Kartı Ekle</paper-item>
+                                                <div dialoginfo>
+                                                    <form id="addcreditcardform" is="iron-form" action="/h/main" method="post" on-iron-form-response="_ironFormResponseAddCard">
+                                                        <paper-input label="Banka Adı" id="bankname" name="bankname" value$="{{bankname}}" auto-validate maxlength="15">
+                                                            <div prefix>&#x20BA;</div>
+                                                        </paper-input>
+                                                        <paper-input label="Kartı Limiti" id="cardlimit" name="cardlimit" value$="{{cardlimit}}" allowed-pattern="[0-9]" auto-validate maxlength="6">
+                                                            <div prefix>&#x20BA;</div>
+                                                        </paper-input>
+                                                        <paper-input label="Anlık Kartın Borcu" id="carddebt" name="carddebt" value$="{{carddebt}}" allowed-pattern="[0-9]" auto-validate maxlength="6">
+                                                            <div prefix>&#x20BA;</div>
+                                                        </paper-input>
+                                                        <input type="hidden" name="fm" value="add-credit-card" />
+                                                    </form>
+                                                </div>
+                                            </paper-material>
+                                            <div class="buttons">
+                                                <paper-button on-tap="_pbAddNewCard">Kartı Kaydet</paper-button>
+                                                <paper-button dialog-dismiss>İptal</paper-button>
+                                            </div>
+                                        </paper-dialog>                                    
+                                        <form id="deleteselectedcard" is="iron-form" action="/h/main" method="post" on-iron-form-response="_ironFormResponseDeleteSelectedCard">
+                                            <input type="hidden" name="fm" value="delete-credit-card" />
+                                            <input type="hidden" name="creditcardid" value$="[[creditcardid]]" />
+                                        </form>
                             </div>
                         </div>
 
@@ -418,6 +484,15 @@
                             creditcards: []
                         }
                     }
+                },
+                creditcardid: {
+                    type: Number,
+                    value: 0,
+                    notify: true
+                },
+                updatingdata: {
+                    type: Object,
+                    notify: true
                 }
             },
             ready: function () {
@@ -440,7 +515,6 @@
                     this.set('response.income', response);
                     this.loadingincome = false;
                 }
-
             },
             _responseGetUserOutcome: function (event) {
                 //console.log('_response Outcome');
@@ -460,6 +534,83 @@
                     this.loadingcreditcards = false;
                 }
             },
+            _pbUserIncome: function (event) {
+                //console.log('_pbUserIncome');
+                this.$.userincomeform.submit();
+            },
+            _ironFormResponseUserIncome: function (event) {
+                var response = event.detail.response;
+                //console.log('_ironFormResponseUserIncome => ' + response);
+                this._setAlarmaa(response.message);
+            },
+            _pbUserOutcome: function(event){
+                //console.log('_pbUserOutcome');
+                this.$.useroutcomeform.submit();
+            },
+            _ironFormResponseUserOutcome: function (event) {
+                var response = event.detail.response;
+                //console.log('_ironFormResponseUserOutcome => ' + response);
+                this._setAlarmaa(response.message);
+            },
+            _pibDeleteSelectedCard: function (event) {
+                //console.log('_pibDeleteSelectedCard');
+                console.log(event.model.item);
+
+                this.creditcardid = event.model.item.id;
+                this.$.deleteselectedcard.submit();
+            },
+            _ironFormResponseDeleteSelectedCard: function (event) {
+                var response = event.detail.response;
+                //console.log('_ironFormResponseDeleteSelectedCard => ' + response);
+                if (response.success) {
+                    this.debounce('retriggerCreditCards', this._generateCreditCardRequest, 400);
+                }
+                this._setAlarmaa(response.message);
+            },
+            _pbAddNewCard: function(event){
+                //console.log('_pbAddNewCard');
+                this.$.addcreditcardform.submit();
+            },
+            _ironFormResponseAddCard: function(event){
+                var response = event.detail.response;
+                //console.log('_ironFormResponseAddCard => ' + response);
+                if (response.success) {
+                    this.debounce('retriggerCreditCards', this._generateCreditCardRequest, 400);
+                    this.$.addcard.close();
+                }
+                this._setAlarmaa(response.message);
+            },
+            _pbUpdateSelectedCard: function(){
+                console.log('_pbUpdateSelectedCard');
+                //console.log(event.model.item);
+                //this.creditcardid = event.model.item.id;
+                this.$.updatecreditcardform.submit();
+            },
+            _ironFormResponseUpdateCard: function(event){
+                var response = event.detail.response;
+                //console.log('_ironFormResponseUpdateCard => ' + response);
+                if (response.success) {
+                    this.debounce('retriggerCreditCards', this._generateCreditCardRequest, 400);
+                    this.$.updatecard.close();
+                }
+                this._setAlarmaa(response.message);
+            },
+            _setAlarmaa: function (message) {
+                document.getElementById('alert').setAttribute('text', message);
+                document.getElementById('alert').open();
+            },
+            _pibOpenUpdateCard: function (event) {
+                this.set('updatingdata', event.model.item);
+                //this.updatingdata = event.model;
+                //console.log(this.updatingdata);
+                this.$.updatecard.open();
+            },
+            _generateCreditCardRequest: function () {
+                if (this.$.iaGetUserCreditCards.lastRequest) {
+                    this.$.iaGetUserCreditCards.lastRequest.abort();
+                }
+                this.$.iaGetUserCreditCards.generateRequest();
+            }
 
         });
     </script>

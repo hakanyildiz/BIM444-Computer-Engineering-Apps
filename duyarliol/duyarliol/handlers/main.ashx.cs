@@ -71,6 +71,221 @@ namespace duyarliol.handlers
 
                             #endregion
                         }
+                        else if(method == "update-user-income")
+                        {
+                            #region update user income
+
+                            string a = context.Request.Form["jobtype"],
+                            b = context.Request.Form["monthlyincome"],
+                            c = context.Request.Form["monthlyadditionalincome"];
+
+                            string jobtype = "";
+                            int income = 0, additionalincome = 0;
+
+                            if (!string.IsNullOrEmpty(a)) jobtype = a.Trim();
+                            if (!string.IsNullOrEmpty(b)) int.TryParse(b, out income);
+                            if (!string.IsNullOrEmpty(c)) int.TryParse(c, out additionalincome);
+
+                            if (data.updatedb("userincome", new List<core.db>() {
+                                           new core.db() { column = "jobtype", value = jobtype },
+                                           new core.db() { column = "monthlyincome", value = income },
+                                           new core.db() { column = "monthlyadditionalincome", value = additionalincome },
+                                           new core.db() { column = "uploaddate", value = DateTime.Now }
+                                        }, new List<core.db>() {
+                                      new core.db() { column = "userid", value = ((core.user)context.Session["user"]).id }
+                                }))
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = true, message = "Gelir Bilgilerin Güncellendi." }));
+                                context.Response.End();
+                            }
+                            else
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Bağlantı hatası." }));
+                                context.Response.End();
+                            }
+
+                            #endregion
+                        }
+                        else if (method == "update-user-outcome")
+                        {
+                            #region update user outcome
+
+                            string a = context.Request.Form["houserent"],
+                            b = context.Request.Form["electricbill"],
+                            c = context.Request.Form["waterbill"],
+                            d = context.Request.Form["gasbill"],
+                            e = context.Request.Form["otherbills"],
+                            f = context.Request.Form["internetbill"],
+                            g = context.Request.Form["individualexpense"],
+                            h = context.Request.Form["marketexpense"],
+                            j = context.Request.Form["gsmbill"];
+
+                            int house = 0, electric = 0, water = 0, gas = 0, others = 0, internet = 0, individual = 0, market = 0, gsm = 0;
+
+                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out house);
+                            if (!string.IsNullOrEmpty(b)) int.TryParse(b, out electric);
+                            if (!string.IsNullOrEmpty(c)) int.TryParse(c, out water);
+                            if (!string.IsNullOrEmpty(d)) int.TryParse(d, out gas);
+                            if (!string.IsNullOrEmpty(e)) int.TryParse(e, out others);
+                            if (!string.IsNullOrEmpty(f)) int.TryParse(f, out internet);
+                            if (!string.IsNullOrEmpty(g)) int.TryParse(g, out individual);
+                            if (!string.IsNullOrEmpty(h)) int.TryParse(h, out market);
+                            if (!string.IsNullOrEmpty(j)) int.TryParse(j, out gsm);
+                            
+                            if (data.updatedb("useroutcome", new List<core.db>() {
+                                           new core.db() { column = "houserent", value = house },
+                                           new core.db() { column = "electricbill", value = electric },
+                                           new core.db() { column = "waterbill", value = water },
+                                           new core.db() { column = "gasbill", value = gas },
+                                           new core.db() { column = "gsmbill", value = gsm },
+                                           new core.db() { column = "otherbills", value = others },
+                                           new core.db() { column = "individualexpense", value = individual },
+                                           new core.db() { column = "marketexpense", value = market },
+                                           new core.db() { column = "internetbill", value = internet },
+                                           new core.db() { column = "updatedate", value = DateTime.Now }
+                                        }, new List<core.db>() {
+                                      new core.db() { column = "userid", value = ((core.user)context.Session["user"]).id }
+                                }))
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = true, message = "Gider Bilgilerin Güncellendi." }));
+                                context.Response.End();
+                            }
+                            else
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Bağlantı hatası." }));
+                                context.Response.End();
+                            }
+
+                            #endregion
+                        }
+                        else if (method == "add-credit-card")
+                        {
+                            #region add credit card
+
+                            string a = context.Request.Form["bankname"],
+                            b = context.Request.Form["cardlimit"],
+                            c = context.Request.Form["carddebt"];
+
+                            string bankname = "";
+                            int cardlimit = 0, carddebt = 0;
+
+                            if (!string.IsNullOrEmpty(a)) bankname = a.Trim();
+                            if (!string.IsNullOrEmpty(b)) int.TryParse(b, out cardlimit);
+                            if (!string.IsNullOrEmpty(c)) int.TryParse(c, out carddebt);
+
+                            if (string.IsNullOrEmpty(bankname))
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Lütfen, Geçerli Bir Kart İsmi Giriniz!" }));
+                                context.Response.End();
+                            }
+                            if (carddebt == 0 || cardlimit == 0)
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Kart Limiti/Borcu Boş Bırakılamaz!" }));
+                                context.Response.End();
+                            }
+
+                            if (cardlimit < carddebt)
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Kart Borcu, Kart Limitinden Yüksek Olamaz!" }));
+                                context.Response.End();
+                            }
+
+                            if (data.insertdb("usercreditcards", new List<core.db>() {
+                                           new core.db() { column = "bankname", value = bankname },
+                                           new core.db() { column = "cardlimit", value = cardlimit },
+                                           new core.db() { column = "carddebt", value = carddebt },
+                                           new core.db() { column = "updatedate", value = DateTime.Now },
+                                           new core.db() { column = "userid", value = ((core.user)context.Session["user"]).id }
+                            }))
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = true, message = string.Format("{0} İsimli Kredi Kartın Başarıyla Eklendi!", bankname) }));
+                                context.Response.End();
+                            }
+                            else
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Bağlantı hatası." }));
+                                context.Response.End();
+                            }
+                            #endregion
+                        }
+                        else if(method == "update-credit-card")
+                        {
+                            #region update credit card
+
+                            string a = context.Request.Form["bankname"],
+                                b = context.Request.Form["cardlimit"],
+                                c = context.Request.Form["carddebt"],
+                                d = context.Request.Form["creditcardid"];
+
+                            string bankname = "";
+                            int cardlimit = 0, carddebt = 0, creditcardid = 0;
+
+                            if (!string.IsNullOrEmpty(a)) bankname = a.Trim();
+                            if (!string.IsNullOrEmpty(b)) int.TryParse(b, out cardlimit);
+                            if (!string.IsNullOrEmpty(c)) int.TryParse(c, out carddebt);
+                            if (!string.IsNullOrEmpty(d)) int.TryParse(d, out creditcardid);
+
+                            if (string.IsNullOrEmpty(bankname))
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Lütfen, Geçerli Bir Kart İsmi Giriniz!" }));
+                                context.Response.End();
+                            }
+
+                            if (carddebt == 0 || cardlimit == 0)
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Kart Limiti/Borcu Boş Bırakılamaz!" }));
+                                context.Response.End();
+                            }
+
+                            if (cardlimit < carddebt)
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Kart Borcu, Kart Limitinden Yüksek Olamaz!" }));
+                                context.Response.End();
+                            }
+
+                            if (data.updatedb("usercreditcards", new List<core.db>() {
+                                           new core.db() { column = "bankname", value = bankname },
+                                           new core.db() { column = "cardlimit", value = cardlimit },
+                                           new core.db() { column = "carddebt", value = carddebt },
+                                           new core.db() { column = "updatedate", value = DateTime.Now }
+                                        }, new List<core.db>() {
+                                      new core.db() { column = "id", value = creditcardid}
+                                }))
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = true, message = "Kredi Kartı Bilgilerin Güncellendi." }));
+                                context.Response.End();
+                            }
+                            else
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Bağlantı hatası." }));
+                                context.Response.End();
+                            }
+
+                            #endregion
+                        }
+                        else if(method == "delete-credit-card")
+                        {
+                            #region update user income
+
+                            string a = context.Request.Form["creditcardid"];
+                            int creditcardid = 0;
+                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out creditcardid);
+
+                            if(data.removedb("usercreditcards", new List<core.db>() {
+                                  new core.db() { column = "id", value = creditcardid}
+                            }))
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = true, message = "Seçmiş Olduğun Kredi Kartı Silindi." }));
+                                context.Response.End();
+                            }
+                            else
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Bağlantı hatası." }));
+                                context.Response.End();
+                            }
+
+                            #endregion
+                        }
                         else if (method == "update-user-profile")
                         {
                             #region update user profile info
