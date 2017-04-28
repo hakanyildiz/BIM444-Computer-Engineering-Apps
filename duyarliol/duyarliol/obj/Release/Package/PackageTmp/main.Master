@@ -11,10 +11,10 @@
 
     <title>Duyarlı Ol</title>
     <asp:ContentPlaceHolder ID="seo" runat="server"></asp:ContentPlaceHolder>
-
     <script src="assets/js/masterpage.js"></script>
+    <link rel="import" href="assets/components/kaldirirmi/vulcanized/do-all-imports.html"/>
 
-    <link rel="import" href="assets/components/kaldirirmi/do-all-imports.html"/>
+    <link rel="import" href="assets/components/money-input/money-input.html" async/>
     <link href="assets/css/animate.css" rel="stylesheet" />
   
     <asp:ContentPlaceHolder ID="style" runat="server">
@@ -45,6 +45,9 @@
         %>
         <asp:ContentPlaceHolder ID="body" runat="server"></asp:ContentPlaceHolder>
     <asp:ContentPlaceHolder ID="script" runat="server">
+       
+
+
     </asp:ContentPlaceHolder>
 </body>
 </html>

@@ -79,7 +79,7 @@ namespace duyarliol.auth.facebook
                                         {
                                             //cannot insert table: auths
                                             data.removedb("users", new List<core.db>() { new core.db() { column = "id", value = userid } });
-                                            context.Session["auth-message"] = "Bağlantı hatası.";
+                                            context.Session["auth-message"] = "Bağlantı hatası. cannot insert table: auths";
                                             context.Session["auth-method"] = "facebook";
                                             context.Session["auth-email"] = email;
                                             context.Session["auth-accesstoken"] = accesstoken;
@@ -89,7 +89,7 @@ namespace duyarliol.auth.facebook
                                     else
                                     {
                                         //cannot insert table: users
-                                        context.Session["auth-message"] = "Bağlantı hatası.";
+                                        context.Session["auth-message"] = "Bağlantı hatası. if userid > 0";
                                         context.Session["auth-method"] = "facebook";
                                         context.Session["auth-email"] = email;
                                         context.Session["auth-accesstoken"] = accesstoken;
@@ -99,7 +99,7 @@ namespace duyarliol.auth.facebook
                                 else
                                 {
                                     //cannot insert table: users
-                                    context.Session["auth-message"] = "Bağlantı hatası.";
+                                    context.Session["auth-message"] = "Bağlantı hatası. cannot insert table: users";
                                     context.Session["auth-method"] = "facebook";
                                     context.Session["auth-email"] = email;
                                     context.Session["auth-accesstoken"] = accesstoken;

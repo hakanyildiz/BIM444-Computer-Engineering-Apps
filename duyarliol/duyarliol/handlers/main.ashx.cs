@@ -80,17 +80,17 @@ namespace duyarliol.handlers
                             c = context.Request.Form["monthlyadditionalincome"];
 
                             string jobtype = "";
-                            int income = 0, additionalincome = 0;
+                            double income = 0, additionalincome = 0;
 
                             if (!string.IsNullOrEmpty(a)) jobtype = a.Trim();
-                            if (!string.IsNullOrEmpty(b)) int.TryParse(b, out income);
-                            if (!string.IsNullOrEmpty(c)) int.TryParse(c, out additionalincome);
+                            if (!string.IsNullOrEmpty(b)) double.TryParse(b, out income);
+                            if (!string.IsNullOrEmpty(c)) double.TryParse(c, out additionalincome);
 
                             if (data.updatedb("userincome", new List<core.db>() {
                                            new core.db() { column = "jobtype", value = jobtype },
-                                           new core.db() { column = "monthlyincome", value = income },
-                                           new core.db() { column = "monthlyadditionalincome", value = additionalincome },
-                                           new core.db() { column = "uploaddate", value = DateTime.Now }
+                                           new core.db() { column = "monthlyincome", value = (income) },
+                                           new core.db() { column = "monthlyadditionalincome", value = (additionalincome) },
+                                           new core.db() { column = "updatedate", value = DateTime.Now }
                                         }, new List<core.db>() {
                                       new core.db() { column = "userid", value = ((core.user)context.Session["user"]).id }
                                 }))
@@ -120,28 +120,28 @@ namespace duyarliol.handlers
                             h = context.Request.Form["marketexpense"],
                             j = context.Request.Form["gsmbill"];
 
-                            int house = 0, electric = 0, water = 0, gas = 0, others = 0, internet = 0, individual = 0, market = 0, gsm = 0;
+                            double house = 0, electric = 0, water = 0, gas = 0, others = 0, internet = 0, individual = 0, market = 0, gsm = 0;
 
-                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out house);
-                            if (!string.IsNullOrEmpty(b)) int.TryParse(b, out electric);
-                            if (!string.IsNullOrEmpty(c)) int.TryParse(c, out water);
-                            if (!string.IsNullOrEmpty(d)) int.TryParse(d, out gas);
-                            if (!string.IsNullOrEmpty(e)) int.TryParse(e, out others);
-                            if (!string.IsNullOrEmpty(f)) int.TryParse(f, out internet);
-                            if (!string.IsNullOrEmpty(g)) int.TryParse(g, out individual);
-                            if (!string.IsNullOrEmpty(h)) int.TryParse(h, out market);
-                            if (!string.IsNullOrEmpty(j)) int.TryParse(j, out gsm);
+                            if (!string.IsNullOrEmpty(a)) double.TryParse(a, out house);
+                            if (!string.IsNullOrEmpty(b)) double.TryParse(b, out electric);
+                            if (!string.IsNullOrEmpty(c)) double.TryParse(c, out water);
+                            if (!string.IsNullOrEmpty(d)) double.TryParse(d, out gas);
+                            if (!string.IsNullOrEmpty(e)) double.TryParse(e, out others);
+                            if (!string.IsNullOrEmpty(f)) double.TryParse(f, out internet);
+                            if (!string.IsNullOrEmpty(g)) double.TryParse(g, out individual);
+                            if (!string.IsNullOrEmpty(h)) double.TryParse(h, out market);
+                            if (!string.IsNullOrEmpty(j)) double.TryParse(j, out gsm);
                             
                             if (data.updatedb("useroutcome", new List<core.db>() {
-                                           new core.db() { column = "houserent", value = house },
-                                           new core.db() { column = "electricbill", value = electric },
-                                           new core.db() { column = "waterbill", value = water },
-                                           new core.db() { column = "gasbill", value = gas },
-                                           new core.db() { column = "gsmbill", value = gsm },
-                                           new core.db() { column = "otherbills", value = others },
-                                           new core.db() { column = "individualexpense", value = individual },
-                                           new core.db() { column = "marketexpense", value = market },
-                                           new core.db() { column = "internetbill", value = internet },
+                                           new core.db() { column = "houserent", value = (house) },
+                                           new core.db() { column = "electricbill", value = (electric) },
+                                           new core.db() { column = "waterbill", value = (water) },
+                                           new core.db() { column = "gasbill", value = (gas) },
+                                           new core.db() { column = "gsmbill", value = (gsm) },
+                                           new core.db() { column = "otherbills", value = (others) },
+                                           new core.db() { column = "individualexpense", value = (individual) },
+                                           new core.db() { column = "marketexpense", value = (market) },
+                                           new core.db() { column = "internetbill", value = (internet) },
                                            new core.db() { column = "updatedate", value = DateTime.Now }
                                         }, new List<core.db>() {
                                       new core.db() { column = "userid", value = ((core.user)context.Session["user"]).id }
@@ -167,11 +167,11 @@ namespace duyarliol.handlers
                             c = context.Request.Form["carddebt"];
 
                             string bankname = "";
-                            int cardlimit = 0, carddebt = 0;
+                            double cardlimit = 0, carddebt = 0;
 
                             if (!string.IsNullOrEmpty(a)) bankname = a.Trim();
-                            if (!string.IsNullOrEmpty(b)) int.TryParse(b, out cardlimit);
-                            if (!string.IsNullOrEmpty(c)) int.TryParse(c, out carddebt);
+                            if (!string.IsNullOrEmpty(b)) double.TryParse(b, out cardlimit);
+                            if (!string.IsNullOrEmpty(c)) double.TryParse(c, out carddebt);
 
                             if (string.IsNullOrEmpty(bankname))
                             {
@@ -192,8 +192,8 @@ namespace duyarliol.handlers
 
                             if (data.insertdb("usercreditcards", new List<core.db>() {
                                            new core.db() { column = "bankname", value = bankname },
-                                           new core.db() { column = "cardlimit", value = cardlimit },
-                                           new core.db() { column = "carddebt", value = carddebt },
+                                           new core.db() { column = "cardlimit", value = (cardlimit) },
+                                           new core.db() { column = "carddebt", value = (carddebt) },
                                            new core.db() { column = "updatedate", value = DateTime.Now },
                                            new core.db() { column = "userid", value = ((core.user)context.Session["user"]).id }
                             }))
@@ -218,12 +218,12 @@ namespace duyarliol.handlers
                                 d = context.Request.Form["creditcardid"];
 
                             string bankname = "";
-                            int cardlimit = 0, carddebt = 0, creditcardid = 0;
+                            double cardlimit = 0, carddebt = 0, creditcardid = 0;
 
                             if (!string.IsNullOrEmpty(a)) bankname = a.Trim();
-                            if (!string.IsNullOrEmpty(b)) int.TryParse(b, out cardlimit);
-                            if (!string.IsNullOrEmpty(c)) int.TryParse(c, out carddebt);
-                            if (!string.IsNullOrEmpty(d)) int.TryParse(d, out creditcardid);
+                            if (!string.IsNullOrEmpty(b)) double.TryParse(b, out cardlimit);
+                            if (!string.IsNullOrEmpty(c)) double.TryParse(c, out carddebt);
+                            if (!string.IsNullOrEmpty(d)) double.TryParse(d, out creditcardid);
 
                             if (string.IsNullOrEmpty(bankname))
                             {
@@ -245,8 +245,8 @@ namespace duyarliol.handlers
 
                             if (data.updatedb("usercreditcards", new List<core.db>() {
                                            new core.db() { column = "bankname", value = bankname },
-                                           new core.db() { column = "cardlimit", value = cardlimit },
-                                           new core.db() { column = "carddebt", value = carddebt },
+                                           new core.db() { column = "cardlimit", value = (cardlimit) },
+                                           new core.db() { column = "carddebt", value = (carddebt) },
                                            new core.db() { column = "updatedate", value = DateTime.Now }
                                         }, new List<core.db>() {
                                       new core.db() { column = "id", value = creditcardid}
@@ -469,910 +469,6 @@ namespace duyarliol.handlers
 
                             #endregion
                         }
-                        else if (method == "new-user-system")
-                        {
-                            #region add user system
-
-                            int ram = 0, cpu = 0, gpu = 0, os = 0, free_hdd = 0;
-                            string a = context.Request.Form["cpu"],
-                              b = context.Request.Form["gpu"],
-                              c = context.Request.Form["os"],
-                              d = context.Request.Form["ram"],
-                              e = context.Request.Form["hdd"],
-                              cpuname = context.Request.Form["cpuname"],
-                              gpuname = context.Request.Form["gpuname"],
-                              osname = context.Request.Form["osname"];
-
-                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out cpu);
-                            if (!string.IsNullOrEmpty(b)) int.TryParse(b, out gpu);
-                            if (!string.IsNullOrEmpty(c)) int.TryParse(c, out os);
-                            if (!string.IsNullOrEmpty(d)) int.TryParse(d, out ram);
-                            if (!string.IsNullOrEmpty(d)) int.TryParse(e, out free_hdd);
-
-                            if (cpu == 0 || gpu == 0 || os == 0 || ram == 0 || free_hdd == 0)
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Lütfen gerekli yerleri doldur." }));
-                                context.Response.End();
-                            }
-
-                            data.removedb("usersystems", new List<core.db>() { new core.db() { column = "userid", value = ((core.user)context.Session["user"]).id } });
-
-                            if (data.insertdb("usersystems", new List<core.db>() {
-                                      new core.db() { column = "userid", value = ((core.user)context.Session["user"]).id },
-                                      new core.db() { column = "cpu_id", value = cpu },
-                                      new core.db() { column = "cpu_name", value = cpuname },
-                                      new core.db() { column = "gpu_id", value = gpu },
-                                      new core.db() { column = "gpu_name", value = gpuname },
-                                      new core.db() { column = "os_id", value = os },
-                                      new core.db() { column = "os_name", value = osname },
-                                      new core.db() { column = "ram", value = ram },
-                                      new core.db() { column = "free_hdd", value = free_hdd },
-                                      new core.db() { column = "last_scan_time", value = DateTime.Now},
-
-
-                                    }))
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = true, message = "Sistemin tanımlandı." }));
-                                context.Response.End();
-                            }
-                            else
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Bağlantı hatası." }));
-                                context.Response.End();
-                            }
-
-                            #endregion
-                        }
-                        else if (method == "new-user-frame-rate")
-                        {
-                            #region add new user frame rate
-
-                            int gameid = 0, resolutionid = 0, framerate = 0;
-                            string a = context.Request.Form["game"],
-                              b = context.Request.Form["resolution"],
-                              c = context.Request.Form["framerate"];
-
-                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out gameid);
-                            if (!string.IsNullOrEmpty(b)) int.TryParse(b, out resolutionid);
-                            if (!string.IsNullOrEmpty(c)) int.TryParse(c, out framerate);
-
-                            if (gameid == 0 || resolutionid == 0 || framerate == 0)
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Lütfen gerekli yerleri doldur." }));
-                                context.Response.End();
-                            }
-
-                            if (data.insertdb("userframerates", new List<core.db>() {
-                    new core.db() { column = "userid", value = ((core.user)context.Session["user"]).id },
-                    new core.db() { column = "gameid", value = gameid },
-                    new core.db() { column = "resolutionid", value = resolutionid },
-                    new core.db() { column = "framerate", value = framerate },
-                    new core.db() { column = "date", value = DateTime.Now }
-                  }))
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = true, message = "İşlem başarılı." }));
-                                context.Response.End();
-                            }
-                            else
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Bağlantı hatası." }));
-                                context.Response.End();
-                            }
-
-                            #endregion
-                        }
-                        else if (method == "new-forum-post")
-                        {
-                            #region add new forum post
-
-                            string content = context.Request.Form["content"],
-                              forumthreadurl = context.Request.Form["forumthread"];
-
-                            if (string.IsNullOrEmpty(forumthreadurl))
-                            {
-                                context.Session["site-message"] = "Bağlantı hatası.";
-                                context.Response.Redirect(context.Request.UrlReferrer.PathAndQuery);
-                            }
-
-                            int forumthreadid = Convert.ToInt32(data.getsinglecolumndb("forumthreads", "id", new List<core.db>() { new core.db() { column = "url", value = forumthreadurl } }) ?? 0);
-                            if (forumthreadid == 0)
-                            {
-                                context.Session["site-message"] = "Bağlantı hatası.";
-                                context.Response.Redirect(context.Request.UrlReferrer.PathAndQuery);
-                            }
-
-                            if (string.IsNullOrEmpty(content))
-                            {
-                                context.Session["site-message"] = "Lütfen yorum kısmını boş bırakma.";
-                                context.Response.Redirect(context.Request.UrlReferrer.PathAndQuery);
-                            }
-
-                            if (!data.insertdb("forumposts", new List<core.db>() {
-                                  new core.db() { column = "userid", value = ((core.user)context.Session["user"]).id },
-                                  new core.db() { column = "forumthreadid", value = forumthreadid },
-                                  new core.db() { column = "postcontent", value = HttpUtility.HtmlEncode(content) },
-                                  new core.db() { column = "upvote", value = 0 },
-                                  new core.db() { column = "downvote", value = 0 },
-                                  new core.db() { column = "date", value = DateTime.Now },
-                                  new core.db() { column = "status", value = 1 }
-                                }))
-                            {
-                                context.Session["site-message"] = "Bağlantı hatası.";
-                                context.Response.Redirect(context.Request.UrlReferrer.PathAndQuery);
-                            }
-
-
-
-                            int currentpostcount = Convert.ToInt32(data.getsinglecolumndbcount(
-                                "forumposts",
-                                new List<core.db>(){
-                                        new core.db() { column = "forumthreadid", value = forumthreadid }
-                                      , new core.db() {column = "status" , value = 1 }
-                            }));
-
-
-                            data.updatedb("forumthreads", new List<core.db>() {
-                                  new core.db() { column = "postcount", value = currentpostcount }
-                                }, new List<core.db>() {
-                                  new core.db() { column = "id", value = forumthreadid }
-                                });
-                            context.Session["site-message"] = "Yorumun eklendi.";
-                            context.Response.Redirect(context.Request.UrlReferrer.PathAndQuery);
-
-                            #endregion
-                        }
-                        #region Moderator Page
-                        else if (method == "accept-waiting-thread")
-                        {
-                            #region accept waiting thread
-
-                            string a = context.Request.Form["threadid"];
-
-                            int threadid = 0;
-
-                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out threadid);
-
-
-                            if (data.updatedb("forumthreads", new List<core.db>() {
-                  new core.db() { column = "status", value = 1 }
-                }, new List<core.db>() {
-                  new core.db() { column = "id", value = threadid}
-                }))
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = true, message = "Konu onaylandı" }));
-                                context.Response.End();
-                            }
-                            else
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Bağlantı hatası." }));
-                                context.Response.End();
-                            }
-
-                            #endregion
-                        }
-                        else if (method == "delete-waiting-thread")
-                        {
-                            #region delete waiting thread Moderator Operation
-
-                            string a = context.Request.Form["threadid"];
-
-                            int threadid = 0;
-
-                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out threadid);
-
-
-                            if (data.removedb("forumthreads", new List<core.db>() {
-                  new core.db() { column = "id", value = threadid }
-                }))
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = true, message = "Konu silindi." }));
-                                context.Response.End();
-                            }
-                            else
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Bağlantı hatası." }));
-                                context.Response.End();
-                            }
-
-                            #endregion
-                        }
-                        else if (method == "mod-block-user")
-                        {
-                            #region mod-block-user Moderator Operation
-
-                            string a = context.Request.Form["userid"];
-
-                            int userid = 0;
-
-                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out userid);
-
-
-                            if (data.updatedb("users", new List<core.db>() {
-                  new core.db() { column = "status", value = 0}
-                }, new List<core.db>() {
-                  new core.db() { column = "id", value = userid}
-                }))
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = true, message = "Kullanıcı Engellendi." }));
-                                context.Response.End();
-                            }
-                            else
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Bağlantı hatası." }));
-                                context.Response.End();
-                            }
-
-                            #endregion
-                        }
-                        else if (method == "mod-unblock-user")
-                        {
-                            #region mod-unblock-user Moderator Operation
-
-                            string a = context.Request.Form["userid"];
-
-                            int userid = 0;
-
-                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out userid);
-
-
-                            if (data.updatedb("users", new List<core.db>() {
-                  new core.db() { column = "status", value = 1}
-                }, new List<core.db>() {
-                  new core.db() { column = "id", value = userid}
-                }))
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = true, message = "Kullanıcı Engeli Kaldırıldı." }));
-                                context.Response.End();
-                            }
-                            else
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Bağlantı hatası." }));
-                                context.Response.End();
-                            }
-
-                            #endregion
-                        }
-                        #endregion
-
-                        else if (method == "wizard-add-system")
-                        {
-                            #region add user system in SystemWizard page - autodetect system
-                            int ram = 0, cpuId = 0, gpuId = 0, osId = 0, freeHdd = 0;
-                            string a = context.Request.Form["cpuName"],
-                              b = context.Request.Form["gpuName"],
-                              c = context.Request.Form["osName"],
-                              d = context.Request.Form["ram"],
-                              e = context.Request.Form["freeHdd"],
-                              cpuName = "",
-                              gpuName = "",
-                              osName = "";
-
-                            if (!string.IsNullOrEmpty(a)) cpuName = a.Trim();
-                            if (!string.IsNullOrEmpty(b)) gpuName = b.Trim();
-                            if (!string.IsNullOrEmpty(c)) osName = c.Trim();
-                            if (!string.IsNullOrEmpty(d)) int.TryParse(d, out ram);
-                            if (!string.IsNullOrEmpty(e)) int.TryParse(e, out freeHdd);
-
-                            if (cpuName == "" || gpuName == "" || osName == "" || ram == 0 || freeHdd == 0)
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Parametrelerde sıkıntı var." }));
-                                context.Response.End();
-                            }
-
-                            //get cpu id via cpu name
-                            cpuId = Convert.ToInt32(data.getsinglecolumndbViaLikeParam("cpulist", "id", new List<core.db>() {
-                                      new core.db()
-                                      {
-                                        column = "name",
-                                        value  = cpuName
-                                      }
-                                    })
-                            );
-
-                            // get cpu full name via name
-                            cpuName = Convert.ToString(data.getDoubleColumndbViaLikeParam("cpulist", "brand", "name", new List<core.db>() { new core.db() { column = "name", value = cpuName } }));
-
-
-                            if (cpuId == 0)
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Sorry, doesn't match CPU ID and Name! :(" }));
-                                context.Response.End();
-                            }
-                            // get gpu id via name
-                            gpuId = Convert.ToInt32(data.getsinglecolumndbViaLikeParam("gpulist", "id", new List<core.db>() { new core.db() { column = "name", value = gpuName } }));
-                            if (gpuId == 0)
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Sorry, doesn't match GPU ID and Name! :(" }));
-                                context.Response.End();
-                            }
-
-                            // get os id via name
-                            osId = Convert.ToInt32(data.getsinglecolumndbViaLikeParam("oslist", "id", new List<core.db>() { new core.db() { column = "name", value = osName } }));
-                            if (osId == 0)
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Sorry, doesn't match Operation System ID and Name! :(" }));
-                                context.Response.End();
-                            }
-
-
-                            //check user system is already added..
-                            int cnt = data.checkdb("usersystems", new List<core.db>() { new core.db() { column = "userid", value = ((core.user)context.Session["user"]).id } });
-
-                            if (cnt > 0)
-                            {//update
-
-                                if (data.updatedb("usersystems",
-                                    new List<core.db>() {
-                                               new core.db() { column = "cpu_id", value = cpuId},
-                                               new core.db() { column = "cpu_name", value = cpuName},
-                                               new core.db() { column = "gpu_id", value = gpuId},
-                                               new core.db() { column = "gpu_name", value = gpuName},
-                                               new core.db() { column = "os_id", value = osId},
-                                               new core.db() { column = "os_name", value = osName},
-                                               new core.db() { column = "ram", value = ram },
-                                               new core.db() { column = "free_hdd", value = freeHdd },
-                                               new core.db() { column = "last_scan_time", value = DateTime.Now }
-                                },
-                                    new List<core.db>() {
-                                               new core.db() { column = "userid", value = ((core.user)context.Session["user"]).id }
-                                    }))
-                                {
-                                    context.Response.Write(jss.Serialize(new response() { success = true, message = "Sistemin güncellendi." }));
-                                    context.Response.End();
-
-                                }
-                                else
-                                {
-                                    context.Response.Write(jss.Serialize(new response() { success = false, message = "Sistem Güncelleme -> Bağlantı hatası." }));
-                                    context.Response.End();
-                                }
-                            }
-                            else
-                            {
-                                //insert
-                                if (data.insertdb("usersystems", new List<core.db>() {
-                                       new core.db() { column = "userid", value =((core.user)context.Session["user"]).id },
-                                       new core.db() { column = "cpu_id", value = cpuId},
-                                       new core.db() { column = "cpu_name", value = cpuName},
-                                       new core.db() { column = "gpu_id", value = gpuId},
-                                       new core.db() { column = "gpu_name", value = gpuName},
-                                       new core.db() { column = "os_id", value = osId},
-                                       new core.db() { column = "os_name", value = osName},
-                                       new core.db() { column = "ram", value = ram },
-                                       new core.db() { column = "free_hdd", value = freeHdd },
-                                       new core.db() { column = "last_scan_time", value = DateTime.Now }
-
-                                    }))
-                                {
-                                    context.Response.Write(jss.Serialize(new response() { success = true, message = "Sistemin tanımlandı" }));
-                                    context.Response.End();
-
-                                }
-                                else
-                                {
-                                    context.Response.Write(jss.Serialize(new response() { success = false, message = "Sistem Tanımlama -> Bağlantı hatası." }));
-                                    context.Response.End();
-                                }
-                            }
-
-                            #endregion
-                        }
-
-                        else if (method == "game-add-color")
-                        {
-                            #region game-add-color  in game.aspx
-                            string a = context.Request.Form["backcolor"],
-                              b = context.Request.Form["backcoloropacity"],
-                              c = context.Request.Form["maincolor"],
-                              d = context.Request.Form["gameid"],
-                              backcolor = "",
-                              backcoloropacity = "",
-                              maincolor = "";
-                            int id = 0;
-                            if (!string.IsNullOrEmpty(a)) backcolor = a.Trim();
-                            if (!string.IsNullOrEmpty(b)) backcoloropacity = b.Trim();
-                            if (!string.IsNullOrEmpty(c)) maincolor = c.Trim();
-                            if (!string.IsNullOrEmpty(d)) int.TryParse(d, out id);
-
-
-                            if (data.updatedb("kalgame", new List<core.db>() {
-                                   new core.db() { column = "bc", value = backcolor},
-                                   new core.db() { column = "bca", value = backcoloropacity},
-                                   new core.db() { column = "mc", value = maincolor }
-
-                               }, new List<core.db>() {
-                                      new core.db() { column = "id", value = id},
-
-                               }))
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = true, message = "Renk işlendi" }));
-                                context.Response.End();
-
-                            }
-                            else
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Bağlantı hatası." }));
-                                context.Response.End();
-                            }
-
-
-                            #endregion
-                        }
-
-                        else if (method == "post-increase-viewcount")
-                        {
-                            #region post - when user access the news - viewcount increase +1
-
-                            string _id = context.Request.Form["id"];
-                            string _viewcount = context.Request.Form["viewcount"];
-
-                            int id = 0, viewcount = 0;
-
-                            if (!string.IsNullOrEmpty(_id)) int.TryParse(_id, out id);
-                            if (!string.IsNullOrEmpty(_viewcount)) int.TryParse(_viewcount, out viewcount);
-
-                            viewcount = viewcount + 1;
-
-                            if (data.updatedb("kalnews", new List<core.db>() {
-                  new core.db() { column = "viewcount", value = viewcount }
-                }, new List<core.db>() {
-                  new core.db() { column = "id", value = id}
-                }))
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = true, message = "Viewcount arttırıldı" }));
-                                context.Response.End();
-                            }
-                            else
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Bağlantı hatası." }));
-                                context.Response.End();
-                            }
-
-                            #endregion
-                        }
-
-                        else if (method == "post-uservote-review")
-                        {
-                            #region post - user vote in review.aspx
-
-                            string _userid = context.Request.Form["userid"];
-                            string _gameid = context.Request.Form["gameid"];
-                            string _vote = context.Request.Form["vote"];
-
-
-                            int userid = 0, gameid = 0;
-                            double vote = 0;
-
-                            if (!string.IsNullOrEmpty(_userid)) int.TryParse(_userid, out userid);
-                            if (!string.IsNullOrEmpty(_gameid)) int.TryParse(_gameid, out gameid);
-                            if (!string.IsNullOrEmpty(_vote)) double.TryParse(_vote, out vote);
-
-                            vote = vote * 20;
-
-                            if (vote > 100)
-                            {
-                                vote = vote / 10;
-                            }
-
-                            int result = data.checkdb("gameuservote", new List<core.db>() {
-                   new core.db() {column = "userid" ,value = userid },
-                   new core.db() {column = "gameid" ,value = gameid}
-                });
-
-                            if (result > 0)
-                            {//update
-                                if (data.updatedb("gameuservote", new List<core.db>() {
-                  new core.db() { column = "vote", value = vote }
-                }, new List<core.db>() {
-                  new core.db() { column = "userid", value = userid},
-                  new core.db() { column = "gameid", value = gameid}
-                }))
-                                {
-                                    context.Response.Write(jss.Serialize(new response() { success = true, message = "Oylama update başarılı" }));
-                                    context.Response.End();
-                                }
-                                else
-                                {
-                                    context.Response.Write(jss.Serialize(new response() { success = false, message = "Oylama update Bağlantı hatası." }));
-                                    context.Response.End();
-                                }
-                            }
-                            else
-                            {
-                                if (data.insertdb("gameuservote", new List<core.db>() {
-                   new core.db() { column = "userid", value = userid},
-                   new core.db() { column = "gameid", value = gameid},
-                   new core.db() { column = "vote", value = vote}
-                }))
-                                {
-                                    context.Response.Write(jss.Serialize(new response() { success = true, message = "Oylama insert başarılı" }));
-                                    context.Response.End();
-                                }
-                                else
-                                {
-                                    context.Response.Write(jss.Serialize(new response() { success = false, message = "Oylama insert Bağlantı hatası." }));
-                                    context.Response.End();
-                                }
-                            }
-
-
-                            #endregion
-                        }
-                        else if (method == "post-kleine-container-news")
-                        {
-                            #region post - when user access the news - viewcount increase +1
-
-                            string _id = context.Request.Form["container"];
-                            string _viewcount = context.Request.Form["kleine"];
-
-                            int id = 0, viewcount = 0;
-
-                            if (!string.IsNullOrEmpty(_id)) int.TryParse(_id, out id);
-                            if (!string.IsNullOrEmpty(_viewcount)) int.TryParse(_viewcount, out viewcount);
-
-                            viewcount = viewcount + 1;
-
-                            if (data.updatedb("kalnews", new List<core.db>() {
-                  new core.db() { column = "viewcount", value = viewcount }
-                }, new List<core.db>() {
-                  new core.db() { column = "id", value = id}
-                }))
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = true, message = "Viewcount arttırıldı" }));
-                                context.Response.End();
-                            }
-                            else
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Bağlantı hatası." }));
-                                context.Response.End();
-                            }
-
-                            #endregion
-                        }
-                        else if (method == "post-kleine-container-reviews")
-                        {
-                            #region post - when user access the reviews - viewcount increase +1
-
-                            string _id = context.Request.Form["container"];
-                            string _viewcount = context.Request.Form["kleine"];
-
-                            int id = 0, viewcount = 0;
-
-                            if (!string.IsNullOrEmpty(_id)) int.TryParse(_id, out id);
-                            if (!string.IsNullOrEmpty(_viewcount)) int.TryParse(_viewcount, out viewcount);
-
-                            viewcount = viewcount + 1;
-
-                            if (data.updatedb("kalreviews", new List<core.db>() {
-                  new core.db() { column = "viewcount", value = viewcount }
-                }, new List<core.db>() {
-                  new core.db() { column = "id", value = id}
-                }))
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = true, message = "Viewcount arttırıldı" }));
-                                context.Response.End();
-                            }
-                            else
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Bağlantı hatası." }));
-                                context.Response.End();
-                            }
-
-                            #endregion
-                        }
-                        #region FRIENDSHIP
-                        else if (method == "send-friend-request")
-                        {
-                            #region sending friend request
-                            int senderId = 0, receiverId = 0;
-                            senderId = ((core.user)context.Session["user"]).id;
-
-                            string a = context.Request.Form["receiverId"];
-                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out receiverId);
-
-                            if (senderId == 0 || receiverId == 0)
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "İşlemi gerçekleştirmek için Giriş yapman gerekli." }));
-                                context.Response.End();
-                            }
-
-                            //all this time ((one_id < two_id)) !!
-                            int user_one_id, user_two_id;
-                            if (senderId < receiverId)
-                            {
-                                user_one_id = senderId;
-                                user_two_id = receiverId;
-                            }
-                            else
-                            {
-                                user_one_id = receiverId;
-                                user_two_id = senderId;
-                            }
-                            /* Code Meaning
-                             0   Pending
-                             1   Accepted
-                             2   Declined
-                             3   Blocked */
-
-                            int isExist = data.checkdb("kalrelationship", new List<core.db>() {
-                                    new core.db() { column = "user_one_id", value = user_one_id },
-                                    new core.db() { column = "user_two_id", value = user_two_id },
-                                    new core.db() { column = "status", value = 0 }
-                                });
-
-                            if (isExist == 1)
-                            {
-                                if (data.removedb("kalrelationship", new List<core.db>() {
-                                        new core.db() { column = "user_one_id", value = user_one_id },
-                                        new core.db() { column = "user_two_id", value = user_two_id }
-                                    }))
-                                {
-                                    context.Response.Write(jss.Serialize(new response() { success = true, message = "Arkadaşlık İsteğini geri çektin!" }));
-                                    context.Response.End();
-                                }
-                                else
-                                {
-                                    context.Response.Write(jss.Serialize(new response() { success = false, message = "Arkadaşlık geri çekimi. Bağlantı Hatası!" }));
-                                    context.Response.End();
-                                }
-                            }
-
-                            if (data.insertdb("kalrelationship", new List<core.db>() {
-                                    new core.db() { column = "user_one_id", value = user_one_id },
-                                    new core.db() { column = "user_two_id", value = user_two_id },
-                                    new core.db() { column = "status", value = 0 }, //0 --> pending
-                                    new core.db() { column = "action_user_id", value = senderId}
-                                }))
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = true, message = "Arkadaşlık İsteğin gönderildi." }));
-                                context.Response.End();
-                            }
-                            else
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Arkadaşlık gönderimi. Bağlantı Hatası!" }));
-                                context.Response.End();
-                            }
-                            #endregion
-                        }
-                        else if (method == "cancel-active-friendship")
-                        {
-                            #region cancel active friendshipp
-                            int senderId = 0, receiverId = 0;
-                            senderId = ((core.user)context.Session["user"]).id;
-
-                            string a = context.Request.Form["receiverId"];
-                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out receiverId);
-
-                            if (senderId == 0 || receiverId == 0)
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "İşlemi gerçekleştirmek için Giriş yapman gerekli." }));
-                                context.Response.End();
-                            }
-                            //all this time ((one_id < two_id)) !!
-                            int user_one_id, user_two_id;
-                            if (senderId < receiverId)
-                            {
-                                user_one_id = senderId;
-                                user_two_id = receiverId;
-                            }
-                            else
-                            {
-                                user_one_id = receiverId;
-                                user_two_id = senderId;
-                            }
-                            if (data.removedb("kalrelationship", new List<core.db>() {
-                                        new core.db() { column = "user_one_id", value = user_one_id },
-                                        new core.db() { column = "user_two_id", value = user_two_id }
-                                    }))
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = true, message = "Arkadaşlıktan çıktınız" }));
-                                context.Response.End();
-                            }
-                            else
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Arkadaşlık iptali. Bağlantı Hatası!" }));
-                                context.Response.End();
-                            }
-
-                            #endregion
-                        }
-                        else if (method == "accept-friend-request")
-                        {
-                            #region accepting request of friendship
-                            //session  kişi daki receiver.. isteklere bakan
-                            int senderId = 0, receiverId = 0;
-                            receiverId = ((core.user)context.Session["user"]).id;
-                            string a = context.Request.Form["senderId"];
-                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out senderId);
-                            if (senderId == 0 || receiverId == 0)
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "İşlemi gerçekleştirmek için Giriş yapman gerekli." }));
-                                context.Response.End();
-                            }
-
-                            //all this time ((one_id < two_id)) !!
-                            int user_one_id, user_two_id;
-                            if (senderId < receiverId)
-                            {
-                                user_one_id = senderId;
-                                user_two_id = receiverId;
-                            }
-                            else
-                            {
-                                user_one_id = receiverId;
-                                user_two_id = senderId;
-                            }
-                            int isAlreadyAccepted = data.checkdb("kalrelationship", new List<core.db>() {
-                                    new core.db() { column = "user_one_id", value = user_one_id },
-                                    new core.db() { column = "user_two_id", value = user_two_id },
-                                    new core.db() { column = "status", value = 1 }
-                                });
-                            if (isAlreadyAccepted > 0)
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Zaten arkadaşsınız." }));
-                                context.Response.End();
-                            }
-
-                            if (data.updatedb("kalrelationship", new List<core.db>() {
-                                    new core.db() { column = "status", value = 1 },
-                                    new core.db() { column = "action_user_id", value = receiverId }
-                                  }, new List<core.db>() {
-                                    new core.db() { column = "user_one_id", value = user_one_id },
-                                    new core.db() { column = "user_two_id", value = user_two_id }
-                                  }))
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = true, message = "Arkadaşlık isteniği onayladın." }));
-                                context.Response.End();
-                            }
-                            else
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Bağlantı Hatası!" }));
-                                context.Response.End();
-                            }
-                            #endregion
-                        }
-                        else if (method == "decline-friend-request")
-                        {
-                            #region decline request of friendship
-                            //bu sefer session  kişi daki receiver.. isteklere bakan
-                            int senderId = 0, receiverId = 0;
-                            receiverId = ((core.user)context.Session["user"]).id;
-                            string a = context.Request.Form["senderId"];
-                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out senderId);
-                            if (senderId == 0 || receiverId == 0)
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "İşlemi gerçekleştirmek için Giriş yapman gerekli." }));
-                                context.Response.End();
-                            }
-
-                            //all this time ((one_id < two_id)) !!
-                            int user_one_id, user_two_id;
-                            if (senderId < receiverId)
-                            {
-                                user_one_id = senderId;
-                                user_two_id = receiverId;
-                            }
-                            else
-                            {
-                                user_one_id = receiverId;
-                                user_two_id = senderId;
-                            }
-                            int isAlreadyDeclined = data.checkdb("kalrelationship", new List<core.db>() {
-                                    new core.db() { column = "user_one_id", value = user_one_id },
-                                    new core.db() { column = "user_two_id", value = user_two_id },
-                                    new core.db() { column = "status", value = 2 }
-                                });
-                            if (isAlreadyDeclined > 0)
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "İsteği zaten onaylamadın! Lütfen Bekle." }));
-                                context.Response.End();
-                            }
-
-                            if (data.updatedb("kalrelationship", new List<core.db>() {
-                                    new core.db() { column = "status", value = 2 }, // 2 --> declined
-                                    new core.db() { column = "action_user_id", value = receiverId }
-                                  }, new List<core.db>() {
-                                    new core.db() { column = "user_one_id", value = user_one_id },
-                                    new core.db() { column = "user_two_id", value = user_two_id }
-                                  }))
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = true, message = "Arkadaşlık isteniği onaylamadın!" }));
-                                context.Response.End();
-                            }
-                            else
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Bağlantı Hatası!" }));
-                                context.Response.End();
-                            }
-                            #endregion
-                        }
-                        #endregion
-
-                        #region GAME <-> USER INTERACTIONS
-                        else if (method == "send-request-like-game")
-                        {
-                            #region send request -> like or unlike to game from user
-                            int userid = 0, gameid = 0, isliked = 1;
-                            userid = ((core.user)context.Session["user"]).id;
-                            string a = context.Request.Form["gameid"];
-                            string b = context.Request.Form["isliked"];
-
-                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out gameid);
-                            if (!string.IsNullOrEmpty(b)) int.TryParse(b, out isliked);
-
-                            int like_interaction = 0;
-                            //0 -> Unlike it!
-                            //1 -> Like it!
-                            string messageToUser = "";
-                            //beğenilmiş ise kaldır, beğenilmemiş ise beğen!
-                            if (isliked == 0)
-                            {
-                                like_interaction = 1;
-                                messageToUser = "Oyunu Beğendin!";
-                            }
-                            else if (isliked == 1)
-                            {
-
-                                messageToUser = "Oyunu Beğenmekten Vazgeçtin!";
-                                like_interaction = 0;
-                            }
-
-                            if (userid == 0 || gameid == 0)
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "İşlemi gerçekleştirmek için Giriş yapman gerekli." }));
-                                context.Response.End();
-                            }
-
-                            //kayıt var mı diye kontrol et! varsa update, yoksa insert!
-                            var tableName = "usergameinteraction";
-                            int isAlreadyIntearct = data.checkdb(tableName, new List<core.db>() {
-                                    new core.db() { column = "userid", value = userid },
-                                    new core.db() { column = "gameid", value = gameid }
-                                });
-
-                            if (isAlreadyIntearct > 0)
-                            {
-                                //update!
-                                if (data.updatedb(tableName, new List<core.db>() {
-                                        new core.db() {column = "isliked", value = like_interaction }
-                                    }, new List<core.db>() { new core.db() {  column = "userid", value = userid},
-                                    new core.db() {  column = "gameid", value = gameid },
-                                    new core.db() {  column = "isliked", value = isliked } }))
-                                {
-
-                                    context.Response.Write(jss.Serialize(new response() { success = true, message = messageToUser + "" }));
-                                    context.Response.End();
-                                }
-                                else
-                                {
-                                    context.Response.Write(jss.Serialize(new response() { success = false, message = "Bağlantı Hatası! Update Error. 500!" }));
-                                    context.Response.End();
-                                }
-                            }
-                            else
-                            {
-                                //insert!
-                                if (data.insertdb(tableName, new List<core.db>() {
-                                      new core.db() { column = "userid", value = userid },
-                                      new core.db() { column = "gameid", value = gameid },
-                                      new core.db() { column = "isliked", value = 1} }
-                                ))
-                                {
-
-                                    context.Response.Write(jss.Serialize(new response() { success = true, message = "Oyunu Beğendin!" }));
-                                    context.Response.End();
-                                }
-                                else
-                                {
-                                    context.Response.Write(jss.Serialize(new response() { success = false, message = "Bağlantı Hatası! Insrt Error. 500!" }));
-                                    context.Response.End();
-                                }
-                            }
-                            #endregion
-                        }
-
-                        #endregion
-
                         else if (method == "add-first-user-data")
                         {
                             #region add first user data (expense,income,credit cards )
@@ -1482,24 +578,24 @@ namespace duyarliol.handlers
                             //adding income
                             data.insertdb("userincome", new List<core.db>() {
                                 new core.db() { column = "jobtype", value = jobtype },
-                                new core.db() { column = "monthlyincome", value = income / 100},
-                                new core.db() { column = "monthlyadditionalincome", value = additionalincome / 100 },
-                                new core.db() { column = "uploaddate", value = DateTime.Now },
+                                new core.db() { column = "monthlyincome", value = income },
+                                new core.db() { column = "monthlyadditionalincome", value = additionalincome },
+                                new core.db() { column = "createddate", value = DateTime.Now },
                                 new core.db() { column = "userid", value = userid }
                             });
 
                             //adding outcome
                             data.insertdb("useroutcome", new List<core.db>() {
-                                new core.db() { column = "houserent", value = houseRent / 100 },
-                                new core.db() { column = "electricbill", value = electricbill / 100 },
-                                new core.db() { column = "waterbill", value = waterbill / 100 },
-                                new core.db() { column = "gasbill", value = gasbill / 100}, 
-                                new core.db() { column = "internetbill", value = internetbill / 100},
-                                new core.db() { column = "gsmbill", value = gsmbill / 100},
-                                new core.db() { column = "otherbills", value = otherbills / 100},
-                                new core.db() { column = "individualexpense", value = individualexpense / 100},
-                                new core.db() { column = "marketexpense", value = marketexpense / 100},
-                                new core.db() { column = "updatedate", value = DateTime.Now },
+                                new core.db() { column = "houserent", value = houseRent },
+                                new core.db() { column = "electricbill", value = electricbill },
+                                new core.db() { column = "waterbill", value = waterbill },
+                                new core.db() { column = "gasbill", value = gasbill }, 
+                                new core.db() { column = "internetbill", value = internetbill},
+                                new core.db() { column = "gsmbill", value = gsmbill },
+                                new core.db() { column = "otherbills", value = otherbills},
+                                new core.db() { column = "individualexpense", value = individualexpense},
+                                new core.db() { column = "marketexpense", value = marketexpense},
+                                new core.db() { column = "createddate", value = DateTime.Now },
                                 new core.db() { column = "userid", value = userid }
                             });
 
@@ -1508,9 +604,9 @@ namespace duyarliol.handlers
                             {
                                 data.insertdb("usercreditcards", new List<core.db>() {
                                     new core.db() { column = "bankname", value = bankNameOne},
-                                    new core.db() { column = "cardlimit", value = cardLimit1 / 100 },
-                                    new core.db() { column = "carddebt", value = cardDebt1 / 100},
-                                    new core.db() { column = "updatedate", value = DateTime.Now },
+                                    new core.db() { column = "cardlimit", value = cardLimit1 },
+                                    new core.db() { column = "carddebt", value = cardDebt1},
+                                    new core.db() { column = "createddate", value = DateTime.Now },
                                     new core.db() { column = "userid", value = userid }
                                 });
                             }
@@ -1519,9 +615,9 @@ namespace duyarliol.handlers
                             {
                                 data.insertdb("usercreditcards", new List<core.db>() {
                                     new core.db() { column = "bankname", value = bankNameTwo},
-                                    new core.db() { column = "cardlimit", value = cardLimit2 / 100},
-                                    new core.db() { column = "carddebt", value = cardDebt2 / 100},
-                                    new core.db() { column = "updatedate", value = DateTime.Now },
+                                    new core.db() { column = "cardlimit", value = cardLimit2},
+                                    new core.db() { column = "carddebt", value = cardDebt2 },
+                                    new core.db() { column = "createddate", value = DateTime.Now },
                                     new core.db() { column = "userid", value = userid }
                                 });
                             }
@@ -1530,9 +626,9 @@ namespace duyarliol.handlers
                             {
                                 data.insertdb("usercreditcards", new List<core.db>() {
                                     new core.db() { column = "bankname", value = bankNameThree},
-                                    new core.db() { column = "cardlimit", value = cardLimit3 / 100},
-                                    new core.db() { column = "carddebt", value = cardDebt3 / 100},
-                                    new core.db() { column = "updatedate", value = DateTime.Now },
+                                    new core.db() { column = "cardlimit", value = cardLimit3},
+                                    new core.db() { column = "carddebt", value = cardDebt3 },
+                                    new core.db() { column = "createddate", value = DateTime.Now },
                                     new core.db() { column = "userid", value = userid }
                                 });
                             }
@@ -1541,9 +637,9 @@ namespace duyarliol.handlers
                             {
                                 data.insertdb("usercreditcards", new List<core.db>() {
                                     new core.db() { column = "bankname", value = bankNameFour},
-                                    new core.db() { column = "cardlimit", value = cardLimit4 / 100},
-                                    new core.db() { column = "carddebt", value = cardDebt4 / 100},
-                                    new core.db() { column = "updatedate", value = DateTime.Now },
+                                    new core.db() { column = "cardlimit", value = cardLimit4 },
+                                    new core.db() { column = "carddebt", value = cardDebt4 },
+                                    new core.db() { column = "createddate", value = DateTime.Now },
                                     new core.db() { column = "userid", value = userid }
                                 });
                             }
@@ -1552,9 +648,9 @@ namespace duyarliol.handlers
                             {
                                 data.insertdb("usercreditcards", new List<core.db>() {
                                     new core.db() { column = "bankname", value = bankNameFive},
-                                    new core.db() { column = "cardlimit", value = cardLimit5 / 100},
-                                    new core.db() { column = "carddebt", value = cardDebt5 / 100},
-                                    new core.db() { column = "updatedate", value = DateTime.Now },
+                                    new core.db() { column = "cardlimit", value = cardLimit5 },
+                                    new core.db() { column = "carddebt", value = cardDebt5 },
+                                    new core.db() { column = "createddate", value = DateTime.Now },
                                     new core.db() { column = "userid", value = userid }
                                 });
                             }
@@ -1563,7 +659,7 @@ namespace duyarliol.handlers
                             context.Response.End();
                             #endregion
                         }
-
+                      
                         #endregion
                     }
                     else
@@ -1729,6 +825,8 @@ namespace duyarliol.handlers
                 {
                     if (context.Session["user"] != null)
                     {
+                        #region user logged
+
                         if (method == "user-auths")
                         {
                             #region get user auths
@@ -1827,6 +925,269 @@ namespace duyarliol.handlers
                                 context.Response.End();
                             #endregion
                         }
+                        else if(method == "get-user-wishlist")
+                        {
+                            #region get user wishlist
+                            int userid = ((core.user)context.Session["user"]).id;
+                            context.Response.Write(jss.Serialize(data.getuserwishlist(userid)));
+                            context.Response.End();
+                            #endregion
+                        }
+                        else if (method == "get-user-pending-wishlist")
+                        {
+                            #region get user pending wishlist
+                            string a = context.Request.QueryString["a"],
+                                 b = context.Request.QueryString["b"];
+
+                            int itemperpage = 20, page = 1;
+
+                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out itemperpage);
+                            if (!string.IsNullOrEmpty(b)) int.TryParse(b, out page);
+
+                            int userid = ((core.user)context.Session["user"]).id;
+                            context.Response.Write(jss.Serialize(data.getuserwishlist(userid, 1, itemperpage, page)));
+                            context.Response.End();
+                            #endregion
+                        }
+                        else if (method == "get-user-completed-wishlist")
+                        {
+                            #region get user completed wishlist
+
+                            string a = context.Request.QueryString["a"],
+                                b = context.Request.QueryString["b"];
+
+                            int itemperpage = 20, page = 1;
+
+                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out itemperpage);
+                            if (!string.IsNullOrEmpty(b)) int.TryParse(b, out page);
+
+                            int userid = ((core.user)context.Session["user"]).id;
+                            context.Response.Write(jss.Serialize(data.getuserwishlist(userid, 0, itemperpage, page)));
+                            context.Response.End();
+
+                            #endregion
+                        }
+                        else if(method == "get-user-answerlist")
+                        {
+                            #region get user wishlist
+                            int userid = ((core.user)context.Session["user"]).id;
+                            context.Response.Write(jss.Serialize(data.getuserwishlist(userid)));
+                            context.Response.End();
+                            #endregion
+                        }
+                        else if (method == "get-user-info")
+                        {
+                            #region get user info  FOR Chrome Extension
+                            string a = context.Request.QueryString["id"];
+                            int userid = 0;
+                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out userid);
+
+                            context.Response.Write(jss.Serialize(data.getuserinfo(userid)));
+                            context.Response.End();
+                            #endregion
+                        }
+                        else if (method == "get-credit-cards-ce")
+                        {
+                            #region get credit cards FOR Chrome Extension 
+                            string a = context.Request.QueryString["id"];
+                            int userid = 0;
+                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out userid);
+
+                            context.Response.Write(jss.Serialize(data.getcreditcards(userid)));
+                            context.Response.End();
+                            #endregion
+                        }
+                        else if (method == "check-answer-list-ce")
+                        {
+                            #region check answer list FOR Chrome Extension 
+                            string a = context.Request.QueryString["id"];
+                            int userid = 0;
+                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out userid);
+
+                            context.Response.Write(jss.Serialize(data.getsinglecolumndbcount("answerlist", new List<core.db>() { new core.db() { column = "userid", value = userid } })));
+                            context.Response.End();
+                            #endregion
+                        }
+                        else if (method == "run-chrome-extension-control")
+                        {
+                            #region run chrome extension control
+
+                            string userid = context.Request.QueryString["userid"],
+                             wl = context.Request.QueryString["wishlist"],
+                              al = context.Request.QueryString["answerlist"];
+
+                            if (context.Session["user"] != null)
+                            {
+                                if (((core.user)context.Session["user"]).id != Convert.ToInt32(userid))
+                                {
+                                    context.Response.Write(jss.Serialize(new response() { success = false, message = "Duyarlı.ol Sitesine Tekrar Giriş Yapmalısın!" }));
+                                    context.Response.End();
+                                }
+                            }
+
+
+                            var wishlist = jss.Deserialize<List<wishlist>>(wl);
+                            var answerlist = jss.Deserialize<List<answerlist>>(al);
+
+                            #region first check income / outcome
+
+                            double userincometotal = data.getuserincometotal(Convert.ToInt32(userid));
+
+                            if (userincometotal == 0)
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Sistemde Kayıtlı Gelir Bilgilerin Bulunmamakta! \n Lütfen Gelir Bilgilerini Doldurup Tekrar Deneyiniz!" }));
+                                context.Response.End();
+                            }
+                            double useroutcometotal = data.getuseroutcometotal(Convert.ToInt32(userid));
+
+                            if (useroutcometotal == 0)
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Sistemde Kayıtlı Gider Bilgilerin Bulunmamakta! \n Lütfen Gider Bilgilerini Doldurup Tekrar Deneyiniz!" }));
+                                context.Response.End();
+                            }
+
+                            double net = userincometotal - useroutcometotal;
+                            if (net < 0)
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Net Paran Bulunmamakta!" }));
+                                context.Response.End();
+                            }
+                            #endregion
+
+                            double wishTotal = 0;
+                            double interestrate = 0;
+
+                            double usercreditdebtstotal = 0;
+                            var creditcardlist = data.getusercreditcards(Convert.ToInt32(userid));
+
+                            if (creditcardlist.Count == 0)
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Sistemde Kayıtlı Kredi Kartı Bilgilerin Bulunmamakta! \n Lütfen Kredi Kartı Bilgilerini Doldurup Tekrar Deneyiniz!" }));
+                                context.Response.End();
+                            }
+
+                            #region wishlist 
+                            /* öncelikle gelen istekler wishlist db'ye kaydedilir. */
+                            foreach (var wish in wishlist)
+                            {
+                                data.insertdb("wishlist", new List<core.db>() {
+                                    new core.db() { column = "ordername",  value = wish.name },
+                                    new core.db() { column = "ordercount", value = Convert.ToInt32(wish.count) },
+                                    new core.db() { column = "orderprice", value = (float)Convert.ToDouble(wish.price) / 100 },
+                                    new core.db() { column = "orderdate", value = DateTime.Now },
+                                    new core.db() { column = "pending", value = 1 },
+                                    new core.db() { column = "userid", value = Convert.ToInt32(userid) }
+                                });
+                                wishTotal += Convert.ToDouble(wish.price) / 100;
+                            }
+                            #endregion
+
+                            #region answerlist
+
+                            /* verilen cevaplara interest rate oluşturma*/
+                            int turn = 0;
+                            foreach (var answr in answerlist)
+                            {
+                                if (turn == 0 || turn == 1 || turn == 3)
+                                {
+                                    if (answr.answer.Contains("evet")) interestrate += 5;
+                                }
+                                else if (turn == 2 || turn == 4)
+                                {
+                                    if (answr.answer.Contains("hayır")) interestrate += 5;
+                                }
+                                else
+                                {
+                                    if (answr.answer.Contains("hayır")) interestrate += 10;
+                                }
+                                turn++;
+                            }
+
+
+                            /* cevaplar kontrol edilir */
+                            int checkanswers = Convert.ToInt32(data.getsinglecolumndbcount("answerlist", new List<core.db>() { new core.db() { column = "userid", value = Convert.ToInt32(userid) } }));
+                            var counter = 1;
+                            if (checkanswers == 0)
+                            {
+                                /* cevaplar veritabanına kaydedilir */
+                                foreach (var answerobject in answerlist)
+                                {
+                                    data.insertdb("answerlist", new List<core.db>()
+                                    {
+                                        new core.db() { column = "question", value = "question"+counter  },
+                                        new core.db() { column = "answer", value = answerobject.answer  },
+                                        new core.db() { column = "date", value = DateTime.Now },
+                                        new core.db() { column = "userid", value = Convert.ToInt32(userid) }
+                                    });
+                                    counter++;
+                                }
+                            }
+                            //else
+                            //{
+                            //    foreach (var answerobject in answerlist)
+                            //    {
+                            //        data.updatedb(
+                            //            "answerlist",
+                            //            new List<core.db>()
+                            //            {
+                            //                new core.db() { column = "answer", value = answerobject.answer  },
+                            //                new core.db() { column = "date", value = DateTime.Now }
+                            //            },
+                            //            new List<core.db>()
+                            //            {
+                            //                new core.db() { column = "question", value = "question"+counter  },
+                            //                new core.db() { column = "userid", value = Convert.ToInt32(userid) }
+                            //            }
+                            //        );
+                            //        counter++;
+                            //    }
+                            //}
+                            #endregion
+
+
+                            bool wishHigherThanAllCard = true;
+
+                            foreach (var card in creditcardlist)
+                            {
+                                usercreditdebtstotal += (card.carddebt * 30) / 100; //asgari tutar 
+
+                                if (wishTotal < (card.cardlimit - card.carddebt))
+                                {
+                                    wishHigherThanAllCard = false; //herhangibir kk alışveriş için uygunsa 'false' gelir hata almadan bi sonraki adıma geçilir.
+                                }
+                            }
+
+                            if (wishHigherThanAllCard)
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = string.Format("Sistemdeki Kredi Kartı Bakiyelerin Alışveriş İçin Yetersiz!") }));
+                                context.Response.End();
+                            }
+
+                            net -= usercreditdebtstotal;
+                            if (net < 0)
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = string.Format("Kredi Kartı Borçlarından Dolayı Alışveriş Yapmamalısın!") }));
+                                context.Response.End();
+                            }
+
+                            double last = net - (wishTotal + ((wishTotal * interestrate) / 100));
+                            if (last < 0)
+                            {
+
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = string.Format("Duyarlı.Ol'a katıldığın için teşekkürler. \n Vermiş Olduğun Bilgiler Doğrultusunda Sepetindeki Almamalısın!") }));
+                                context.Response.End();
+                            }
+                            else
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = true, message = string.Format("Duyarlı.Ol'a katıldığın için teşekkürler. \n Sepetindeki Ürünleri Almaman Konusunda Hiçbir Sakınca Bulamadık. Duyarlı Kalın!") }));
+                                context.Response.End();
+                            }
+
+                            #endregion
+                        }
+                      
+
+                        #endregion
                     }
                     else
                     {
@@ -1846,6 +1207,217 @@ namespace duyarliol.handlers
 
                             #endregion
                         }
+                        else if(method == "get-user-info")
+                        {
+                            #region get user info  FOR Chrome Extension
+                            string a = context.Request.QueryString["id"];
+                            int userid = 0;
+                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out userid);
+
+                            context.Response.Write(jss.Serialize(data.getuserinfo(userid)));
+                            context.Response.End();
+                            #endregion
+                        }
+                        else if(method == "get-credit-cards-ce")
+                        {
+                            #region get credit cards FOR Chrome Extension 
+                            string a = context.Request.QueryString["id"];
+                            int userid = 0;
+                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out userid);
+
+                            context.Response.Write(jss.Serialize(data.getcreditcards(userid)));
+                            context.Response.End();
+                            #endregion
+                        }
+                        else if(method == "check-answer-list-ce")
+                        {
+                            #region check answer list FOR Chrome Extension 
+                            string a = context.Request.QueryString["id"];
+                            int userid = 0;
+                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out userid);
+
+                            context.Response.Write(jss.Serialize(data.getsinglecolumndbcount("answerlist", new List<core.db>() { new core.db() {  column = "userid", value = userid} })));
+                            context.Response.End();
+                            #endregion
+                        }
+                        else if (method == "run-chrome-extension-control")
+                        {
+                            #region run chrome extension control
+
+                            string userid = context.Request.QueryString["userid"],
+                             wl = context.Request.QueryString["wishlist"],
+                              al = context.Request.QueryString["answerlist"];
+
+                            if (context.Session["user"] != null)
+                            {
+                                if (((core.user)context.Session["user"]).id != Convert.ToInt32(userid))
+                                {
+                                    context.Response.Write(jss.Serialize(new response() { success = false, message = "Duyarlı.ol Sitesine Tekrar Giriş Yapmalısın!" }));
+                                    context.Response.End();
+                                }
+                            }
+
+
+                            var wishlist = jss.Deserialize<List<wishlist>>(wl);
+                            var answerlist = jss.Deserialize<List<answerlist>>(al);
+
+                            #region first check income / outcome
+
+                            double userincometotal = data.getuserincometotal(Convert.ToInt32(userid));
+
+                            if (userincometotal == 0)
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Sistemde Kayıtlı Gelir Bilgilerin Bulunmamakta! \n Lütfen Gelir Bilgilerini Doldurup Tekrar Deneyiniz!" }));
+                                context.Response.End();
+                            }
+                            double useroutcometotal = data.getuseroutcometotal(Convert.ToInt32(userid));
+
+                            if (useroutcometotal == 0)
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Sistemde Kayıtlı Gider Bilgilerin Bulunmamakta! \n Lütfen Gider Bilgilerini Doldurup Tekrar Deneyiniz!" }));
+                                context.Response.End();
+                            }
+
+                            double net = userincometotal - useroutcometotal;
+                            if (net < 0)
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Net Paran Bulunmamakta!" }));
+                                context.Response.End();
+                            }
+                            #endregion
+
+                            double wishTotal = 0;
+                            double interestrate = 0;
+
+                            double usercreditdebtstotal = 0;
+                            var creditcardlist = data.getusercreditcards(Convert.ToInt32(userid));
+
+                            if (creditcardlist.Count == 0)
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Sistemde Kayıtlı Kredi Kartı Bilgilerin Bulunmamakta! \n Lütfen Kredi Kartı Bilgilerini Doldurup Tekrar Deneyiniz!" }));
+                                context.Response.End();
+                            }
+
+                            #region wishlist 
+                            /* öncelikle gelen istekler wishlist db'ye kaydedilir. */
+                            foreach (var wish in wishlist)
+                            {
+                                data.insertdb("wishlist", new List<core.db>() {
+                                    new core.db() { column = "ordername",  value = wish.name },
+                                    new core.db() { column = "ordercount", value = Convert.ToInt32(wish.count) },
+                                    new core.db() { column = "orderprice", value = (float)Convert.ToDouble(wish.price) / 100 },
+                                    new core.db() { column = "orderdate", value = DateTime.Now },
+                                    new core.db() { column = "pending", value = 1 },
+                                    new core.db() { column = "userid", value = Convert.ToInt32(userid) }
+                                });
+                                wishTotal += Convert.ToDouble(wish.price) / 100;
+                            }
+                            #endregion
+
+                            #region answerlist
+
+                            /* verilen cevaplara interest rate oluşturma*/
+                            int turn = 0;
+                            foreach (var answr in answerlist)
+                            {
+                                if (turn == 0 || turn == 1 || turn == 3)
+                                {
+                                    if (answr.answer.Contains("evet")) interestrate += 5;
+                                }
+                                else if (turn == 2 || turn == 4)
+                                {
+                                    if (answr.answer.Contains("hayır")) interestrate += 5;
+                                }
+                                else
+                                {
+                                    if (answr.answer.Contains("hayır")) interestrate += 10;
+                                }
+                                turn++;
+                            }
+
+
+                            /* cevaplar kontrol edilir */
+                            int checkanswers = Convert.ToInt32(data.getsinglecolumndbcount("answerlist", new List<core.db>() { new core.db() { column = "userid", value = Convert.ToInt32(userid) } }));
+                            var counter = 1;
+                            if (checkanswers == 0)
+                            {
+                                /* cevaplar veritabanına kaydedilir */
+                                foreach (var answerobject in answerlist)
+                                {
+                                    data.insertdb("answerlist", new List<core.db>()
+                                    {
+                                        new core.db() { column = "question", value = "question"+counter  },
+                                        new core.db() { column = "answer", value = answerobject.answer  },
+                                        new core.db() { column = "date", value = DateTime.Now },
+                                        new core.db() { column = "userid", value = Convert.ToInt32(userid) }
+                                    });
+                                    counter++;
+                                }
+                            }
+                            //else
+                            //{
+                            //    foreach (var answerobject in answerlist)
+                            //    {
+                            //        data.updatedb(
+                            //            "answerlist",
+                            //            new List<core.db>()
+                            //            {
+                            //                new core.db() { column = "answer", value = answerobject.answer  },
+                            //                new core.db() { column = "date", value = DateTime.Now }
+                            //            },
+                            //            new List<core.db>()
+                            //            {
+                            //                new core.db() { column = "question", value = "question"+counter  },
+                            //                new core.db() { column = "userid", value = Convert.ToInt32(userid) }
+                            //            }
+                            //        );
+                            //        counter++;
+                            //    }
+                            //}
+                            #endregion
+
+                            
+                            bool wishHigherThanAllCard = true;
+
+                            foreach (var card in creditcardlist)
+                            {
+                                usercreditdebtstotal += (card.carddebt * 30) / 100; //asgari tutar 
+
+                                if (wishTotal < (card.cardlimit - card.carddebt))
+                                {
+                                    wishHigherThanAllCard = false; //herhangibir kk alışveriş için uygunsa 'false' gelir hata almadan bi sonraki adıma geçilir.
+                                }
+                            }
+
+                            if (wishHigherThanAllCard)
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = string.Format("Sistemdeki Kredi Kartı Bakiyelerin Alışveriş İçin Yetersiz!") }));
+                                context.Response.End();
+                            }
+
+                            net -= usercreditdebtstotal;
+                            if (net < 0)
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = string.Format("Kredi Kartı Borçlarından Dolayı Alışveriş Yapmamalısın!") }));
+                                context.Response.End();
+                            }
+
+                            double last = net - (wishTotal + ((wishTotal * interestrate) / 100));
+                            if (last < 0)
+                            {
+
+                                context.Response.Write(jss.Serialize(new response() { success = false, message = string.Format("Duyarlı.Ol'a katıldığın için teşekkürler. \n Vermiş Olduğun Bilgiler Doğrultusunda Sepetindeki Almamalısın!") }));
+                                context.Response.End();
+                            }
+                            else
+                            {
+                                context.Response.Write(jss.Serialize(new response() { success = true, message = string.Format("Duyarlı.Ol'a katıldığın için teşekkürler. \n Sepetindeki Ürünleri Almaman Konusunda Hiçbir Sakınca Bulamadık. Duyarlı Kalın!") }));
+                                context.Response.End();
+                            }
+
+                            #endregion
+                        }
+
                         #endregion
                     }
                 }
@@ -1952,4 +1524,17 @@ namespace duyarliol.handlers
         }
     }
 
+   
+    public class wishlist
+    {
+        public string name { get; set; }
+        public string count { get; set; }
+        public string price { get; set; }
+
+    }
+    public class answerlist
+    {
+        public string answer { get; set; }
+
+    }
 }

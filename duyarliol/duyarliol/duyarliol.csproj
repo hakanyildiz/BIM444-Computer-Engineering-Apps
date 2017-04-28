@@ -856,6 +856,10 @@
     <Content Include="assets\components\flag-icon-css\flags\4x3\zm.svg" />
     <Content Include="assets\components\flag-icon-css\flags\4x3\zw.svg" />
     <Content Include="assets\components\flip-card\flip-card.html" />
+    <Content Include="assets\components\google-chart\charts-loader.html" />
+    <Content Include="assets\components\google-chart\google-chart-loader.html" />
+    <Content Include="assets\components\google-chart\google-chart-styles.html" />
+    <Content Include="assets\components\google-chart\google-chart.html" />
     <Content Include="assets\components\iron-flex-layout\classes\iron-flex-layout.html" />
     <Content Include="assets\components\iron-flex-layout\classes\iron-shadow-flex-layout.html" />
     <Content Include="assets\components\iron-flex-layout\iron-flex-layout-classes.html" />
@@ -910,7 +914,6 @@
     <Content Include="assets\components\kaldirirmi\anasayfa\kaldirirmi-manset.html" />
     <Content Include="assets\components\kaldirirmi\anasayfa\sc-swiper-campaign.html" />
     <Content Include="assets\components\kaldirirmi\anasayfa\sc-swiper-main.html" />
-    <Content Include="assets\components\kaldirirmi\do-all-imports.html" />
     <Content Include="assets\components\kaldirirmi\kaldirirmi-custom-icons.html" />
     <Content Include="assets\components\kaldirirmi\forum\kaldirirmi-forumtitles.html" />
     <Content Include="assets\components\kaldirirmi\galeriler\gallery-animated-grid.html" />
@@ -1062,6 +1065,8 @@
     <Content Include="assets\components\swiper\sc-swiper.min.css" />
     <Content Include="assets\components\tagcloud\jquery.svg3dtagcloud.min.js" />
     <Content Include="assets\components\tagcloud\kaldirirmi-tagcloud.html" />
+    <Content Include="assets\components\x-card\x-cards-list.html" />
+    <Content Include="assets\components\x-card\x-card.html" />
     <Content Include="assets\css\animate.css" />
     <Content Include="assets\css\default.css" />
     <Content Include="assets\css\mainlogin.css" />
@@ -1069,9 +1074,12 @@
     <Content Include="assets\css\default.min.css" />
     <Content Include="assets\duyarliol\do-app.html" />
     <Content Include="assets\duyarliol\do-home.html" />
+    <Content Include="assets\duyarliol\do-completed-wishlist.html" />
+    <Content Include="assets\duyarliol\do-pending-wishlist.html" />
     <Content Include="assets\duyarliol\do-profile.html" />
     <Content Include="assets\duyarliol\do-registration.html" />
     <Content Include="assets\duyarliol\do-main.html" />
+    <Content Include="assets\components\kaldirirmi\vulcanized\do-all-imports.html" />
     <Content Include="assets\duyarliol\polymer-all-imports.vulcanized.html" />
     <Content Include="assets\components\streaming-list\youtube-card.html" />
     <Content Include="assets\components\streaming-list\twitchtv-card.html" />
@@ -2131,6 +2139,8 @@
     <Content Include="assets\components\app-layout\templates\shrine\data\items.json" />
     <Content Include="assets\components\app-layout\templates\shrine\manifest.json" />
     <Content Include="assets\components\app-layout\templates\test-drive\bower.json" />
+    <None Include="Properties\PublishProfiles\duyarliol - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\duyarliol - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\duyarliol1 - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\duyarliol1 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\kaldirirmi.com.pubxml" />

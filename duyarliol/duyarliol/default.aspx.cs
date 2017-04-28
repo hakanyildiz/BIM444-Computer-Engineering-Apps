@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 
 namespace duyarliol
 {
@@ -19,6 +20,16 @@ namespace duyarliol
             if (Session["user"] != null)
             {
                 uid = ((core.user)Session["user"]).id;
+
+                HttpCookie cookie = Request.Cookies["duyarliol"];
+                if(cookie == null)
+                {
+                    HttpCookie userCookie = new HttpCookie("duyarliol");
+                    userCookie["auth"] = uid.ToString();
+                    userCookie.Expires = DateTime.Now.AddDays(30);
+                    Response.Cookies.Add(userCookie);
+                }
+
             }
 
             if (!IsPostBack)

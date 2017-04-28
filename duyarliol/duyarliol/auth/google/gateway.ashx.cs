@@ -18,7 +18,7 @@ namespace duyarliol.auth.google
                 string tokeninfo = "";
                 try
                 {
-                    tokeninfo = granttoken("https://www.googleapis.com/oauth2/v4/token", string.Format("code={0}&client_id={1}&client_secret={2}&redirect_uri={3}&grant_type={4}", code, "1025271688593-hjuu8h3rjk1jsqs26vl043hha8shabpk.apps.googleusercontent.com", "pKbIPhe4A_UfD__8kh0lbrBz", "http://duyarliol1.azurewebsites.net/auth/google/gateway", "authorization_code"));
+                    tokeninfo = granttoken("https://www.googleapis.com/oauth2/v4/token", string.Format("code={0}&client_id={1}&client_secret={2}&redirect_uri={3}&grant_type={4}", code, "1025271688593-hjuu8h3rjk1jsqs26vl043hha8shabpk.apps.googleusercontent.com", "pKbIPhe4A_UfD__8kh0lbrBz", "http://duyarliol.azurewebsites.net/auth/google/gateway", "authorization_code"));
                 }
                 catch (Exception)
                 {

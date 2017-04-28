@@ -96,14 +96,15 @@
             }
   </style>
 
-    <link rel="import" href="assets/duyarliol/polymer-all-imports.vulcanized.html" />
+    <script src="assets/js/masterpage.js"></script>
+    <link rel="import" href="assets/components/kaldirirmi/do-all-imports.html"/>
 
 </head>
 <body class="fullbleed layout vertical">
   <paper-header-panel class="flex">
     <paper-toolbar first>
       <div class="logo">
-        <iron-image id="mainlogo" src="/assets/img/kaldirirmi_logo_white_1.png" sizing="cover"></iron-image>
+        <iron-image id="mainlogo" src="/assets/img/logo.png" sizing="cover"></iron-image>
       </div>
     </paper-toolbar>
     <div id="app" class="fit">
@@ -143,7 +144,6 @@
       </paper-material>
     </div>
   </paper-header-panel>
-  <script src="/assets/components/webcomponentsjs/webcomponents-lite.min.js"></script>
   <script>
     document.getElementById('methods').addEventListener('iron-select', function () {
       document.getElementById('method').select(this.selected);

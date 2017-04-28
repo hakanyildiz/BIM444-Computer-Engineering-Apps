@@ -296,7 +296,6 @@
                                 </form>
                             </div>
                         </paper-item>
-
                     </paper-material>
                 </neon-animatable>
                 <neon-animatable>
@@ -542,6 +541,7 @@
                 var response = event.detail.response;
                 //console.log('_ironFormResponseUserIncome => ' + response);
                 this._setAlarmaa(response.message);
+                this.debounce('triggerIncome', this._generateIncomeRequest, 400);
             },
             _pbUserOutcome: function(event){
                 //console.log('_pbUserOutcome');
@@ -551,6 +551,8 @@
                 var response = event.detail.response;
                 //console.log('_ironFormResponseUserOutcome => ' + response);
                 this._setAlarmaa(response.message);
+                this.debounce('triggerIncome', this._generateOutcomeRequest, 400);
+
             },
             _pibDeleteSelectedCard: function (event) {
                 //console.log('_pibDeleteSelectedCard');
@@ -610,8 +612,19 @@
                     this.$.iaGetUserCreditCards.lastRequest.abort();
                 }
                 this.$.iaGetUserCreditCards.generateRequest();
+            },
+            _generateIncomeRequest: function () {
+                if (this.$.iaGetUserIncome.lastRequest) {
+                    this.$.iaGetUserIncome.lastRequest.abort();
+                }
+                this.$.iaGetUserIncome.generateRequest();
+            },
+            _generateOutcomeRequest: function () {
+                if (this.$.iaGetUserOutcome.lastRequest) {
+                    this.$.iaGetUserOutcome.lastRequest.abort();
+                }
+                this.$.iaGetUserOutcome.generateRequest();
             }
-
         });
     </script>
 </dom-module>

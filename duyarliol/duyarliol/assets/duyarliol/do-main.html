@@ -287,10 +287,9 @@
     font-size: 13px;
         }
         </style>
-
         <iron-ajax auto id="check-user-income" debounce-duration="300" url="/h/main?fm=check-user-income" handle-as="json" on-response="_responseCheckUserIncome"></iron-ajax>
         <iron-ajax auto id="getuserinfo" debounce-duration="300" url="/h/main?fm=user-info" handle-as="json" on-response="_responseGetUserInfo"></iron-ajax>
-
+       
         <paper-dialog id="profilesalarydialog" entry-animation="slide-from-bottom-animation" exit-animation="slide-down-animation" modal>
             <div id="dialogcontainer">
                 <div class="header">
@@ -692,13 +691,11 @@
                     type: Boolean,
                     value: false,
                     notify: true
-                }
+                },
                 
-
             },
             ready: function () {
                 console.log('do-main run! ' + this.uid);
-
             },
             _responseGetUserInfo: function (event) {
                 var response = event.detail.response;
@@ -843,8 +840,8 @@
                         this.$.profilesalarydialog.open();
                     }
                 }
-            }
-           
+            },
+          
         });
     </script>
 </dom-module>

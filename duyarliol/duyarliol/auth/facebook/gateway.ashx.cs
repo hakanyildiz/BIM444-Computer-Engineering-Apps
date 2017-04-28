@@ -8,7 +8,7 @@ namespace duyarliol.auth.facebook
     {
         public string CLIENT_ID = "1776520979342984";
         public string CLIENT_SECRET = "9504ef7cf7f06506eed6f1d2459fcc51";
-        public string REDIRECT_URL = "http://duyarliol1.azurewebsites.net/auth/facebook/gateway";
+        public string REDIRECT_URL = "http://duyarliol.azurewebsites.net/auth/facebook/gateway";
         public void ProcessRequest(HttpContext context)
         {
             string code = context.Request.QueryString["code"];

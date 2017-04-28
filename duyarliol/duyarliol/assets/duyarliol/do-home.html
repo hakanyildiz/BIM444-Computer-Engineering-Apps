@@ -1,10 +1,275 @@
-﻿<dom-module id="do-home">
+﻿<link rel="import" href="/assets/components/x-card/x-card.html" async />
+<link rel="import" href="/assets/components/x-card/x-cards-list.html" async />
+<link rel="import" href="/assets/components/google-chart/google-chart.html" async>
+<link rel="import" href="/assets/duyarliol/do-pending-wishlist.html" async/>
+<link rel="import" href="/assets/duyarliol/do-completed-wishlist.html" async />
+
+<dom-module id="do-home">
     <template>
         <style is="custom-style">
+            body {
+                /*padding: 15px;
+                @apply(--layout-fullbleed);
+                @apply(--paper-font-common-base);*/
+            }
+
+            neon-animated-pages {
+                height: 100%;
+            }
+
+            .large {
+                width: 100%;
+            }
+
+            .button {
+                text-align: center;
+                width: 120px;
+                height: 32px;
+                line-height: 32px;
+                border-radius: 2px;
+                font-size: 0.9em;
+                background-color: #fff;
+                color: #646464;
+            }
+
+                .button.blue {
+                    background-color: #4285f4;
+                    color: #fff;
+                }
+
+                .button.raised {
+                    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+                }
+
+                .button.back {
+                    position: fixed;
+                    top: 100px;
+                    left: 180px;
+                }
+
+            .card-contents {
+                @apply(--layout-vertical);
+                @apply(--layout-center-center);
+                @apply(--layout-fit);
+            }
+
+            .button-container {
+                @apply(--layout-flex);
+                @apply(--layout-horizontal);
+                flex-wrap: wrap;
+                /*@apply(--layout-around-justified);*/
+            }
+            /*hakke style */
+            #pages {
+                width: 100%;
+                height: calc(100vh - 64px);
+            }
+
+            .tile {
+                width: calc(100% / 3.2);
+                height: calc(100% / 2.2);
+                @apply(--layout-vertical);
+                @apply(--layout-center);
+                padding-top: 20px;
+                font-size: 25px;
+                color: #fff;
+                margin: 20px;
+                transition: all ease-in-out .3s;
+                cursor: pointer;
+                background-color: #0057e7;
+                opacity: 0.88;
+            }
+            .tilemaster{
+                width: calc(100%);
+                height: calc(100% / 1.5);
+                @apply(--layout-horizontal);
+                @apply(--layout-center);
+                color: #000;
+            }
+            .tilemaster paper-material{
+               margin:10px;
+            }
+
+                .tile:hover {
+                    transform: scale(1.05);
+                    opacity: 1;
+                }
+
+            .google-green {
+                background-color: #008744;
+            }
+
+            .google-red {
+                background-color: #d62d20;
+            }
+
+            .google-blue {
+                background-color: #0057e7;
+            }
+
+            .google-yellow {
+                background-color: #ffa700;
+            }
+
+            #selection-demo {
+                position: relative;
+                height: 300px;
+            }
+
+            #selection-chart {
+                float: left;
+            }
+
+            #selection-display {
+                display: inline-block;
+                position: relative;
+                top: 50%;
+            }
+
+            /*#selection-demo {
+                position: relative;
+                height: 300px;
+            }*/
+
+            #selection-chart {
+                float: left;
+            }
+
+            #selection-display {
+                display: inline-block;
+                position: relative;
+                top: 50%;
+            }
+             /* Phone and tablet */
+            #chartincome, #chartoutcome, #chartcredit{
+              height: 300px;
+              width: 380px;
+            }
+
+            /* Desktop */
+            @media screen and (min-width: 1800px) {
+              #chartincome, #chartoutcome, #chartcredit{
+                  width: 550px;
+                  height:400px;
+              }
+              .tilemaster{
+                 padding-left:25px;
+              }
+            }
 
         </style>
+        <iron-ajax auto
+                   id="iaGetUserIncome"
+                   debounce-duration="300"
+                   url="/h/main?fm=get-user-income"
+                   handle-as="json"
+                   on-response="_responseGetUserIncome"></iron-ajax>
+        <iron-ajax auto
+                   id="iaGetUserOutcome"
+                   debounce-duration="300"
+                   url="/h/main?fm=get-user-outcome"
+                   handle-as="json"
+                   on-response="_responseGetUserOutcome"></iron-ajax>
+        <iron-ajax auto
+                   id="iaGetUserCreditCards"
+                   debounce-duration="300"
+                   url="/h/main?fm=get-user-creditcards"
+                   handle-as="json"
+                   on-response="_responseGetUserCreditCards"></iron-ajax>
 
-        Home
+        <neon-animated-pages id="pages" selected="0">
+            <x-cards-list id="list">
+                <div class="card-contents">
+                    <div class="button-container large">
+                        <div class="tilemaster raised button">
+                            <paper-material elevation="1">
+                                <paper-toolbar class="toolbar">
+                                    <paper-icon-button icon="icons:arrow-upward"></paper-icon-button>
+                                    <span>[[incometotalmessage]]</span>
+                                </paper-toolbar>
+                                <google-chart id="chartincome"
+                                              type="pie"
+                                              options='{"title": "Gelirlerin"}'
+                                              cols='[{"label": "Income", "type": "string"},{"label": "Money", "type": "number"}]'
+                                              rows='{{response.income}}'
+                                              selection='[{"row": 1}]'>
+                                </google-chart>
+                            </paper-material>
+                            <paper-material elevation="1">
+                                    <paper-toolbar class="toolbar">
+                                        <paper-icon-button icon="icons:arrow-downward"></paper-icon-button>
+                                        <span>[[outcometotalmessage]]</span>
+                                    </paper-toolbar>
+                                    <google-chart id="chartoutcome"
+                                                  type="pie"
+                                                  options='{"title": "Giderlerin"}'
+                                                  cols='[{"label": "Outcome", "type": "string"},{"label": "Money", "type": "number"}]'
+                                                  rows='{{response.outcome}}'
+                                                  selection='[{"row": 1}]'>
+                                    </google-chart>
+                                </paper-material>
+                            <paper-material elevation="1">
+                                    <paper-toolbar class="toolbar">
+                                        <paper-icon-button icon="icons:timeline"></paper-icon-button>
+                                        <span>[[credittotalmessage]]</span>
+                                    </paper-toolbar>
+                                    <google-chart id="chartcredit"
+                                                  type="column"
+                                                  options='{"title": "Kredi Kartları"}'
+                                                  data='{{response.credit}}'>
+                                    </google-chart>
+                                </paper-material>
+                       </div>
+                        <div class="layout horizontal" style="justify-content:flex-start !important; height:100% !important;">
+                            <div class="tile google-blue raised button" on-click="_onFirstClick">
+                                <p>Ürünleri Satın Alıp Almadığına Dair Bizi Bilgilendirmen Gerekiyor!</p>
+                                <paper-button style="background:#fff; color: #0057e7;font-size:18px; font-weight:bold;" raised>İstek Listesini Görmek İçin Tıkla</paper-button>
+                            </div>
+                            <div class="tile google-red raised button" on-click="_onSecondClick">
+                                <p>Duyarlılık Testini Tamamlarken Sorularımızı Cevapladın!</p>
+                                <paper-button style="background:#fff; color: #d62d20;font-size:18px; font-weight:bold;" raised>Cevaplarını Değiştirmek İçin Tıkla</paper-button>
+                            </div>
+                            <div class="tile google-yellow raised button" on-click="_onThirdClick">
+                                <p>En Son Hangi Alışverişleri Yapmışsın, Bi Bak Bence!</p>
+                                <paper-button style="background:#fff; color: #ffa700;font-size:18px; font-weight:bold;" raised>Alışveriş Geçmişin İçin Tıkla</paper-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </x-cards-list>
+            <x-card>
+                <div class="card-contents">
+                    <div class="raised back button" on-click="_onBackClick">
+                        Geri Dön
+                    </div>
+                    <do-pending-wishlist creditcards="[[response.creditcards]]"></do-pending-wishlist>
+                </div>
+            </x-card>
+            <x-card>
+                <div class="card-contents">
+                    <div class="raised back button" on-click="_onBackClick">
+                        Geri Dön
+                    </div>
+                    <h2>Angular</h2>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                </div>
+            </x-card>
+            <x-card>
+                <div class="card-contents">
+                    <div class="raised back button" on-click="_onBackClick">
+                        Geri Dön
+                    </div>
+                    <do-completed-wishlist></do-completed-wishlist>
+                </div>
+            </x-card>
+        </neon-animated-pages>
     </template>
     <script>
         Polymer({
@@ -15,11 +280,143 @@
                     value: 111111,
                     notify: true
                 },
+                response: {
+                    type: Object,
+                    value: function () {
+                        return {
+                            income: [['Gelir Eklemelisin',100]],
+                            outcome: [['Gider Eklemelisin', 100]],
+                            credit: [['Kredi Kartı Bilgileri Getiriliyor', 'Limit', 'Borç'], ['Kredi Kartı Eklemelisin', 0, 0]],
+                            creditcards: []
+                        }
+                    }
+                },
+                incometotalmessage: { type: String, notify: true, value: 'Gelir Bilgilerini Eklemelisin' },
+                outcometotalmessage: { type: String, notify: true, value: 'Gider Bilgilerini Eklemelisin'},
+                credittotalmessage: { type: String, notify: true, value: 'Kredi Kartı Eklemelisin' },
+                },
+            ready: function(){
+                console.log('do-home ready');
             },
-            ready: function () {
-                console.log('do-home is ready now!');
+            _onFirstClick: function (event) {
+                this.$.list.sharedElements = {
+                    'ripple': event.target,
+                    'reverse-ripple': event.target
+                };
+                this.$.pages.selected = 1;
+            },
+            _onSecondClick: function (event) {
+                this.$.list.sharedElements = {
+                    'ripple': event.target,
+                    'reverse-ripple': event.target
+                };
+                this.$.pages.selected = 2;
+            },
+            _onThirdClick: function(){
+                this.$.list.sharedElements = {
+                    'ripple': event.target,
+                    'reverse-ripple': event.target
+                };
+                this.$.pages.selected = 3;
+            },
+            _onBackClick: function (event) {
+                this.$.pages.selected = 0;
+
+            },
+            _responseGetUserIncome: function (event) {
+                //console.log('_responseGetUserIncome');
+                var response = event.detail.response;
+                var inc = ['Sabit Gelir', response.monthlyincome];
+                var addinc = ['Ek Gelir', response.monthlyadditionalincome];
+                var total = response.monthlyincome + response.monthlyadditionalincome;
+                this.incometotalmessage = 'Toplam Gelirin: '+ total +' TL';
+
+                this.set('response.income', []);
+
+                this.push('response.income', inc);
+                this.push('response.income', addinc);
+
+                //console.log(this.response.income);
+
+                //document.getElementById('chartincome').redraw();
+
+                //this.$.chartincome.redraw();
+            },
+            _responseGetUserOutcome: function (event) {
+                //console.log('_responseGetUserOutcome');
+                var response = event.detail.response;
+                this.set('response.outcome', []);
+
+                var total = response.houserent +
+                    response.electricbill
+                    + response.gasbill +
+                    response.gsmbill +
+                    response.individualexpense + response.internetbill +
+                    response.marketexpense +
+                    response.otherbills +
+                    response.waterbill
+
+                this.outcometotalmessage = 'Toplam Giderlerin: ' + total + ' TL';
+
+                var a1 = ['Ev kirası', response.houserent];
+                var a2 = ['Elektrik Faturası', response.electricbill];
+                var a3 = ['Doğalgaz Faturası', response.gasbill];
+                var a4 = ['Telefon Faturası', response.gsmbill];
+                var a5 = ['Bireysel Harcamalar', response.individualexpense];
+                var a6 = ['Internet Faturası', response.internetbill];
+                var a7 = ['Market Harcamaları', response.marketexpense];
+                var a8 = ['Diger Faturalar', response.otherbills];
+                var a9 = ['Su Faturası', response.waterbill];
+
+                this.push('response.outcome', a1);
+                this.push('response.outcome', a2);
+                this.push('response.outcome', a3);
+                this.push('response.outcome', a4);
+                this.push('response.outcome', a5);
+                this.push('response.outcome', a6);
+                this.push('response.outcome', a7);
+                this.push('response.outcome', a8);
+                this.push('response.outcome', a9);
+
+                //console.log(this.response.outcome);
+                //this.$.chartoutcome.redraw();
+                //document.getElementById('chartoutcome').redraw();
+
+
+            },
+            _responseGetUserCreditCards: function (event) {
+                //console.log('_responseGetUserCreditCards');
+                var response = event.detail.response;
+                this.set('response.credit', []);
+                this.set('response.creditcards', response);
+                //console.log(response);
+
+                var total = 0;
+                this.push('response.credit', ['Kart Adı', 'Kart Limiti', 'Kart Borcu']);
+                response.forEach(function (card) {
+                    total += card.carddebt;
+                    var dd = [card.bankname,card.cardlimit,card.carddebt];
+                    this.push('response.credit', dd);
+                }, this);
+
+                this.credittotalmessage = 'Anlık Toplam Borç: ' + total + ' TL';
+
+                //document.getElementById('chartcredit').redraw();
             }
         });
+
+
+        /* char media */
+        var media = window.matchMedia('(min-width: 1800px)');
+
+        media.addListener(redrawer);
+
+        function redrawer() {
+            document.getElementById('chartcredit').redraw();
+            document.getElementById('chartoutcome').redraw();
+            document.getElementById('chartincome').redraw();
+        }
+
     </script>
 
-</dom-module>
+</dom-module>   

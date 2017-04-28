@@ -12,9 +12,8 @@ namespace core
 {
     public class data
     {
-        public const string connstr = "Server=tcp:duyarliol1.database.windows.net,1433;Initial Catalog=duyarliol1;Persist Security Info=False;User ID=duyarliol1;Password=a2gf2a424gfk.;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-        //public const string connstr = @"Data Source=duyarliol1.database.windows.net;Initial Catalog=duyarliol1;Integrated Security=False;User ID=duyarliol1;Password=a2gf2a424gfk;Connect Timeout=60;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-
+        //public const string connstr = "Server=tcp:duyarliol1.database.windows.net,1433;Initial Catalog=duyarliol1;Persist Security Info=False;User ID=duyarliol1;Password=a2gf2a424gfk.;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+        public const string connstr = "Server=tcp:duyarliol.database.windows.net,1433;Initial Catalog=duyarliol;Persist Security Info=False;User ID=duyarliol;Password=A2gf2a424gfk.;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
         SqlConnection conn;
         SqlCommand cmd;
         public data() { conn = new SqlConnection(connstr); cmd = conn.CreateCommand(); }
@@ -59,10 +58,48 @@ namespace core
                 }
                 return null;
             }
+            catch (Exception ex)
+            { 
+                return null;
+            }
+        }
+
+        public List<creditcard> getcreditcards(int userid)
+        {
+            try
+            {
+                List<creditcard> list = new List<creditcard>();
+                using (conn)
+                {
+                    cmd.CommandText = "select bankname, cardlimit, carddebt,createddate,updatedate from usercreditcards where userid = @userid";
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@userid", userid);
+                    if (conn.State == ConnectionState.Open) conn.Close();
+                    if (conn.State == ConnectionState.Closed) { conn.ConnectionString = connstr; conn.Open(); }
+                    using (SqlDataReader r = cmd.ExecuteReader())
+                    {
+                        while (r.Read())
+                        {
+                            list.Add(new creditcard()
+                            {
+                                bankname = !r.IsDBNull(0) ? r.GetString(0) : "",
+                                cardlimit = !r.IsDBNull(1) ? r.GetDouble(1) : 0,
+                                carddebt = !r.IsDBNull(2) ? r.GetDouble(2) : 0,
+                                createddate = !r.IsDBNull(3) ? r.GetDateTime(3): DateTime.Now,
+                                updatedate = !r.IsDBNull(4) ? r.GetDateTime(4) : DateTime.Now,
+                            });
+                        }
+                    }
+                }
+
+
+                return list;
+            }
             catch (Exception)
             {
                 return null;
             }
+           
         }
         public user getuserinfo(string username)
         {
@@ -100,39 +137,7 @@ namespace core
                 }
                 return null;
             }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-        public List<user> getfriendsfollowingchannelId(int channelId, int currentUserId)
-        {
-            try
-            {
-                List<user> list = new List<user>();
-                using (conn)
-                {
-                    cmd.CommandText = string.Format("select users.fullname,users.url,users.avatar from users inner join auths on users.id = auths.userid where auths.authtype = 2 and auths.followlist like '%{0}%' and users.id != {1}", channelId, currentUserId);
-                    cmd.Parameters.Clear();
-                    cmd.Parameters.AddWithValue("@channel", channelId);
-                    if (conn.State == ConnectionState.Open) conn.Close();
-                    if (conn.State == ConnectionState.Closed) { conn.ConnectionString = connstr; conn.Open(); }
-                    using (SqlDataReader r = cmd.ExecuteReader())
-                    {
-                        while (r.Read())
-                        {
-                            list.Add(new user()
-                            {
-                                username = !r.IsDBNull(0) ? r.GetString(0) : "",
-                                url = !r.IsDBNull(1) ? r.GetString(1) : "",
-                                avatar = !r.IsDBNull(2) ? r.GetString(2) : ""
-                            });
-                        }
-                    }
-                }
-                return list;
-            }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return null;
             }
@@ -144,7 +149,7 @@ namespace core
                 using (conn)
                 {
 
-                    cmd.CommandText = "select jobtype, monthlyincome, monthlyadditionalincome, uploaddate from userincome where userid=@a";
+                    cmd.CommandText = "select jobtype, monthlyincome, monthlyadditionalincome, createddate, updatedate from userincome where userid=@a";
                     cmd.Parameters.Clear();
                     cmd.Parameters.AddWithValue("@a", id);
                     if (conn.State == ConnectionState.Open) conn.Close();
@@ -156,9 +161,10 @@ namespace core
                             return new income()
                             {
                                 jobtype = !r.IsDBNull(0) ? r.GetString(0) : "",
-                                monthlyincome = !r.IsDBNull(1) ? r.GetInt32(1) : 0,
-                                monthlyadditionalincome = !r.IsDBNull(2) ? r.GetInt32(2) : 0,
-                                date = !r.IsDBNull(3) ? r.GetDateTime(3) : DateTime.Now
+                                monthlyincome = !r.IsDBNull(1) ? r.GetDouble(1) : 0,
+                                monthlyadditionalincome = !r.IsDBNull(2) ? r.GetDouble(2) : 0,
+                                createddate = !r.IsDBNull(3) ? r.GetDateTime(3) : DateTime.Now,
+                                updatedate = !r.IsDBNull(4) ? r.GetDateTime(4) : DateTime.Now
                             };
                         }
                     }
@@ -177,7 +183,7 @@ namespace core
                 using (conn)
                 {
 
-                    cmd.CommandText = "select houserent,electricbill,waterbill,gasbill,internetbill,gsmbill,otherbills,individualexpense,marketexpense,updatedate from useroutcome where userid=@a";
+                    cmd.CommandText = "select houserent,electricbill,waterbill,gasbill,internetbill,gsmbill,otherbills,individualexpense,marketexpense,createddate,updatedate from useroutcome where userid=@a";
                     cmd.Parameters.Clear();
                     cmd.Parameters.AddWithValue("@a", id);
                     if (conn.State == ConnectionState.Open) conn.Close();
@@ -188,16 +194,18 @@ namespace core
                         {
                             return new outcome()
                             {
-                                houserent = !r.IsDBNull(0) ? r.GetInt32(0) : 0,
-                                electricbill = !r.IsDBNull(1) ? r.GetInt32(1) : 0,
-                                waterbill = !r.IsDBNull(2) ? r.GetInt32(2) : 0,
-                                gasbill = !r.IsDBNull(3) ? r.GetInt32(3) : 0,
-                                internetbill = !r.IsDBNull(4) ? r.GetInt32(4) : 0,
-                                gsmbill = !r.IsDBNull(5) ? r.GetInt32(5) : 0,
-                                otherbills = !r.IsDBNull(6) ? r.GetInt32(6) : 0,
-                                individualexpense = !r.IsDBNull(7) ? r.GetInt32(7) : 0,
-                                marketexpense = !r.IsDBNull(8) ? r.GetInt32(8) : 0,
-                                date = !r.IsDBNull(9) ? r.GetDateTime(9) : DateTime.Now
+                                houserent = !r.IsDBNull(0) ? r.GetDouble(0) : 0,
+                                electricbill = !r.IsDBNull(1) ? r.GetDouble(1) : 0,
+                                waterbill = !r.IsDBNull(2) ? r.GetDouble(2) : 0,
+                                gasbill = !r.IsDBNull(3) ? r.GetDouble(3) : 0,
+                                internetbill = !r.IsDBNull(4) ? r.GetDouble(4) : 0,
+                                gsmbill = !r.IsDBNull(5) ? r.GetDouble(5) : 0,
+                                otherbills = !r.IsDBNull(6) ? r.GetDouble(6) : 0,
+                                individualexpense = !r.IsDBNull(7) ? r.GetDouble(7) : 0,
+                                marketexpense = !r.IsDBNull(8) ? r.GetDouble(8) : 0,
+                                createddate = !r.IsDBNull(9) ? r.GetDateTime(9) : DateTime.Now,
+                                updatedate = !r.IsDBNull(10) ? r.GetDateTime(10) : DateTime.Now
+
                             };
                         }
                     }
@@ -216,7 +224,7 @@ namespace core
                 List<creditcard> list = new List<creditcard>();
                 using (conn)
                 {
-                    cmd.CommandText = "select id, bankname, cardlimit, carddebt, updatedate from usercreditcards where userid=@a";
+                    cmd.CommandText = "select id, bankname, cardlimit, carddebt, createddate,updatedate from usercreditcards where userid=@a";
                     cmd.Parameters.Clear();
                     cmd.Parameters.AddWithValue("@a", id);
                     if (conn.State == ConnectionState.Open) conn.Close();
@@ -229,9 +237,10 @@ namespace core
                             {
                                 id = !r.IsDBNull(0) ? r.GetInt32(0) : 0,
                                 bankname = !r.IsDBNull(1) ? r.GetString(1) : "",
-                                cardlimit = !r.IsDBNull(2) ? r.GetInt32(2) : 0,
-                                carddebt = !r.IsDBNull(3) ? r.GetInt32(3) : 0,
-                                date = !r.IsDBNull(4) ? r.GetDateTime(4) : DateTime.Now 
+                                cardlimit = !r.IsDBNull(2) ? r.GetDouble(2) : 0,
+                                carddebt = !r.IsDBNull(3) ? r.GetDouble(3) : 0,
+                                createddate = !r.IsDBNull(4) ? r.GetDateTime(4) : DateTime.Now,
+                                updatedate = !r.IsDBNull(5) ? r.GetDateTime(5) : DateTime.Now,
                             });
                         }
                     }
@@ -242,6 +251,158 @@ namespace core
             {
                 return null;
             }
+        }
+
+        public List<wishlist> getuserwishlist(int id)
+        {
+            try
+            {
+                List<wishlist> list = new List<wishlist>();
+                using (conn)
+                {
+                    cmd.CommandText = "select ordername,ordercount,orderprice,userid,orderdate,pending from wishlist where userid=@a";
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@a", id);
+                    if (conn.State == ConnectionState.Open) conn.Close();
+                    if (conn.State == ConnectionState.Closed) { conn.ConnectionString = connstr; conn.Open(); }
+                    using (SqlDataReader r = cmd.ExecuteReader())
+                    {
+                        while (r.Read())
+                        {
+                            list.Add(new wishlist()
+                            {
+                                ordername = !r.IsDBNull(0) ? r.GetString(0) : "",
+                                ordercount = !r.IsDBNull(1) ? r.GetInt32(1) : 0,
+                                orderprice = !r.IsDBNull(2) ? r.GetDouble(2) : 0,
+                                userid = !r.IsDBNull(3) ? r.GetInt32(3) : 0,
+                                orderdate = !r.IsDBNull(4) ? r.GetDateTime(4) : DateTime.Now,
+                                pending = !r.IsDBNull(5) ? r.GetInt32(5) : 0
+                            });
+                        }
+                    }
+                }
+                return list;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        public List<wishlist> getuserwishlist(int userid, int pending, int itemperpage, int page)
+        {
+            try
+            {
+                List<wishlist> list = new List<wishlist>();
+                using (conn)
+                {
+                    string pendingClause = "";
+                    if(pending == 1)
+                    {
+                        pendingClause += " and pending = 1";
+                    }
+                    else if(pending == 0)
+                    {
+                        pendingClause += " and pending = 0";
+                    }
+
+                    cmd.CommandText = string.Format("select * from (select ordername,ordercount,orderprice,userid,orderdate,pending,row_number() over (order by orderdate desc) as rn from wishlist where userid=@userid {0}) a where a.rn between @start and @end", pendingClause);
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@start", ((page - 1) * itemperpage) + 1);
+                    cmd.Parameters.AddWithValue("@end", page * itemperpage);
+                    cmd.Parameters.AddWithValue("@userid", userid);
+                    if (conn.State == ConnectionState.Open) conn.Close();
+                    if (conn.State == ConnectionState.Closed) { conn.ConnectionString = connstr; conn.Open(); }
+                    using (SqlDataReader r = cmd.ExecuteReader())
+                    {
+                        while (r.Read())
+                        {
+                            list.Add(new wishlist()
+                            {
+                                ordername = !r.IsDBNull(0) ? r.GetString(0) : "",
+                                ordercount = !r.IsDBNull(1) ? r.GetInt32(1) : 0,
+                                orderprice = !r.IsDBNull(2) ? r.GetDouble(2) : 0,
+                                userid = !r.IsDBNull(3) ? r.GetInt32(3) : 0,
+                                orderdate = !r.IsDBNull(4) ? r.GetDateTime(4) : DateTime.Now,
+                                pending = !r.IsDBNull(5) ? r.GetInt32(5) : 0
+                            });
+                        }
+                    }
+                }
+                return list;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public double getuserincometotal(int userid)
+        {
+            double total = 0;
+            try
+            {
+                income income = new income();
+                using (conn)
+                {
+                    cmd.CommandText = "select monthlyincome, monthlyadditionalincome from userincome where userid = @a";
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@a", userid);
+                    if (conn.State == ConnectionState.Open) conn.Close();
+                    if (conn.State == ConnectionState.Closed) { conn.ConnectionString = connstr; conn.Open(); }
+                    using (SqlDataReader r = cmd.ExecuteReader())
+                    {
+                        while (r.Read())
+                        {
+                            income.monthlyincome = !r.IsDBNull(0) ? r.GetDouble(0) : 0;
+                            income.monthlyadditionalincome = !r.IsDBNull(1) ? r.GetDouble(1) : 0;
+                        }
+                    }
+                }
+                total = income.monthlyadditionalincome + income.monthlyincome;
+            }
+            catch (Exception)
+            {
+
+            }
+            return total;
+        }
+        public double getuseroutcometotal(int userid)
+        {
+            double total = 0;
+            try
+            {
+                outcome outcome = new outcome();
+                using (conn)
+                {
+                    cmd.CommandText = "select electricbill, waterbill, gasbill, internetbill, gsmbill, otherbills, individualexpense, marketexpense,houserent from useroutcome where userid = @a";
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@a", userid);
+                    if (conn.State == ConnectionState.Open) conn.Close();
+                    if (conn.State == ConnectionState.Closed) { conn.ConnectionString = connstr; conn.Open(); }
+                    using (SqlDataReader r = cmd.ExecuteReader())
+                    {
+                        while (r.Read())
+                        {
+                            outcome.electricbill = !r.IsDBNull(0) ? r.GetDouble(0) : 0;
+                            outcome.waterbill = !r.IsDBNull(1) ? r.GetDouble(1) : 0;
+                            outcome.gasbill = !r.IsDBNull(2) ? r.GetDouble(2) : 0;
+                            outcome.internetbill = !r.IsDBNull(3) ? r.GetDouble(3) : 0;
+                            outcome.gsmbill = !r.IsDBNull(4) ? r.GetDouble(4) : 0;
+                            outcome.otherbills = !r.IsDBNull(5) ? r.GetDouble(5) : 0;
+                            outcome.individualexpense = !r.IsDBNull(6) ? r.GetDouble(6) : 0;
+                            outcome.marketexpense = !r.IsDBNull(7) ? r.GetDouble(7) : 0;
+                            outcome.houserent = !r.IsDBNull(8) ? r.GetDouble(8) : 0;
+                        }
+                    }
+                }
+                total = outcome.electricbill + outcome.waterbill + outcome.gasbill + outcome.internetbill +
+                    outcome.gsmbill + outcome.otherbills + outcome.individualexpense + outcome.marketexpense + outcome.houserent;
+            }
+            catch (Exception)
+            {
+
+            }
+            return total;
         }
 
         #endregion
@@ -777,31 +938,44 @@ namespace core
     public class income
     {
         public string jobtype { get; set; }
-        public int monthlyincome { get; set; }
-        public int monthlyadditionalincome { get; set; }
-        public DateTime date { get; set; }
+        public double monthlyincome { get; set; }
+        public double monthlyadditionalincome { get; set; }
+        public DateTime createddate { get; set; }
+        public DateTime updatedate { get; set; }
     }
 
     public class outcome
     {
-        public int houserent { get; set; }
-        public int waterbill { get; set; }
-        public int gasbill { get; set; }
-        public int gsmbill { get; set; }
-        public int internetbill { get; set; }
-        public int electricbill { get; set; }
-        public int otherbills { get; set; }
-        public int individualexpense { get; set; }
-        public int marketexpense { get; set; }
-        public DateTime date { get; set; }
+        public double houserent { get; set; }
+        public double waterbill { get; set; }
+        public double gasbill { get; set; }
+        public double gsmbill { get; set; }
+        public double internetbill { get; set; }
+        public double electricbill { get; set; }
+        public double otherbills { get; set; }
+        public double individualexpense { get; set; }
+        public double marketexpense { get; set; }
+        public DateTime createddate { get; set; }
+        public DateTime updatedate { get; set; }
     }
     public class creditcard
     {
         public int id { get; set; }
         public string bankname { get; set; }
-        public int cardlimit { get; set; }
-        public int carddebt { get; set; }
-        public DateTime date { get; set; }
+        public double cardlimit { get; set; }
+        public double carddebt { get; set; }
+        public DateTime createddate { get; set; }
+        public DateTime updatedate { get; set; }
+
     }
 
+    public class wishlist
+    {
+        public string ordername { get; set; }
+        public int ordercount { get; set; }
+        public double orderprice { get; set; }
+        public DateTime orderdate { get; set; }
+        public int pending { get; set; }
+        public int userid { get; set; }
+    }
 }

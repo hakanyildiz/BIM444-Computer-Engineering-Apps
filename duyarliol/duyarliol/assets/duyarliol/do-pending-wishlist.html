@@ -1,0 +1,285 @@
+﻿<script src="../components/moment-element/hakke/hakke-moment-with-locales.min.js"></script>
+<dom-module id="do-pending-wishlist">
+    <style>
+        :host {
+            display: block;
+            margin-bottom: 50px;
+        }
+
+        #wishlist {
+            @apply(--layout-vertical);
+            @apply(--layout-center);
+            /*flex-flow: row wrap;*/
+            /*-ms-flex-flow: row wrap;*/
+            width: 600px;
+            min-height: 500px;
+            background: #fff;
+        }
+        #wishlist .item{
+            padding:10px;
+            width:90%;
+            border-bottom:1px solid;
+            @apply(--layout-horizontal);
+        }
+        #wishlist .item-column{
+            @apply(--layout-horizontal);
+        }
+        #wishlist .item-column .ordername{
+            font-size:18px;
+        }
+         #wishlist .item-column .ordercount{
+            font-size:16px;
+        }
+          #wishlist .item-column .orderdate{
+            font-size:16px;
+        }
+           #wishlist .item-column .orderprice{
+            font-size:16px;
+        }
+           #wishlist .item-column .leftside i{
+               font-weight:bold;
+           }
+           #wishlist .item-column .centerside{
+               @apply(--layout-horizontal);
+               @apply(--layout-center-center);
+           }
+           #wishlist .item-column .rightside{
+
+           }
+
+        app-toolbar{
+            background: #0026ff;
+            color: #fff;
+        }
+        #pibDone{
+            color: #0026ff;
+        }
+        #pibDelete{
+            color: red;
+        }
+        #wishlist .item-column paper-icon-button{
+            transition: all ease-in-out .3s;
+           width: 45px;
+           opacity: 0.88;
+           height: 45px;
+        }
+        #wishlist .item-column paper-icon-button:hover{
+           transform: scale(1.2);
+           opacity:1; 
+        }
+        div[empty]{
+            margin-top:30px;
+            font-size:22px;
+            font-weight: 100;
+        }    
+        #dialogwish paper-toolbar{
+            margin: 0 !important;
+        }
+    </style>
+      <template>
+              <iron-ajax auto id="getpendingwishlist"
+                         debounce="3000"
+                         url="/h/main?fm=get-user-pending-wishlist&a=[[itemperpage]]&b=[[page]]"
+                         handle-as="json"
+                         on-response="_response"></iron-ajax>
+                  <app-toolbar>
+                      <iron-icon icon="icons:hourglass-empty"></iron-icon>
+                      Onay Bekleyen Alışveriş Listesi
+                  </app-toolbar>    
+                  <paper-material id="wishlist" elevation="1">
+                      <template is="dom-repeat" items="{{response}}" as="item">
+                          <div class="item">
+                              <div class="layout vertical flex">
+                                  <div class="item-column">
+                                      <h1 class="ordername">[[item.ordername]]</h1>
+                                  </div>
+                                  <div class="item-column">
+                                      <div class="layout vertical leftside">
+                                          <div class="orderprice">Fiyat: <i>{{_remakePrice(item.orderprice)}}</i> TL</div>
+                                          <div class="ordercount">Adet: <i>[[item.ordercount]]</i></div>
+                                      </div>
+                                      <div class="flex centerside">
+                                          <span class="orderdate">{{_remakeDate(item.orderdate)}}</span>
+                                      </div>
+                                      <div class="layout horizontal rightside">
+                                          <paper-icon-button id="pibDone" icon="check" on-tap="_pibDone"></paper-icon-button>
+                                          <paper-icon-button id="pibDelete" icon="delete" on-tap="_pibDelete"></paper-icon-button>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </template>
+                      <template is="dom-if" if="[[empty]]">
+                          <div empty>
+                              Onay Bekleyen Bir Alışveriş Bulunmamaktadır.
+                          </div>
+                        </template>
+                  </paper-material>
+                  
+          <paper-dialog id="dialogwish" entry-animation="scale-up-animation"
+              exit-animation="fade-out-animation" modal>
+              <paper-toolbar style="background-color:#171059">
+                  <h3>Alışverişin Yapılacağı Kredi Kartını Seçiniz</h3>
+              </paper-toolbar>
+              <paper-dialog-scrollable>
+                  <div class="layout vertical center">
+                      <p>Ürün: [[selectedwish.ordername]]</p>
+
+                      <div>
+                          <paper-dropdown-menu class="pdmHeader" label="Kart Adı">
+                              <paper-listbox style="background-color:#171059; color:white" class="dropdown-content"
+                                             attr-for-selected="value"
+                                             selected="{{selectedcardid}}">
+                                  <template is="dom-repeat" items="[[creditcards]]">
+                                      <paper-item value$="[[item.id]]">[[item.bankname]]</paper-item>
+                                  </template>
+                              </paper-listbox>
+                          </paper-dropdown-menu>
+                      </div>
+                      <div style="text-align:center;">
+                          <h3>Seçilen Kart</h3>
+                          <template is="dom-repeat"
+                                     items="{{creditcards}}"
+                                     filter="{{computeFilter(selectedcardid)}}">
+                              <table style="border:1px solid; width: 100%;">
+                                  <thead>
+                                      <tr>
+                                          <th>Kart Adı</th>
+                                          <th>Kart Limiti</th>
+                                          <th>Anlık Kart Borcu</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                          <th>[[item.bankname]]</th>
+                                          <th>[[item.cardlimit]] TL</th>
+                                          <th>[[item.carddebt]] TL</th>
+                                      </tr>
+                                  </tbody>
+                              </table>
+
+                              <div>{{_remakeResult(item.cardlimit, item.carddebt, selectedwish.orderprice)}}</div>
+                          </template>
+
+                     </div>
+                  </div>
+              </paper-dialog-scrollable>
+              <div class="buttons">
+                  <paper-button dialog-dismiss>İptal</paper-button>
+                  <paper-button dialog-confirm autofocus>Tamamla</paper-button>
+              </div>
+          </paper-dialog>
+    </template>
+    <script>
+    Polymer({
+        is: "do-pending-wishlist",
+        computeFilter: function (selectedid) {
+            if (!selectedid) {
+                // set filter to null to disable filtering
+                return null;
+            } else {
+                // return a filter function for the current search string
+                return function (item) {
+                    return (item.id == selectedid);
+                };
+            }
+        },
+        properties: {
+            go: {
+                type: Boolean,
+                value: false,
+                notify: true
+            },
+            loading: {
+                type: Boolean,
+                value: true,
+                notify: true
+            },
+            query: {
+                type: String,
+                value: '',
+                notify: true
+            },
+            page: {
+                type: Number,
+                value: 1,
+            },
+            itemperpage: {
+                type: Number,
+                value: 20
+            },
+            response: {
+                type: Array,
+                notify: true,
+                value: []
+            },
+            timeout: {
+                type: Number,
+                value: 1111,
+                notify: true
+            },
+            creditcards: { type: Array, value: [], notify: true},
+            empty: { type: Boolean, value: false, notify: true },
+            selectedwish: {type: Object, value: null, notify: true},
+            selectedcardid: {type: Number, value: 1, notify: true }
+        },
+        ready: function () {
+        },
+        _response: function (event) {
+            var response = event.detail.response;
+            console.log(response);
+
+            if (response.length > 0) {
+                response.forEach(function (item) {
+                    this.push('response', item);
+                }, this);
+            }
+            else {
+                this.empty = true;
+            }
+            this.loading = false;
+
+        },
+        _clearState: function () {
+            this.page = 0;
+            this.empty = false;
+            this.loading = true;
+            this.set('response', []);
+        },
+        _generateRequest: function () {
+            if (this.$.getnewslist.lastRequest) {
+                this.$.getnewslist.lastRequest.abort();
+            }
+            this.page = 1;
+            this.$.getnewslist.generateRequest();
+        },
+        _remakePrice: function (price) {
+            return parseInt(price);
+        },
+        _remakeDate: function (itemdate) {
+            return moment(itemdate).format('LL');
+        },
+        _remakeResult: function(cardlimit,carddebt, orderprice){
+            var aval = cardlimit - carddebt;
+            if (aval < orderprice) {
+                return 'Yeterli Limit Yok';
+            }
+            else {
+                return 'Yeterli Limit Var';
+            }
+        },
+        _pibDelete: function (event) {
+            console.log('_pibDelete');
+            var item = event.model.item;
+        },
+        _pibDone: function (event) {
+            console.log('_pibDone');
+            var item = event.model.item;
+            this.set('selectedwish', item);
+            //console.log(this.selectedwish);
+            this.$.dialogwish.open();
+        },
+       
+    });
+    </script>
+</dom-module>

@@ -4,7 +4,7 @@ namespace duyarliol.auth.facebook
 {
     public class login : IHttpHandler, System.Web.SessionState.IRequiresSessionState
     {
-        public string WEBSITE_NAME = "http://duyarliol1.azurewebsites.net/";
+        public string WEBSITE_NAME = "http://duyarliol.azurewebsites.net/";
         public string CLIENT_ID = "1776520979342984";
         public void ProcessRequest(HttpContext context)
         {
