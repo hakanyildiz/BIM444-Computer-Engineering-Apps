@@ -1,0 +1,402 @@
+﻿.MyQuotesLoginPage {
+}
+
+.load {
+    width: 160px !important;
+}
+
+#QuotesheaderIcon {
+    float: left !important;
+    margin-left: 15px !important;
+}
+
+.MyQuotesform, .splashform {
+    display: flex !important;
+    flex-direction: column !important;
+    font-family: Verdana, Geneva, sans-serif !important;
+    z-index: 1 !important;
+    margin: 0 !important;
+    padding: 10px !important;
+    text-align: center !important;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24) !important;
+    min-width: 600px !important;
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    z-index: 100000000000 !important;
+    background-color: #eee !important;
+  
+}
+
+
+@media only screen and (max-width : 1650px) { /* zoom %110*/
+ .MyQuotesform{
+       overflow-y: scroll !important;
+       height: 650px !important;
+ }
+}
+
+@media only screen and (min-width : 1651px) { 
+ .MyQuotesform{
+       height: 760px !important;
+ }
+}
+
+
+
+
+.MyQuotesform form {
+    margin: 5px 30px;
+}
+
+.MyQuotesform div[do-toolbar] {
+    font-size: 22px !important;
+    font-weight: bold;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    margin: 5px 0px;
+}
+
+    .MyQuotesform div[do-toolbar] #hakkebtn {
+        font-weight: 100 !important;
+    }
+
+.MyQuotesform textarea {
+    font-family: Verdana, Geneva, sans-serif !important;
+    outline: 0 !important;
+    background: white !important;
+    border: 0 !important;
+    margin: 0px !important;
+    width: 100% !important;
+    font-size: 14px !important;
+    border-radius: 5px !important;
+    height: 150px !important;
+    border: 2px solid #c5cddb !important;
+    text-align: left !important;
+    padding: 10px !important;
+    -webkit-box-sizing: border-box !important; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box !important; /* Firefox, other Gecko */
+    box-sizing: border-box !important;
+}
+
+.MyQuotesform input[type=text] {
+    font-family: Verdana, Geneva, sans-serif !important;
+    outline: 0 !important;
+    background-color: white !important;
+    border: 0 !important;
+    margin: 0px !important;
+    font-size: 14px !important;
+    border-radius: 5px !important;
+    border: 2px solid #c5cddb !important;
+    height: 40px !important;
+    width: 100% !important;
+    text-align: left !important;
+    padding: 10px !important;
+    -webkit-box-sizing: border-box !important; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box !important; /* Firefox, other Gecko */
+    box-sizing: border-box !important;
+}
+
+.MyQuotesform button {
+    text-transform: uppercase !important;
+    outline: 0 !important;
+    background: #4CAF50 !important;
+    width: 44% !important;
+    border: 0 !important;
+    padding: 10px !important;
+    margin: 10px 0px !important;
+    color: #FFFFFF !important;
+    font-size: 14px !important;
+    -webkit-transition: all 0.3 ease !important;
+    transition: all 0.3 ease !important;
+    cursor: pointer !important;
+    border-radius: 5px !important;
+}
+
+.MyQuotesform #MyQuotesCancel {
+    background: #ff4b1f !important; /* fallback for old browsers */
+}
+
+    .MyQuotesform #MyQuotesCancel:hover {
+        background: #e53935 !important; /* fallback for old browsers */
+    }
+
+.MyQuotesform button:hover {
+    background: #43A047 !important;
+}
+
+.MyQuotesform .MyQuotesmessage {
+    margin: 15px 0 0 !important;
+    color: red !important;
+    font-size: 12px !important;
+    font-weight: bold;
+}
+
+.MyQuotesform h3 {
+    font-size: 16px !important;
+    font-weight: bold !important;
+    padding: 5px !important;
+    margin: 2px 5px 5px 0px !important;
+    font-family: Verdana !important;
+    color: #687484 !important;
+    display: block !important;
+    float: left !important;
+}
+
+#MyQuotesOwnerWrapper {
+    position: relative !important;
+    width: 400px !important;
+    display: block !important;
+}
+
+    #MyQuotesOwnerWrapper img {
+        position: absolute !important;
+        top: 7px !important;
+        right: 6px !important;
+        width: 25px !important;
+        height: 25px !important;
+        z-index: 10000000000000 !important;
+    }
+
+.reset-this {
+    animation: none;
+    animation-delay: 0;
+    animation-direction: normal;
+    animation-duration: 0;
+    animation-fill-mode: none;
+    animation-iteration-count: 1;
+    animation-name: none;
+    animation-play-state: running;
+    animation-timing-function: ease;
+    backface-visibility: visible;
+    background: 0;
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: transparent;
+    background-image: none;
+    background-origin: padding-box;
+    background-position: 0 0;
+    background-position-x: 0;
+    background-position-y: 0;
+    background-repeat: repeat;
+    background-size: auto auto;
+    border: 0;
+    border-style: none;
+    border-width: medium;
+    border-color: inherit;
+    border-bottom: 0;
+    border-bottom-color: inherit;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-style: none;
+    border-bottom-width: medium;
+    border-collapse: separate;
+    border-image: none;
+    border-left: 0;
+    border-left-color: inherit;
+    border-left-style: none;
+    border-left-width: medium;
+    border-radius: 0;
+    border-right: 0;
+    border-right-color: inherit;
+    border-right-style: none;
+    border-right-width: medium;
+    border-spacing: 0;
+    border-top: 0;
+    border-top-color: inherit;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top-style: none;
+    border-top-width: medium;
+    bottom: auto;
+    box-shadow: none;
+    box-sizing: content-box;
+    caption-side: top;
+    clear: none;
+    clip: auto;
+    color: inherit;
+    columns: auto;
+    column-count: auto;
+    column-fill: balance;
+    column-gap: normal;
+    column-rule: medium none currentColor;
+    column-rule-color: currentColor;
+    column-rule-style: none;
+    column-rule-width: none;
+    column-span: 1;
+    column-width: auto;
+    content: normal;
+    counter-increment: none;
+    counter-reset: none;
+    cursor: auto;
+    direction: ltr;
+    display: inline;
+    empty-cells: show;
+    float: none;
+    font: normal;
+    font-family: inherit;
+    font-size: medium;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    height: auto;
+    hyphens: none;
+    left: auto;
+    letter-spacing: normal;
+    line-height: normal;
+    list-style: none;
+    list-style-image: none;
+    list-style-position: outside;
+    list-style-type: disc;
+    margin: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    max-height: none;
+    max-width: none;
+    min-height: 0;
+    min-width: 0;
+    opacity: 1;
+    orphans: 0;
+    outline: 0;
+    outline-color: invert;
+    outline-style: none;
+    outline-width: medium;
+    overflow: visible;
+    overflow-x: visible;
+    overflow-y: visible;
+    padding: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    page-break-after: auto;
+    page-break-before: auto;
+    page-break-inside: auto;
+    perspective: none;
+    perspective-origin: 50% 50%;
+    position: static;
+    /* May need to alter quotes for different locales (e.g fr) */
+    quotes: '\201C' '\201D' '\2018' '\2019';
+    right: auto;
+    tab-size: 8;
+    table-layout: auto;
+    text-align: inherit;
+    text-align-last: auto;
+    text-decoration: none;
+    text-decoration-color: inherit;
+    text-decoration-line: none;
+    text-decoration-style: solid;
+    text-indent: 0;
+    text-shadow: none;
+    text-transform: none;
+    top: auto;
+    transform: none;
+    transform-style: flat;
+    transition: none;
+    transition-delay: 0s;
+    transition-duration: 0s;
+    transition-property: none;
+    transition-timing-function: ease;
+    unicode-bidi: normal;
+    vertical-align: baseline;
+    visibility: visible;
+    white-space: normal;
+    widows: 0;
+    width: auto;
+    word-spacing: normal;
+    z-index: auto;
+}
+
+#usercreditcards table, #userwishlist table {
+    border: 1px solid black !important;
+    border-collapse: collapse !important;
+    font-weight: 100 !important;
+    width: 100%;
+    margin: 10px 0px !important;
+}
+
+    #usercreditcards table tr th, #userwishlist table tr th {
+        font-weight: 100 !important;
+    }
+
+    #usercreditcards table #tableheader th, #userwishlist table #tableheader th {
+        font-weight: 400 !important;
+    }
+
+    #usercreditcards table #tableheader, #userwishlist table #tableheader {
+        border-bottom: 1px solid !important;
+        font-weight: 400 !important;
+        background: #222;
+        color: white;
+    }
+
+#MyQuotes #do-questions .do-question {
+    margin: 8px 0px;
+}
+
+    #MyQuotes #do-questions .do-question p[question] {
+        font-size: 17px;
+        font-weight: 500 !important;
+        border-bottom: 1px solid;
+        margin: 0px 20px;
+        border-style: groove;
+        text-align: left;
+    }
+
+    #MyQuotes #do-questions .do-question .do-radiobuttons {
+        display: flex;
+        flex-direction: inherit;
+        align-items: center;
+        justify-content: space-around !important;
+        margin: 10px 0px;
+        font-weight: 100;
+        font-size: 17px !important;
+    }
+
+        #MyQuotes #do-questions .do-question .do-radiobuttons div {
+            display: flex;
+            align-items: center;
+        }
+
+            #MyQuotes #do-questions .do-question .do-radiobuttons div input[type=radio] {
+                height: 20px;
+                width: 20px;
+            }
+
+#userwishlist tr th[wishthtitle] {
+    text-transform: lowercase;
+    margin: 7px 5px;
+    float: left;
+    width: 400px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+tr th[totalprice] {
+    float: left;
+    margin: 5px;
+    border: 1px solid;
+    padding: 5px;
+}
+
+/*#MyQuotes{
+   display:none !important;
+}*/
+
+
+#splashscreen{
+    width: 160px !important;
+}
+
+#btnDoRun{
+    /*width: 50% !important;*/
+    background: #4885ed !important;
+}
+#btnDoClose{
+    width: 22% !important;
+
+}

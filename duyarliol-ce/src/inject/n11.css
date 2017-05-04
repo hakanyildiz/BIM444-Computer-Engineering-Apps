@@ -1,0 +1,18 @@
+/**
+ * Place your custom CSS styles here.
+ **/
+ .bla{
+	 
+ }
+ 
+ 
+ #btnSepetimInjectionN11{
+	 float: right;
+    font-size: 16px;
+    top: 18px;
+    right: 10px;
+    position: absolute;
+    z-index: 1;
+    min-width: 100px;
+    text-align: center;
+ }
