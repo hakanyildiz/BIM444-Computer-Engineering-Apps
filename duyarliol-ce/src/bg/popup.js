@@ -57,11 +57,9 @@ $('html body').append(splash);
 //    return "";
 //}
 
-//var profilId = getCookie("Putnotes").split("=")[1];
 
 var siteUrl = "http://localhost:64481";
 var OnlineSiteUrl = "http://www.putnotes.net";
-//var azureUrl = "https://myputnotes.azurewebsites.net";
 var azureUrl = "http://duyarliol.azurewebsites.net";
 var handlerClause = "/handlers/main.ashx";
 
@@ -284,6 +282,8 @@ $("#btnDoRun").click(function () {
                 }
                 var displaypart = '<div style="float:left !important;margin:5px; top: 230px;"><img style="width:60px;" src="' + imageIcon + '" /></div> <div style="float:left !important;margin:10px 0px 0px 0px !important; top: 260px;"><p class="reset-this" style="font-size: 20px;">' + res.message + '</p></div> <i style="clear:both"></i>';
                 $("#MyQuotes").html(displaypart);
+				
+				
             },
             error: function (err) {
                 console.log('error');
@@ -294,7 +294,11 @@ $("#btnDoRun").click(function () {
                 setTimeout(function () {
                     $("#MyQuotes").hide();
                     $(".MyQuotesform").remove();
+					
+					window.location = 'https://www.n11.com/sepetim/odeme-onayi';
                 }, 4000);
+				
+				
             }
         });
 

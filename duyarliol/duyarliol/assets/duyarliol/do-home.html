@@ -3,6 +3,7 @@
 <link rel="import" href="/assets/components/google-chart/google-chart.html" async>
 <link rel="import" href="/assets/duyarliol/do-pending-wishlist.html" async/>
 <link rel="import" href="/assets/duyarliol/do-completed-wishlist.html" async />
+<link rel="import" href="/assets/duyarliol/do-answerlist.html" async />
 
 <dom-module id="do-home">
     <template>
@@ -79,6 +80,16 @@
                 background-color: #0057e7;
                 opacity: 0.88;
             }
+
+            .tile p{
+                height:100px;
+            }
+            .tile paper-button{
+                font-size: calc(0.2em + 1vmin) !important;
+                font-weight:bold;
+                background:#fff; 
+            }
+
             .tilemaster{
                 width: calc(100%);
                 height: calc(100% / 1.5);
@@ -223,15 +234,15 @@
                         <div class="layout horizontal" style="justify-content:flex-start !important; height:100% !important;">
                             <div class="tile google-blue raised button" on-click="_onFirstClick">
                                 <p>Ürünleri Satın Alıp Almadığına Dair Bizi Bilgilendirmen Gerekiyor!</p>
-                                <paper-button style="background:#fff; color: #0057e7;font-size:18px; font-weight:bold;" raised>İstek Listesini Görmek İçin Tıkla</paper-button>
+                                <paper-button style="color: #0057e7;" raised>İstek Listesini Görmek İçin Tıkla</paper-button>
                             </div>
                             <div class="tile google-red raised button" on-click="_onSecondClick">
                                 <p>Duyarlılık Testini Tamamlarken Sorularımızı Cevapladın!</p>
-                                <paper-button style="background:#fff; color: #d62d20;font-size:18px; font-weight:bold;" raised>Cevaplarını Değiştirmek İçin Tıkla</paper-button>
+                                <paper-button style="color: #d62d20;" raised>Cevaplarını Değiştirmek İçin Tıkla</paper-button>
                             </div>
                             <div class="tile google-yellow raised button" on-click="_onThirdClick">
                                 <p>En Son Hangi Alışverişleri Yapmışsın, Bi Bak Bence!</p>
-                                <paper-button style="background:#fff; color: #ffa700;font-size:18px; font-weight:bold;" raised>Alışveriş Geçmişin İçin Tıkla</paper-button>
+                                <paper-button style="color: #ffa700;" raised>Alışveriş Geçmişin İçin Tıkla</paper-button>
                             </div>
                         </div>
                     </div>
@@ -242,7 +253,16 @@
                     <div class="raised back button" on-click="_onBackClick">
                         Geri Dön
                     </div>
-                    <do-pending-wishlist creditcards="[[response.creditcards]]"></do-pending-wishlist>
+                    <do-pending-wishlist uid="[[uid]]" creditcards="[[response.creditcards]]" on-tile-click="_onTileClick"></do-pending-wishlist>
+                </div>
+            </x-card>
+            <x-card>
+                
+                <div class="card-contents">
+                    <div class="raised back button" on-click="_onBackClick">
+                        Geri Dön
+                    </div>
+                    <do-answerlist uid="[[uid]]"></do-answerlist>
                 </div>
             </x-card>
             <x-card>
@@ -250,23 +270,7 @@
                     <div class="raised back button" on-click="_onBackClick">
                         Geri Dön
                     </div>
-                    <h2>Angular</h2>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </p>
-                </div>
-            </x-card>
-            <x-card>
-                <div class="card-contents">
-                    <div class="raised back button" on-click="_onBackClick">
-                        Geri Dön
-                    </div>
-                    <do-completed-wishlist></do-completed-wishlist>
+                    <do-completed-wishlist blurred="{{blurred}}"></do-completed-wishlist>
                 </div>
             </x-card>
         </neon-animated-pages>
@@ -278,6 +282,10 @@
                 uid: {
                     type: Number,
                     value: 111111,
+                    notify: true
+                },
+                blurred: {
+                    type: String,
                     notify: true
                 },
                 response: {
@@ -296,7 +304,7 @@
                 credittotalmessage: { type: String, notify: true, value: 'Kredi Kartı Eklemelisin' },
                 },
             ready: function(){
-                console.log('do-home ready');
+                //console.log('do-home ready');
             },
             _onFirstClick: function (event) {
                 this.$.list.sharedElements = {
@@ -402,6 +410,9 @@
                 this.credittotalmessage = 'Anlık Toplam Borç: ' + total + ' TL';
 
                 //document.getElementById('chartcredit').redraw();
+            },
+            _onTileClick: function (event) {
+                this.blurred = Math.random().toString();
             }
         });
 

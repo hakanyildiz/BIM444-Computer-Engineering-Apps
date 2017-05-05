@@ -145,6 +145,10 @@
                 value: 1111,
                 notify: true
             },
+            blurred: {
+                type: String,
+                observer: '_isBlurredFocus'
+            },
             empty: { type: Boolean, value: false, notify: true }
         },
         ready: function () {
@@ -157,14 +161,14 @@
                 response.forEach(function (item) {
                     this.push('response', item);
                 }, this);
-                this.$.pendingWishThreshold.clearTriggers();
+                //this.$.pendingWishThreshold.clearTriggers();
             }
             else {
                 this.empty = true;
             }
             this.loading = false;
 
-            console.log(this.response);
+            //console.log(this.response);
         },
         _clearState: function () {
             this.page = 0;
@@ -173,17 +177,22 @@
             this.set('response', []);
         },
         _generateRequest: function () {
-            if (this.$.getnewslist.lastRequest) {
-                this.$.getnewslist.lastRequest.abort();
+            this._clearState();
+            if (this.$.getcompletedwishlist.lastRequest) {
+                this.$.getcompletedwishlist.lastRequest.abort();
             }
             this.page = 1;
-            this.$.getnewslist.generateRequest();
+            this.$.getcompletedwishlist.generateRequest();
         },
         _remakePrice: function (price) {
             return parseInt(price);
         },
         _remakeDate: function (itemdate) {
             return moment(itemdate).format('LL');
+        },
+        _isBlurredFocus: function (newVal, oldVal) {
+            //console.log('isBlurredFocus' + newVal);
+            this.debounce('refreshcompleted', this._generateRequest, 400);
         }
     });
     </script>

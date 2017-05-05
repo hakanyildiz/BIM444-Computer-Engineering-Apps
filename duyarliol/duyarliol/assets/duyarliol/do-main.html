@@ -1,6 +1,9 @@
 ﻿<dom-module id="do-main">
     <template>
         <style is="custom-style">
+            a{
+                text-decoration:none !important;
+            }
               body {
                   overflow: hidden !important;
                   margin: 0;
@@ -97,11 +100,15 @@
                   app-drawer .dodrawer .dologo, app-drawer .dodrawer .donavigation {
                       @apply(--layout-vertical);
                       @apply(--layout-center-center);
+                      margin:10px 0px;
                   }
 
+                  app-drawer .dodrawer .dologo{
+                      margin-top:20px;
+                  }
                       app-drawer .dodrawer .dologo iron-image {
-                          width: 150px;
-                          height: 150px;
+                             width: 100px;
+                          height: 114px;
                           cursor: pointer;
                       }
 
@@ -122,12 +129,18 @@
                       }
               }
               app-drawer .dodrawer .donavigation #doNavigationMenu paper-item {
-                  padding: 12px 0px 0px 0px;
+                  /*padding: 12px 0px 0px 0px;*/
                   display: flex;
                   text-align: center;
-                  width: 100%;
+                  /*width: 100%;*/
+              }
+              app-drawer .dodrawer .donavigation #doNavigationMenu paper-item:hover{
+                  color: #171059 !important;
               }
 
+               app-drawer .dodrawer .donavigation #doNavigationMenu paper-item iron-icon{
+                        padding-right: 5px; 
+               }
                   app-drawer .dodrawer .donavigation #doNavigationMenu paper-item a {
                       border: none;
                       width: 100%;
@@ -285,6 +298,13 @@
                 background: #008744;
     color: white;
     font-size: 13px;
+        }
+        .btnDownloadExtension{
+            font-size: 13px;
+        background-color: rgba(23, 16, 89, 0.46);
+        color: rgb(23,16,89);
+        background: white;
+        font-weight: bold;
         }
         </style>
         <iron-ajax auto id="check-user-income" debounce-duration="300" url="/h/main?fm=check-user-income" handle-as="json" on-response="_responseCheckUserIncome"></iron-ajax>
@@ -590,20 +610,20 @@
                     <div class="donavigation">
                         <paper-menu id="doNavigationMenu" class="dropdown-content" selected="{{selected}}" on-iron-select="_ironSelect">
                             <paper-item id="navHome">
-                                    <paper-button raised data-hover="Anasayfa" class="btnNav btnNavb icon-remove"><span><iron-icon icon="icons:home"></iron-icon></span></paper-button>
+                              <iron-icon icon="home"></iron-icon> Anasayfa
                             </paper-item>
                             <paper-item id="navPlayground">
-                                    <paper-button raised data-hover="doPlay" class="btnNav btnNavb icon-remove"><span><iron-icon icon="places:casino"></iron-icon></span></paper-button>
-                            </paper-item>
-                            <paper-item id="navForum">
-                                    <paper-button raised data-hover="Forum" class="btnNav btnNavb icon-remove"><span><iron-icon icon="communication:comment"></iron-icon></span></paper-button>
+                                <iron-icon icon="account-box"></iron-icon> Profil
                             </paper-item>
                         </paper-menu>
                      </div>
                 </div>
             </app-drawer>
             <app-toolbar id="toolbar">
-                    <div class="header-title">{{_remakeUsername(user.username)}}</div>      
+                    <div class="header-title">{{_remakeUsername(user.username)}}</div>     
+                    <a href="/assets/duyarliol-ce.rar" target="_blank">
+                        <paper-button raised class="btnDownloadExtension">Chrome Eklenti İndir</paper-button>
+                    </a>
                     <a class="header-logout" href="/uye/cikis">
                        <paper-icon-button id="piblogout" icon="icons:exit-to-app"></paper-icon-button>
                     </a>

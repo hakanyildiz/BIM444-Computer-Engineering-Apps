@@ -8,3 +8,8 @@ C:\Users\lenovo\Documents\GitHub\BIM444-Computer-Engineering-Apps\duyarliol\core
 C:\Users\lenovo\Documents\GitHub\BIM444-Computer-Engineering-Apps\duyarliol\core\obj\Release\core.csprojResolveAssemblyReference.cache
 C:\Users\lenovo\Documents\GitHub\BIM444-Computer-Engineering-Apps\duyarliol\core\obj\Release\core.dll
 C:\Users\lenovo\Documents\GitHub\BIM444-Computer-Engineering-Apps\duyarliol\core\obj\Release\core.pdb
+C:\Users\hakan\Documents\GitHub\BIM444-Computer-Engineering-Apps\duyarliol\core\bin\Release\core.dll
+C:\Users\hakan\Documents\GitHub\BIM444-Computer-Engineering-Apps\duyarliol\core\bin\Release\core.pdb
+C:\Users\hakan\Documents\GitHub\BIM444-Computer-Engineering-Apps\duyarliol\core\obj\Release\core.csprojResolveAssemblyReference.cache
+C:\Users\hakan\Documents\GitHub\BIM444-Computer-Engineering-Apps\duyarliol\core\obj\Release\core.dll
+C:\Users\hakan\Documents\GitHub\BIM444-Computer-Engineering-Apps\duyarliol\core\obj\Release\core.pdb

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -659,7 +660,153 @@ namespace duyarliol.handlers
                             context.Response.End();
                             #endregion
                         }
-                      
+                        else if (method == "change-user-answerlist")
+                        {
+                            #region change user answerlist 
+
+                            string a = context.Request.Form["uid"],
+                            a1 = context.Request.Form["answer1"],
+                            a2 = context.Request.Form["answer2"],
+                            a3 = context.Request.Form["answer3"],
+                            a4 = context.Request.Form["answer4"],
+                            a5 = context.Request.Form["answer5"],
+                            a6 = context.Request.Form["answer6"];
+
+                            int uid = 0;
+                            string answer1, answer2, answer3, answer4, answer5, answer6;
+
+                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out uid);
+                            if (!string.IsNullOrEmpty(a1)) answer1 = a1.Trim();
+                            if (!string.IsNullOrEmpty(a2)) answer2 = a2.Trim();
+                            if (!string.IsNullOrEmpty(a3)) answer3 = a3.Trim();
+                            if (!string.IsNullOrEmpty(a4)) answer4 = a4.Trim();
+                            if (!string.IsNullOrEmpty(a5)) answer5 = a5.Trim();
+                            if (!string.IsNullOrEmpty(a6)) answer6 = a6.Trim();
+
+                            List<string> list = new List<string>();
+                            list.Add(a1);
+                            list.Add(a2);
+                            list.Add(a3);
+                            list.Add(a4);
+                            list.Add(a5);
+                            list.Add(a6);
+
+                            if (uid != ((core.user)context.Session["user"]).id)
+                            {
+                                context.Response.Write(jss.Serialize(new response() { message = "Dikkat et, Yanlış Yoldasın!", success = false }));
+                                context.Response.End();
+                            }
+
+                            for (int i = 0; i < list.Count; i++)
+                            {
+                                data.updatedb("answerlist", 
+                                    new List<core.db>() {
+                                        new core.db() { column = "date", value = DateTime.Now},
+                                        new core.db() { column = "answer", value = list[i].ToString() },
+                                    }, 
+                                    new List<core.db>() {
+                                        new core.db() { column = "userid", value = uid },
+                                        new core.db() { column = "question", value = "question" + (i+1)}
+                                    });
+                            }
+                            context.Response.Write(jss.Serialize(new response() {
+                                message = "Cevapların Başarıyla Güncellendi!",
+                                success = true }));
+                            context.Response.End();
+
+                            #endregion
+                        }
+                        else if (method == "pending-to-completed")
+                        {
+                            #region pending list to completed and also remove cost from credit card
+
+
+                            string a1 = context.Request.Form["uid"],
+                            a2 = context.Request.Form["cardid"],
+                            a3 = context.Request.Form["wishid"],
+                            a4 = context.Request.Form["cardlimit"],
+                            a5 = context.Request.Form["carddebt"],
+                            a6 = context.Request.Form["orderprice"];
+
+                            int uid = 0, wishid = 0, cardid = 0, cardlimit = 0, carddebt = 0, orderprice = 0;
+
+                            if (!string.IsNullOrEmpty(a1)) int.TryParse(a1, out uid);
+                            if (!string.IsNullOrEmpty(a2)) int.TryParse(a2, out cardid);
+                            if (!string.IsNullOrEmpty(a3)) int.TryParse(a3, out wishid);
+                            if (!string.IsNullOrEmpty(a4)) int.TryParse(a4, out cardlimit);
+                            if (!string.IsNullOrEmpty(a5)) int.TryParse(a5, out carddebt);
+                            if (!string.IsNullOrEmpty(a6)) int.TryParse(a6, out orderprice);
+
+
+                            data.updatedb(
+                                "wishlist",
+                                new List<core.db>()
+                                {
+                                    new core.db() { column = "pending", value = 0 }
+                                },
+                                new List<core.db>() {
+                                    new core.db() { column = "id", value = wishid },
+                                    new core.db() { column = "userid", value = uid },
+                                }
+                            );
+
+                            data.updatedb(
+                              "usercreditcards",
+                              new List<core.db>()
+                              {
+                                    new core.db() { column = "carddebt", value = (carddebt + orderprice) }
+                              },
+                              new List<core.db>() {
+                                    new core.db() { column = "userid", value = uid },
+                                    new core.db() { column = "id", value = cardid },
+                              }
+                            );
+
+                            context.Response.Write(jss.Serialize(new response()
+                            {
+                                message = "Bekleyen İstek Kabul Edildi!",
+                                success = true
+                            }));
+                            context.Response.End();
+
+                            #endregion
+                        }
+                        else if(method == "delete-selected-pending")
+                        {
+                            #region delete selected pending item 
+
+                            string a1 = context.Request.Form["uid"],
+                             a2 = context.Request.Form["wishid"];
+
+                            int uid = 0, wishid = 0;
+
+                            if (!string.IsNullOrEmpty(a1)) int.TryParse(a1, out uid);
+                            if (!string.IsNullOrEmpty(a2)) int.TryParse(a2, out wishid);
+
+                            if(data.removedb("wishlist", new List<core.db>() {
+                                new core.db() { column = "id", value = wishid },
+                                new core.db() { column = "userid", value = uid },
+                            }))
+                            {
+                                context.Response.Write(jss.Serialize(new response()
+                                {
+                                    message = "Bekleyen İstek Listeden Silindi!",
+                                    success = true
+                                }));
+                                context.Response.End();
+                            }
+                            else
+                            {
+                                context.Response.Write(jss.Serialize(new response()
+                                {
+                                    message = "Remove DB Error!",
+                                    success = false
+                                }));
+                                context.Response.End();
+                            }
+
+                            #endregion
+                        }
                         #endregion
                     }
                     else
@@ -971,7 +1118,7 @@ namespace duyarliol.handlers
                         {
                             #region get user wishlist
                             int userid = ((core.user)context.Session["user"]).id;
-                            context.Response.Write(jss.Serialize(data.getuserwishlist(userid)));
+                            context.Response.Write(jss.Serialize(data.getuseranswerlist(userid)));
                             context.Response.End();
                             #endregion
                         }

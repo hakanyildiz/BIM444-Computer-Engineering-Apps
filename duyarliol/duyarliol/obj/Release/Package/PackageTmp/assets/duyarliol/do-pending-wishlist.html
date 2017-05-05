@@ -115,6 +115,27 @@
                           </div>
                         </template>
                   </paper-material>
+
+          <form id="formDeletePendingSelected" is="iron-form" action="/h/main"
+                 on-iron-form-response="_responseformDeletePendingSelected" method="post">
+              <input type="hidden" name="fm" value="delete-selected-pending" />
+              <input type="hidden" name="wishid" value="[[selectedwish.id]]" />
+              <input type="hidden" name="uid" value="[[uid]]" />
+          </form>
+
+          <form id="formPendingWishList" is="iron-form" action="/h/main"
+                on-iron-form-response="_responseformPendingWishList" method="post">
+              <input type="hidden" name="fm" value="pending-to-completed" />
+              <input type="hidden" name="wishid" value="[[selectedwish.id]]" />
+              <input type="hidden" name="orderprice" value="[[selectedwish.orderprice]]" />
+
+              <input type="hidden" name="cardid" value="[[selectedcard.id]]" />
+              <input type="hidden" name="carddebt" value="[[selectedcard.carddebt]]" />
+              <input type="hidden" name="cardlimit" value="[[selectedcard.cardlimit]]" />
+
+              <input type="hidden" name="uid" value="[[uid]]" />
+          </form>
+          
                   
           <paper-dialog id="dialogwish" entry-animation="scale-up-animation"
               exit-animation="fade-out-animation" modal>
@@ -124,7 +145,6 @@
               <paper-dialog-scrollable>
                   <div class="layout vertical center">
                       <p>Ürün: [[selectedwish.ordername]]</p>
-
                       <div>
                           <paper-dropdown-menu class="pdmHeader" label="Kart Adı">
                               <paper-listbox style="background-color:#171059; color:white" class="dropdown-content"
@@ -157,7 +177,7 @@
                                       </tr>
                                   </tbody>
                               </table>
-
+                              <div hidden>{{_remakeSelectedCard(item.id, item.cardlimit, item.carddebt)}}</div>
                               <div>{{_remakeResult(item.cardlimit, item.carddebt, selectedwish.orderprice)}}</div>
                           </template>
 
@@ -166,9 +186,12 @@
               </paper-dialog-scrollable>
               <div class="buttons">
                   <paper-button dialog-dismiss>İptal</paper-button>
-                  <paper-button dialog-confirm autofocus>Tamamla</paper-button>
+                  <paper-button dialog-confirm autofocus on-tap="_savePendingToCompleted">Tamamla</paper-button>
               </div>
           </paper-dialog>
+
+       
+
     </template>
     <script>
     Polymer({
@@ -220,14 +243,20 @@
             },
             creditcards: { type: Array, value: [], notify: true},
             empty: { type: Boolean, value: false, notify: true },
-            selectedwish: {type: Object, value: null, notify: true},
-            selectedcardid: {type: Number, value: 1, notify: true }
+            selectedwish: { type: Object, value: null, notify: true },
+            selectedcard: { type: Object, value: null, notify: true },
+            selectedcardid: { type: Number, value: 1, notify: true },
+            uid: {
+                type: Number,
+                value: 0,
+                notify: true
+            }
         },
         ready: function () {
         },
         _response: function (event) {
             var response = event.detail.response;
-            console.log(response);
+            //console.log(response);
 
             if (response.length > 0) {
                 response.forEach(function (item) {
@@ -247,11 +276,13 @@
             this.set('response', []);
         },
         _generateRequest: function () {
-            if (this.$.getnewslist.lastRequest) {
-                this.$.getnewslist.lastRequest.abort();
+            this.set('response', []);
+
+            if (this.$.getpendingwishlist.lastRequest) {
+                this.$.getpendingwishlist.lastRequest.abort();
             }
             this.page = 1;
-            this.$.getnewslist.generateRequest();
+            this.$.getpendingwishlist.generateRequest();
         },
         _remakePrice: function (price) {
             return parseInt(price);
@@ -269,16 +300,76 @@
             }
         },
         _pibDelete: function (event) {
-            console.log('_pibDelete');
+            //console.log('_pibDelete');
             var item = event.model.item;
+            this.set('selectedwish', item);
+            //console.log(this.selectedwish);
+            //console.log(item);
+
+            document.getElementById('formDeletePendingSelected').submit();
+        },
+        _responseformDeletePendingSelected: function (event) {
+            var response = event.detail.response;
+            //console.log(response);
+            var alert = document.getElementById('alert');
+            if (response.success) {
+                alert.setAttribute('text', response.message);
+                alert.open();
+                this.debounce('refreshAnswers', this._generateRequest, 400);
+            }
         },
         _pibDone: function (event) {
-            console.log('_pibDone');
+            //console.log('_pibDone');
             var item = event.model.item;
+            //console.log(item);
+
             this.set('selectedwish', item);
             //console.log(this.selectedwish);
             this.$.dialogwish.open();
         },
+        _savePendingToCompleted: function () {
+            if (this.uid != 0) {
+               
+                var orderprice = parseInt(document.querySelector("input[name=orderprice]").value);
+                var carddebt = parseInt(document.querySelector("input[name=carddebt]").value);
+                var cardlimit = parseInt(document.querySelector("input[name=cardlimit]").value);
+
+                if ((cardlimit - carddebt) < orderprice) {
+                    var alert = document.getElementById('alert');
+                    alert.setAttribute('text', 'Yetersiz Bakiyeden Dolayı, Bu Kredi Kartı İle Alışveriş Onayı Veremezsiniz.');
+                    alert.open();
+                }
+                else {
+                   document.getElementById('formPendingWishList').submit();
+                }
+            }
+            else {
+                var alert = document.getElementById('alert');
+                alert.setAttribute('text', 'Bekleyen Listesi Üzerinde İşlem Yapabilmek İçin Giriş Yapmalısın!');
+                alert.open();
+            }
+        },
+        _responseformPendingWishList: function (event) {
+            var response = event.detail.response;
+            //console.log(response);
+            var alert = document.getElementById('alert');
+            if (response.success) {
+                alert.setAttribute('text', response.message);
+                alert.open();
+                this.debounce('refreshAnswers', this._generateRequest, 400);
+            }
+
+            this.fire('tile-click', {
+                tile: null,
+                data: null
+            });
+
+        },
+        _remakeSelectedCard: function (id, cardlimit, carddebt) {
+            this.set('selectedcard', null);
+            var json = { id: id, cardlimit: cardlimit, carddebt: carddebt };
+            this.set('selectedcard', json);
+        }
        
     });
     </script>

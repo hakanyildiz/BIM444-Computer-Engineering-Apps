@@ -260,7 +260,7 @@ namespace core
                 List<wishlist> list = new List<wishlist>();
                 using (conn)
                 {
-                    cmd.CommandText = "select ordername,ordercount,orderprice,userid,orderdate,pending from wishlist where userid=@a";
+                    cmd.CommandText = "select ordername,ordercount,orderprice,userid,orderdate,pending,id from wishlist where userid=@a";
                     cmd.Parameters.Clear();
                     cmd.Parameters.AddWithValue("@a", id);
                     if (conn.State == ConnectionState.Open) conn.Close();
@@ -276,8 +276,9 @@ namespace core
                                 orderprice = !r.IsDBNull(2) ? r.GetDouble(2) : 0,
                                 userid = !r.IsDBNull(3) ? r.GetInt32(3) : 0,
                                 orderdate = !r.IsDBNull(4) ? r.GetDateTime(4) : DateTime.Now,
-                                pending = !r.IsDBNull(5) ? r.GetInt32(5) : 0
-                            });
+                                pending = !r.IsDBNull(5) ? r.GetInt32(5) : 0,
+                                id = !r.IsDBNull(6) ? r.GetInt32(6) : 0
+                            }); 
                         }
                     }
                 }
@@ -288,6 +289,44 @@ namespace core
                 return null;
             }
         }
+
+        public List<answerlist> getuseranswerlist(int id)
+        {
+            try
+            {
+                List<answerlist> list = new List<answerlist>();
+                using (conn)
+                {
+                    cmd.CommandText = "select id,question,answer,date,userid from answerlist where userid = @a";
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@a", id);
+                    if (conn.State == ConnectionState.Open) conn.Close();
+                    if (conn.State == ConnectionState.Closed) { conn.ConnectionString = connstr; conn.Open(); }
+                    using (SqlDataReader r = cmd.ExecuteReader())
+                    {
+                        while (r.Read())
+                        {
+                            list.Add(new answerlist()
+                            {
+                                id = !r.IsDBNull(0) ? r.GetInt32(0) : 0,
+                                question = !r.IsDBNull(1) ? r.GetString(1) : "",
+                                answer = !r.IsDBNull(2) ? r.GetString(2) : "",
+                                date = !r.IsDBNull(3) ? r.GetDateTime(3) : DateTime.Now,
+                                userid = id,
+                            });
+                        }
+                    }
+                }
+
+                
+                return list;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         public List<wishlist> getuserwishlist(int userid, int pending, int itemperpage, int page)
         {
             try
@@ -305,7 +344,7 @@ namespace core
                         pendingClause += " and pending = 0";
                     }
 
-                    cmd.CommandText = string.Format("select * from (select ordername,ordercount,orderprice,userid,orderdate,pending,row_number() over (order by orderdate desc) as rn from wishlist where userid=@userid {0}) a where a.rn between @start and @end", pendingClause);
+                    cmd.CommandText = string.Format("select * from (select ordername,ordercount,orderprice,userid,orderdate,pending,id,row_number() over (order by orderdate desc) as rn from wishlist where userid=@userid {0}) a where a.rn between @start and @end", pendingClause);
                     cmd.Parameters.Clear();
                     cmd.Parameters.AddWithValue("@start", ((page - 1) * itemperpage) + 1);
                     cmd.Parameters.AddWithValue("@end", page * itemperpage);
@@ -323,7 +362,9 @@ namespace core
                                 orderprice = !r.IsDBNull(2) ? r.GetDouble(2) : 0,
                                 userid = !r.IsDBNull(3) ? r.GetInt32(3) : 0,
                                 orderdate = !r.IsDBNull(4) ? r.GetDateTime(4) : DateTime.Now,
-                                pending = !r.IsDBNull(5) ? r.GetInt32(5) : 0
+                                pending = !r.IsDBNull(5) ? r.GetInt32(5) : 0,
+                                id = !r.IsDBNull(6) ? r.GetInt32(6) : 0
+                                
                             });
                         }
                     }
@@ -971,11 +1012,24 @@ namespace core
 
     public class wishlist
     {
+        public int id { get; set; }
         public string ordername { get; set; }
         public int ordercount { get; set; }
         public double orderprice { get; set; }
         public DateTime orderdate { get; set; }
         public int pending { get; set; }
         public int userid { get; set; }
+    }
+
+    public class answerlist
+    {
+        public int id { get; set; }
+        public string question { get; set; }
+        public string answer { get; set; }
+
+        public DateTime date { get; set; }
+
+        public int userid { get; set; }
+
     }
 }

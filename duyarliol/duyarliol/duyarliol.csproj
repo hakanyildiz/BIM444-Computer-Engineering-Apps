@@ -1075,6 +1075,7 @@
     <Content Include="assets\duyarliol\do-app.html" />
     <Content Include="assets\duyarliol\do-home.html" />
     <Content Include="assets\duyarliol\do-completed-wishlist.html" />
+    <Content Include="assets\duyarliol\do-answerlist.html" />
     <Content Include="assets\duyarliol\do-pending-wishlist.html" />
     <Content Include="assets\duyarliol\do-profile.html" />
     <Content Include="assets\duyarliol\do-registration.html" />
@@ -2139,10 +2140,9 @@
     <Content Include="assets\components\app-layout\templates\shrine\data\items.json" />
     <Content Include="assets\components\app-layout\templates\shrine\manifest.json" />
     <Content Include="assets\components\app-layout\templates\test-drive\bower.json" />
+    <Content Include="assets\duyarliol-ce.rar" />
     <None Include="Properties\PublishProfiles\duyarliol - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\duyarliol - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\duyarliol1 - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\duyarliol1 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\kaldirirmi.com.pubxml" />
     <None Include="Properties\PublishProfiles\pg.kaldirirmi.com.pubxml" />
     <None Include="Web.Debug.config">

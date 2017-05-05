@@ -1,0 +1,335 @@
+﻿<script src="../components/moment-element/hakke/hakke-moment-with-locales.min.js"></script>
+<dom-module id="do-answerlist">
+    <style>
+        :host {
+            display: block;
+            margin-bottom: 50px;
+        }
+
+        #answerlist {
+            @apply(--layout-vertical);
+            @apply(--layout-center);
+            /*flex-flow: row wrap;*/
+            /*-ms-flex-flow: row wrap;*/
+            width: 600px;
+            min-height: 500px;
+            background: #fff;
+                height: 700px;
+        }
+        #answerlist .item{
+            padding:10px;
+            width:90%;
+            border-bottom:1px solid;
+            @apply(--layout-horizontal);
+        }
+        #answerlist .item-column{
+            @apply(--layout-horizontal);
+        }
+        #answerlist .item-column .ordername{
+            font-size:18px;
+        }
+         #answerlist .item-column .ordercount{
+            font-size:16px;
+        }
+          #answerlist .item-column .orderdate{
+            font-size:16px;
+        }
+           #answerlist .item-column .orderprice{
+            font-size:16px;
+        }
+           #answerlist .item-column .leftside i{
+               font-weight:bold;
+           }
+           #answerlist .item-column .centerside{
+               @apply(--layout-horizontal);
+               @apply(--layout-center-center);
+           }
+           #answerlist .item-column .rightside{
+
+           }
+
+        app-toolbar{
+            background: #0026ff;
+            color: #fff;
+        }
+        #pibDone{
+            color: #0026ff;
+        }
+        #pibDelete{
+            color: red;
+        }
+        #answerlist .item-column paper-icon-button{
+            transition: all ease-in-out .3s;
+           width: 45px;
+           opacity: 0.88;
+           height: 45px;
+        }
+        #answerlist .item-column paper-icon-button:hover{
+           transform: scale(1.2);
+           opacity:1; 
+        }
+        div[empty]{
+            margin-top:30px;
+            font-size:22px;
+            text-align:center;
+            font-weight: 100;
+        }    
+        #dialogwish paper-toolbar{
+            margin: 0 !important;
+        }
+         .saveAnswerButton{
+                        background: #222;
+                        color: white;
+                        width: 100%;
+                        margin: 15px 5px;
+                  }
+
+             paper-radio-button.red {
+                --paper-radio-button-checked-color: var(--paper-red-500);
+                --paper-radio-button-checked-ink-color: var(--paper-red-500);
+                --paper-radio-button-unchecked-color: var(--paper-red-900);
+                --paper-radio-button-unchecked-ink-color: var(--paper-red-900);
+                --paper-radio-button-label-color: var(--paper-red-500);
+              }
+              paper-radio-button.green {
+                --paper-radio-button-checked-color: var(--paper-green-500);
+                --paper-radio-button-checked-ink-color: var(--paper-green-500);
+                --paper-radio-button-unchecked-color: var(--paper-green-900);
+                --paper-radio-button-unchecked-ink-color: var(--paper-green-900);
+                --paper-radio-button-label-color: var(--paper-green-500);
+              }
+    </style>
+      <template>
+              <iron-ajax auto id="getuseranswerlist"
+                         debounce="3000"
+                         url="/h/main?fm=get-user-answerlist"
+                         handle-as="json"
+                         on-response="_response"></iron-ajax>
+                  <app-toolbar>
+                      <iron-icon icon="icons:question-answer"></iron-icon>
+                     Alışverişte Cevaplanan Sorular
+                  </app-toolbar>    
+                  <paper-material id="answerlist" elevation="1">
+                      <template is="dom-if" if="[[!empty]]">
+                          <!-- question 1-->
+                          <div class="item">
+                              <div class="layout vertical flex">
+                                  <div class="item-column">
+                                      <h1 class="ordername">Online alışverişi çok fazla tercih ediyor musunuz?</h1>
+                                  </div>
+                                  <div class="item-column">
+                                      <paper-radio-group selected="{{answer1}}">
+                                          <paper-radio-button name="evet" class="green">Evet</paper-radio-button>
+                                          <paper-radio-button name="hayır" class="red">Hayır</paper-radio-button>
+                                      </paper-radio-group>
+                                  </div>
+                              </div>
+                          </div>
+                          <!-- question 2-->
+                          <div class="item">
+                              <div class="layout vertical flex">
+                                  <div class="item-column">
+                                      <h1 class="ordername">Online alışveriş dışında günlük hayatta kredi  kartınızı sıklıkla kullanır mısınız?</h1>
+                                  </div>
+                                  <div class="item-column">
+                                      <paper-radio-group selected="{{answer2}}">
+                                          <paper-radio-button name="evet" class="green">Evet</paper-radio-button>
+                                          <paper-radio-button name="hayır" class="red">Hayır</paper-radio-button>
+                                      </paper-radio-group>
+                                  </div>
+                              </div>
+                          </div>
+                          <!-- question 3-->
+                          <div class="item">
+                              <div class="layout vertical flex">
+                                  <div class="item-column">
+                                      <h1 class="ordername">Her ay düzenli olarak kredi kartı borcunuzu (en az asgari tutar) ödüyor musunuz?</h1>
+                                  </div>
+                                  <div class="item-column">
+                                      <paper-radio-group selected="{{answer3}}">
+                                          <paper-radio-button name="evet" class="green">Evet</paper-radio-button>
+                                          <paper-radio-button name="hayır" class="red">Hayır</paper-radio-button>
+                                      </paper-radio-group>
+                                  </div>
+                              </div>
+                          </div>
+                          <!-- question 4-->
+                          <div class="item">
+                              <div class="layout vertical flex">
+                                  <div class="item-column">
+                                      <h1 class="ordername">Elinizde olan bir ürün/ürünleri tekrar almayı tercih eder misiniz?</h1>
+                                  </div>
+                                  <div class="item-column">
+                                      <paper-radio-group selected="{{answer4}}">
+                                          <paper-radio-button name="evet" class="green">Evet</paper-radio-button>
+                                          <paper-radio-button name="hayır" class="red">Hayır</paper-radio-button>
+                                      </paper-radio-group>
+                                  </div>
+                              </div>
+                          </div>
+                          <!-- question 5-->
+                          <div class="item">
+                              <div class="layout vertical flex">
+                                  <div class="item-column">
+                                      <h1 class="ordername">Almakta olduğunuz ürün/ürünlere gerçekten ihtiyacınız olduğunu düşünüyor musunuz?</h1>
+                                  </div>
+                                  <div class="item-column">
+                                      <paper-radio-group selected="{{answer5}}">
+                                          <paper-radio-button name="evet" class="green">Evet</paper-radio-button>
+                                          <paper-radio-button name="hayır" class="red">Hayır</paper-radio-button>
+                                      </paper-radio-group>
+                                  </div>
+                              </div>
+                          </div>
+                          <!-- question 6-->
+                          <div class="item">
+                              <div class="layout vertical flex">
+                                  <div class="item-column">
+                                      <h1 class="ordername">Bu kampanyaya karşı dürüst olduğunuzu düşünüyor musunuz?</h1>
+                                  </div>
+                                  <div class="item-column">
+                                      <paper-radio-group selected="{{answer6}}">
+                                          <paper-radio-button name="evet" class="green">Evet</paper-radio-button>
+                                          <paper-radio-button name="hayır" class="red">Hayır</paper-radio-button>
+                                      </paper-radio-group>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="layout horizontal">
+                              <paper-button class="saveAnswerButton" raised on-tap="_saveAnswerList">Cevapları Güncelle</paper-button>
+                          </div>
+                      </template>
+                      <template is="dom-if" if="[[empty]]">
+                          <div empty>
+                             Daha Önce Soruları Cevaplamamışsın!
+                              Alışveriş Yaptıktan Sonra Cevaplarını Buradan Düzenleyebilirsin.
+                          </div>
+                        </template>
+                  </paper-material>
+
+          <form id="formChangeAnswerList" is="iron-form" action="/h/main" on-iron-form-response="_responseFormChangeAnswerList" method="post">
+            <input type="hidden" name="fm" value="change-user-answerlist" />
+            <input type="hidden" name="answer1" value="{{answer1}}" />
+            <input type="hidden" name="answer2" value="{{answer2}}" />
+            <input type="hidden" name="answer3" value="{{answer3}}" />
+            <input type="hidden" name="answer4" value="{{answer4}}" />
+            <input type="hidden" name="answer5" value="{{answer5}}" />
+            <input type="hidden" name="answer6" value="{{answer6}}" />
+            <input type="hidden" name="uid" value="[[uid]]"/>
+        </form>
+
+    </template>
+    <script>
+    Polymer({
+        is: "do-answerlist",
+        computeFilter: function (selectedid) {
+            if (!selectedid) {
+                // set filter to null to disable filtering
+                return null;
+            } else {
+                // return a filter function for the current search string
+                return function (item) {
+                    return (item.id == selectedid);
+                };
+            }
+        },
+        properties: {
+            uid: {type: Number, value: 0, notify: true},
+            go: {
+                type: Boolean,
+                value: false,
+                notify: true
+            },
+            loading: {
+                type: Boolean,
+                value: true,
+                notify: true
+            },
+            response: {
+                type: Array,
+                notify: true,
+                value: []
+            },
+            timeout: {
+                type: Number,
+                value: 1111,
+                notify: true
+            },
+            empty: { type: Boolean, value: false, notify: true },
+        },
+        ready: function () {
+        },
+        _response: function (event) {
+            var response = event.detail.response;
+            console.log(response);
+            var counter = 0;
+            if (response.length > 0) {
+                response.forEach(function (item) {
+                    this.push('response', item);
+
+                    if(counter == 0)
+                    {
+                        this.answer1 = item.answer;
+                    }
+                    else if (counter == 1) {
+                        this.answer2 = item.answer;
+                    }
+                    else if (counter == 2) {
+                        this.answer3 = item.answer;
+                    }
+                    else if (counter == 3) {
+                        this.answer4 = item.answer;
+                    }
+                    else if (counter == 4) {
+                        this.answer5 = item.answer;
+                    }
+                    else if (counter == 5) {
+                        this.answer6 = item.answer;
+                    }
+
+                    counter++;
+                }, this);
+            }
+            else {
+                this.empty = true;
+            }
+            this.loading = false;
+
+        },
+        _clearState: function () {
+            this.page = 0;
+            this.empty = false;
+            this.loading = true;
+            this.set('response', []);
+        },
+        _generateRequest: function () {
+            if (this.$.getuseranswerlist.lastRequest) {
+                this.$.getuseranswerlist.lastRequest.abort();
+            }
+            this.page = 1;
+            this.$.getuseranswerlist.generateRequest();
+        },
+        _saveAnswerList: function () {
+            if (this.userid != 0) {
+                    document.getElementById('formChangeAnswerList').submit();
+            }
+            else {
+                var alert = document.getElementById('alert');
+                alert.setAttribute('text', 'Cevapları Değiştirebilmek İçin Giriş Yapmalısın!');
+                alert.open();
+            }
+        },
+        _responseFormChangeAnswerList: function (event) {
+            var response = event.detail.response;
+            //console.log(response);
+            var alert = document.getElementById('alert');
+            if (response.success) {
+                alert.setAttribute('text', response.message);
+                alert.open();
+                this.debounce('refreshAnswers', this._generateRequest, 400);
+            }
+        },
+       
+    });
+    </script>
+</dom-module>

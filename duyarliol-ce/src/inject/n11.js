@@ -36,7 +36,7 @@ $(document).ready(function(){
 	
 	if(sepetimSatinAl !== null)
 	{
-		$('#stickyCartTotal > div').prepend("<span id='btnSepetimInjectionN11' class='button green big inicon'>Hakke Al<span>")
+		$('#stickyCartTotal > div').prepend("<span id='btnSepetimInjectionN11' class='button green big inicon'>Satın Al<span>")
 		
 		$('#btnSepetimInjectionN11').click(function(e){
 		 
