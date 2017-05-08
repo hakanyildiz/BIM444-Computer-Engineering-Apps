@@ -25,7 +25,7 @@ var cookie = {
 };
 
 
-function Success(profilId, wishlist) {
+function Success(profilId, wishlist,sitename,redirecturl) {
 
     chrome.tabs.insertCSS(null, { file: "src/bg/popup.css" }, function () {
         console.log("popup.css load");
@@ -43,7 +43,7 @@ function Success(profilId, wishlist) {
         console.log("jquery-ui.js load")
     });
 
-    var sendingdata = 'var userid=' + profilId + ';var wisharray = [';
+    var sendingdata = 'var userid=' + profilId + ';var sitename = "' + sitename + '";var redirecturl = "'+redirecturl+'";var wisharray = [';
     for (var ll = 0; ll < wishlist.length; ll++) {
         sendingdata += '{ name: "' + wishlist[ll].name + '", count: "' + wishlist[ll].count + '", price: "' + wishlist[ll].price + '" },';
     }
@@ -100,20 +100,31 @@ chrome.runtime.onMessage.addListener(
     if (request.injector == "n11"){
 		console.log('n11den istek geldi');
 		console.log(request.wishlist); //istek listesi okundu
-		n11creation(request.wishlist);
-				
+		creation(request.wishlist, 'n11', '');
 	    //sendResponse({farewell: "goodbye"});
-	}
+    }
+
+    if (request.injector == "gittigidiyor") {
+        console.log('gittigidiyor istek geldi');
+        console.log(request.wishlist); 
+        creation(request.wishlist, 'gittigidiyor', '');
+    }
+
+    if (request.injector == "mediamarkt") {
+        console.log('mediamarkt istek geldi');
+        console.log(request.wishlist);
+        creation(request.wishlist, 'mediamarkt', request.redirecturl);
+    }
   });
   
-  function n11creation(wishlist){
+function creation(wishlist, sitename, redirecturl) {
 		 chrome.cookies.get(cookie, function (c) {
                     console.log(c);
                     if (c != null) {
                         var id = c.value.split("=")[1];
 
                         if (id != null) {
-                            Success(id,wishlist);
+                            Success(id,wishlist,sitename,redirecturl);
                         }
                         else {
                             Fail();

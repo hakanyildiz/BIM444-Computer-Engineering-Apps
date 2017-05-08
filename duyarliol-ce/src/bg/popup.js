@@ -21,6 +21,9 @@ var q4 = '<div id="do-q4" class="do-question"><p question>Elinizde olan bir ür�
 var q5 = '<div id="do-q5" class="do-question"><p question>Almakta olduğunuz ürün/ürünlere gerçekten ihtiyacınız olduğunu düşünüyor musunuz?</p><div class="do-radiobuttons"><div><input type="radio" name="q5" value="evet" /> Evet </div><div> <input type="radio" name="q5" value="hayır" /> Hayır </div> </div></div>';
 var q6 = '<div id="do-q6" class="do-question"><p question>Bu kampanyaya karşı dürüst olduğunuzu düşünüyor musunuz?</p><div class="do-radiobuttons"><div><input type="radio" name="q6" value="evet" /> Evet </div><div> <input type="radio" name="q6" value="hayır" /> Hayır </div> </div></div>';
 
+var n11Redirect = 'https://www.n11.com/sepetim/odeme-onayi';
+var gittigidiyorRedirect = 'https://www.gittigidiyor.com/adres-bilgileri';
+var mediamarktRedirect = redirecturl;
 
 
 var firstloader = '<div style="float:left !important;margin:5px;"><img style="width:32px;" src="' + chrome.extension.getURL('content/loading2.gif') + '" /></div> <div style="float:left !important;margin:10px 0px 0px 0px !important"><p class="reset-this">Duyarlı.ol Çalıştırılıyor</p></div> <i style="clear:both"></i>';
@@ -58,9 +61,9 @@ $('html body').append(splash);
 //}
 
 
-var siteUrl = "http://localhost:64481";
-var OnlineSiteUrl = "http://www.putnotes.net";
-var azureUrl = "http://duyarliol.azurewebsites.net";
+var siteUrl = "https://localhost:64481";
+var OnlineSiteUrl = "https://www.putnotes.net";
+var azureUrl = "https://duyarliol.azurewebsites.net";
 var handlerClause = "/handlers/main.ashx";
 
 var answerNeedAssign = true;
@@ -262,6 +265,7 @@ $("#btnDoRun").click(function () {
 
         var dataToServer = {
             userid: userid,
+            sitename: sitename,
             dataType: 'json',
             wishlist: JSON.stringify(wisharray),
             answerlist: JSON.stringify(answList),
@@ -295,7 +299,10 @@ $("#btnDoRun").click(function () {
                     $("#MyQuotes").hide();
                     $(".MyQuotesform").remove();
 					
-					window.location = 'https://www.n11.com/sepetim/odeme-onayi';
+                    if (sitename == 'n11') window.location = n11Redirect;
+                    else if (sitename == 'gittigidiyor') window.location = gittigidiyorRedirect;
+                    else if (sitename == 'mediamarkt') window.location = mediamarktRedirect;
+
                 }, 4000);
 				
 				

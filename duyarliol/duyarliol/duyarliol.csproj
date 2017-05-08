@@ -1143,6 +1143,9 @@
     <Content Include="assets\components\web-animations-js\web-animations.min.js" />
     <Content Include="assets\css\mediaquery-template.css" />
     <Content Include="assets\components\gulpfile.js" />
+    <Content Include="assets\img\banner\gittigidiyor.png" />
+    <Content Include="assets\img\banner\mediamarkt.png" />
+    <Content Include="assets\img\banner\n11.png" />
     <Content Include="assets\img\logo.png" />
     <Content Include="assets\js\jquery-3.1.1.min.js" />
     <Content Include="assets\js\js.cookie.js" />

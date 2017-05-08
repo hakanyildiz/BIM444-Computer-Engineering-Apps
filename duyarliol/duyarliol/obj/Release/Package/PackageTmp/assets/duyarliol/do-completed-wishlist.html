@@ -14,186 +14,225 @@
             width: 600px;
             min-height: 500px;
             background: #fff;
+            max-height: 600px;
+            overflow-y: scroll;
         }
-        #wishlist .item{
-            padding:10px;
-            width:90%;
-            border-bottom:1px solid;
-            @apply(--layout-vertical);
-        }
-        #wishlist .item-column{
-            @apply(--layout-horizontal);
-        }
-        #wishlist .item-column .ordername{
-            font-size:18px;
-        }
-         #wishlist .item-column .ordercount{
-            font-size:16px;
-        }
-          #wishlist .item-column .orderdate{
-            font-size:16px;
-        }
-           #wishlist .item-column .orderprice{
-            font-size:16px;
-        }
-           #wishlist .item-column .leftside i{
-               font-weight:bold;
-           }
-           #wishlist .item-column .centerside{
-               @apply(--layout-horizontal);
-               @apply(--layout-center-center);
-           }
-           #wishlist .item-column .rightside{
 
-           }
+            #wishlist .item {
+                padding: 10px;
+                min-height:100px;
+                width: 90%;
+                border-bottom: 1px solid;
+                @apply(--layout-vertical);
+            }
 
-        app-toolbar{
+            #wishlist .item-column {
+                @apply(--layout-horizontal);
+            }
+
+                #wishlist .item-column .ordername {
+                    font-size: 18px;
+                }
+
+                #wishlist .item-column .ordercount {
+                    font-size: 16px;
+                }
+
+                #wishlist .item-column .orderdate {
+                    font-size: 16px;
+                }
+
+                #wishlist .item-column .orderprice {
+                    font-size: 16px;
+                }
+
+                #wishlist .item-column .leftside i {
+                    font-weight: bold;
+                }
+
+                #wishlist .item-column .centerside {
+                    @apply(--layout-horizontal);
+                    @apply(--layout-center-center);
+                }
+
+                #wishlist .item-column .rightside {
+                }
+
+        app-toolbar {
             background: #0026ff;
             color: #fff;
         }
-        #pibDone{
+
+        #pibDone {
             color: #0026ff;
         }
-        #pibDelete{
+
+        #pibDelete {
             color: red;
         }
-        #wishlist .item-column paper-icon-button{
+
+        #wishlist .item-column paper-icon-button {
             transition: all ease-in-out .3s;
-           width: 45px;
-           opacity: 0.88;
-           height: 45px;
+            width: 45px;
+            opacity: 0.88;
+            height: 45px;
         }
-        #wishlist .item-column paper-icon-button:hover{
-           transform: scale(1.2);
-           opacity:1; 
-        }
-         div[empty]{
-            margin-top:30px;
-            font-size:22px;
+
+            #wishlist .item-column paper-icon-button:hover {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+
+        div[empty] {
+            margin-top: 30px;
+            font-size: 22px;
             font-weight: 100;
-        }    
+        }
     </style>
-      <template>
-              <iron-ajax auto id="getcompletedwishlist"
-                         debounce="300"
-                         url="/h/main?fm=get-user-completed-wishlist"
-                         handle-as="json"
-                         on-response="_response"></iron-ajax>
-                  <app-toolbar>
-                      <iron-icon icon="icons:hourglass-full"></iron-icon>
-                      Onaylanmış Alışverişler
-                  </app-toolbar>    
-                  <paper-material id="wishlist" elevation="1">
-                      <template is="dom-repeat" items="{{response}}" as="item">
-                          <div class="item">
-                              <div class="item-column">
-                                  <h1 class="ordername">[[item.ordername]]</h1>
-                              </div>
-                              <div class="item-column">
-                                  <div class="layout vertical leftside">
-                                      <div class="orderprice">Fiyat: <i>{{_remakePrice(item.orderprice)}}</i> TL</div>
-                                      <div class="ordercount">Adet: <i>[[item.ordercount]]</i></div>
-                                  </div>
-                                  <div class="flex centerside">
-                                      <span class="orderdate">{{_remakeDate(item.orderdate)}}</span>
-                                  </div>
-                              </div>
-                          </div>
-                      </template>
-                      <template is="dom-if" if="[[empty]]">
-                          <div empty>
-                              Onaylanmış Bir Alışveriş Bulunmamaktadır.
-                          </div>
-                      </template>
-                  </paper-material>
-        
+    <template>
+        <iron-ajax auto id="getcompletedwishlist"
+                   debounce="300"
+                   url="/h/main?fm=get-user-completed-wishlist"
+                   handle-as="json"
+                   on-response="_response"></iron-ajax>
+        <app-toolbar>
+            <iron-icon icon="icons:hourglass-full"></iron-icon>
+            Onaylanmış Alışverişler
+        </app-toolbar>
+        <paper-material id="wishlist" elevation="1">
+            <template is="dom-repeat" items="{{response}}" as="item">
+                <div class="item">
+                    <div class="layout horizontal flex">
+                        <div>
+                            <iron-image style="width:70px; height:60px; background-color: lightgray;"
+                                        sizing="cover" preload fade src="{{_remakeBanner(item.sitename)}}"></iron-image>
+                        </div>
+                        <div class="layout flex">
+                            <div class="item-column">
+                                <h1 class="ordername">[[item.ordername]]</h1>
+                            </div>
+                            <div class="item-column">
+                                <div class="layout vertical leftside">
+                                    <div class="orderprice">Fiyat: <i>{{_remakePrice(item.orderprice)}}</i> TL</div>
+                                    <div class="ordercount">Adet: <i>[[item.ordercount]]</i></div>
+                                </div>
+                                <div class="flex centerside">
+                                    <span class="orderdate">{{_remakeDate(item.orderdate)}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            <template is="dom-if" if="[[empty]]">
+                <div empty>
+                    Onaylanmış Bir Alışveriş Bulunmamaktadır.
+                </div>
+            </template>
+        </paper-material>
+
     </template>
     <script>
-    Polymer({
-        is: "do-completed-wishlist",
-        properties: {
-            go: {
-                type: Boolean,
-                value: false,
-                notify: true
+        Polymer({
+            is: "do-completed-wishlist",
+            properties: {
+                go: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                loading: {
+                    type: Boolean,
+                    value: true,
+                    notify: true
+                },
+                query: {
+                    type: String,
+                    value: '',
+                    notify: true
+                },
+                page: {
+                    type: Number,
+                    value: 1,
+                },
+                itemperpage: {
+                    type: Number,
+                    value: 20
+                },
+                response: {
+                    type: Array,
+                    notify: true,
+                    value: []
+                },
+                timeout: {
+                    type: Number,
+                    value: 1111,
+                    notify: true
+                },
+                blurred: {
+                    type: String,
+                    observer: '_isBlurredFocus'
+                },
+                empty: { type: Boolean, value: false, notify: true }
             },
-            loading: {
-                type: Boolean,
-                value: true,
-                notify: true
+            ready: function () {
+                //console.log('kaldirirmi-all-news ready');
             },
-            query: {
-                type: String,
-                value: '',
-                notify: true
-            },
-            page: {
-                type: Number,
-                value: 1,
-            },
-            itemperpage: {
-                type: Number,
-                value: 20
-            },
-            response: {
-                type: Array,
-                notify: true,
-                value: []
-            },
-            timeout: {
-                type: Number,
-                value: 1111,
-                notify: true
-            },
-            blurred: {
-                type: String,
-                observer: '_isBlurredFocus'
-            },
-            empty: { type: Boolean, value: false, notify: true }
-        },
-        ready: function () {
-            //console.log('kaldirirmi-all-news ready');
-        },
-        _response: function (event) {
-            var response = event.detail.response;
-          
-            if (response.length > 0) {
-                response.forEach(function (item) {
-                    this.push('response', item);
-                }, this);
-                //this.$.pendingWishThreshold.clearTriggers();
-            }
-            else {
-                this.empty = true;
-            }
-            this.loading = false;
+            _response: function (event) {
+                var response = event.detail.response;
 
-            //console.log(this.response);
-        },
-        _clearState: function () {
-            this.page = 0;
-            this.empty = false;
-            this.loading = true;
-            this.set('response', []);
-        },
-        _generateRequest: function () {
-            this._clearState();
-            if (this.$.getcompletedwishlist.lastRequest) {
-                this.$.getcompletedwishlist.lastRequest.abort();
+                if (response.length > 0) {
+                    response.forEach(function (item) {
+                        this.push('response', item);
+                    }, this);
+                    //this.$.pendingWishThreshold.clearTriggers();
+                }
+                else {
+                    this.empty = true;
+                }
+                this.loading = false;
+
+                //console.log(this.response);
+            },
+            _clearState: function () {
+                this.page = 0;
+                this.empty = false;
+                this.loading = true;
+                this.set('response', []);
+            },
+            _remakeBanner: function (sitename) {
+
+                if (sitename == 'gittigidiyor') {
+                    return 'assets/img/banner/gittigidiyor.png'
+                }
+                else if (sitename == 'n11') {
+                    return 'assets/img/banner/n11.png'
+                }
+                else if (sitename == 'mediamarkt') {
+                    return 'assets/img/banner/mediamarkt.png'
+                }
+                else {
+                    return 'assets/img/logo.png'
+                }
+            },
+            _generateRequest: function () {
+                this._clearState();
+                if (this.$.getcompletedwishlist.lastRequest) {
+                    this.$.getcompletedwishlist.lastRequest.abort();
+                }
+                this.page = 1;
+                this.$.getcompletedwishlist.generateRequest();
+            },
+            _remakePrice: function (price) {
+                return parseInt(price);
+            },
+            _remakeDate: function (itemdate) {
+                return moment(itemdate).format('LL');
+            },
+            _isBlurredFocus: function (newVal, oldVal) {
+                //console.log('isBlurredFocus' + newVal);
+                this.debounce('refreshcompleted', this._generateRequest, 400);
             }
-            this.page = 1;
-            this.$.getcompletedwishlist.generateRequest();
-        },
-        _remakePrice: function (price) {
-            return parseInt(price);
-        },
-        _remakeDate: function (itemdate) {
-            return moment(itemdate).format('LL');
-        },
-        _isBlurredFocus: function (newVal, oldVal) {
-            //console.log('isBlurredFocus' + newVal);
-            this.debounce('refreshcompleted', this._generateRequest, 400);
-        }
-    });
+        });
     </script>
 </dom-module>

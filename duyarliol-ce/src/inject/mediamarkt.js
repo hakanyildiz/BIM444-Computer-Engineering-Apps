@@ -20,25 +20,67 @@ $(document).ready(function(){
 	
 
 	/*  /sepetim */
-	var sepetimSatinAl = $('#js-cart-app > .cobuttons > .cogo-checkout');
+    var sepetimSatinAl = $('#js-cart-app > .cobuttons > .cogo-checkout > .cocheckout-actions');
 	if(sepetimSatinAl !== null)
 	{	
-		console.log(sepetimSatinAl);
+		//console.log(sepetimSatinAl);
 		
-		$('#js-cart-app > .cobuttons > .cogo-checkout > .cocheckout-actions').prepend("<a id='btnSepetimInjectionMM' class='cobutton cobutton-next'><span>Hakke</span><a>")
+		//$('#js-cart-app > .cobuttons > .cogo-checkout > .cocheckout-actions').prepend("<a id='btnSepetimInjectionMM' class='cobutton cobutton-next'><span>Hakke</span><a>")
 		
 		
-		$('#btnSepetimInjectionMM').click(function(e){
-			chrome.runtime.sendMessage({injector: "hepsiburada"}, function(response) {
-			   //console.log(response.farewell);
-			});
-		});
+		//$('#btnSepetimInjectionMM').click(function(e){
+		//	chrome.runtime.sendMessage({injector: "hepsiburada"}, function(response) {
+		//	   //console.log(response.farewell);
+		//	});
+		//});
 		
 		console.log('not null');
 		sepetimSatinAl.click(function(e){
-			e.preventDefault();
+		    e.preventDefault();
 						
-			alert('Duyarlı.ol was here!');
+		    var redirecturl = $('#js-cart-app > .cobuttons > .cogo-checkout > .cocheckout-actions a')[0].href;
+
+		    //alert('Duyarlı.ol was here!');
+			if (document.querySelector('table.ctable') !== null) {
+
+			    var childs = $('table.ctable').children();
+			    var len = childs.length;
+			    var wishlist = [];
+
+			    //console.log(childs);
+			    var uname = '', ucount = 0, uprice = 0;
+
+			    for (var i = 2; i < len ; i++) {
+			        var curr = childs[i];
+
+			        //console.log(curr);
+
+			        uname = curr.querySelector('.cproduct-info .cproduct-heading a').innerText;
+			        var upricetext = curr.querySelector('.cproduct-total span').innerText;
+			        uprice = upricetext.slice(0, upricetext.length - 3);
+			        ucount = curr.querySelector('.cproduct-qty .select-wrapper .select-button select').getAttribute('ng-change').replace('}','').replace(')','').split(': ')[1];
+
+
+			        if (uname !== '' && ucount != 0 && uprice != 0) {
+			                    var currItem = {
+			                        name: uname,
+			                        count: ucount,
+			                        price: uprice
+			                    };
+			                    console.log(currItem);
+			                    wishlist.push(currItem);
+
+			                    uname = '';
+			                    ucount = 0;
+			                    uprice = 0;
+			       }
+			    }
+
+			}
+
+			chrome.runtime.sendMessage({ injector: "mediamarkt", wishlist: wishlist, redirecturl: redirecturl }, function (response) {
+			    //console.log(response.farewell);
+			});
 
 		});
 	}

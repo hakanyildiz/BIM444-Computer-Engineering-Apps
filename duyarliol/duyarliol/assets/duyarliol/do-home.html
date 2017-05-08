@@ -413,7 +413,15 @@
             },
             _onTileClick: function (event) {
                 this.blurred = Math.random().toString();
-            }
+
+                this.debounce('RefreshCreditcards', this._generateCreditCardRequest, 400);
+            },
+            _generateCreditCardRequest: function () {
+                if (this.$.iaGetUserCreditCards.lastRequest) {
+                    this.$.iaGetUserCreditCards.lastRequest.abort();
+                }
+                this.$.iaGetUserCreditCards.generateRequest();
+            },
         });
 
 

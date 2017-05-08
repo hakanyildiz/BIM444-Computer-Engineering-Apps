@@ -1161,6 +1161,7 @@ namespace duyarliol.handlers
 
                             string userid = context.Request.QueryString["userid"],
                              wl = context.Request.QueryString["wishlist"],
+                             sitename = context.Request.QueryString["sitename"],
                               al = context.Request.QueryString["answerlist"];
 
                             if (context.Session["user"] != null)
@@ -1223,7 +1224,8 @@ namespace duyarliol.handlers
                                     new core.db() { column = "orderprice", value = (float)Convert.ToDouble(wish.price) / 100 },
                                     new core.db() { column = "orderdate", value = DateTime.Now },
                                     new core.db() { column = "pending", value = 1 },
-                                    new core.db() { column = "userid", value = Convert.ToInt32(userid) }
+                                    new core.db() { column = "userid", value = Convert.ToInt32(userid) },
+                                    new core.db() { column = "sitename", value = sitename }
                                 });
                                 wishTotal += Convert.ToDouble(wish.price) / 100;
                             }
@@ -1393,6 +1395,7 @@ namespace duyarliol.handlers
 
                             string userid = context.Request.QueryString["userid"],
                              wl = context.Request.QueryString["wishlist"],
+                             sitename = context.Request.QueryString["sitename"],
                               al = context.Request.QueryString["answerlist"];
 
                             if (context.Session["user"] != null)
@@ -1455,7 +1458,9 @@ namespace duyarliol.handlers
                                     new core.db() { column = "orderprice", value = (float)Convert.ToDouble(wish.price) / 100 },
                                     new core.db() { column = "orderdate", value = DateTime.Now },
                                     new core.db() { column = "pending", value = 1 },
-                                    new core.db() { column = "userid", value = Convert.ToInt32(userid) }
+                                    new core.db() { column = "userid", value = Convert.ToInt32(userid) },
+                                    new core.db() { column = "sitename", value = sitename }
+
                                 });
                                 wishTotal += Convert.ToDouble(wish.price) / 100;
                             }

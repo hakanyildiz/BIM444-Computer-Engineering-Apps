@@ -260,7 +260,7 @@ namespace core
                 List<wishlist> list = new List<wishlist>();
                 using (conn)
                 {
-                    cmd.CommandText = "select ordername,ordercount,orderprice,userid,orderdate,pending,id from wishlist where userid=@a";
+                    cmd.CommandText = "select ordername,ordercount,orderprice,userid,orderdate,pending,id,sitename from wishlist where userid=@a";
                     cmd.Parameters.Clear();
                     cmd.Parameters.AddWithValue("@a", id);
                     if (conn.State == ConnectionState.Open) conn.Close();
@@ -277,7 +277,8 @@ namespace core
                                 userid = !r.IsDBNull(3) ? r.GetInt32(3) : 0,
                                 orderdate = !r.IsDBNull(4) ? r.GetDateTime(4) : DateTime.Now,
                                 pending = !r.IsDBNull(5) ? r.GetInt32(5) : 0,
-                                id = !r.IsDBNull(6) ? r.GetInt32(6) : 0
+                                id = !r.IsDBNull(6) ? r.GetInt32(6) : 0,
+                                sitename = !r.IsDBNull(7) ? r.GetString(7): "default"
                             }); 
                         }
                     }
@@ -344,7 +345,7 @@ namespace core
                         pendingClause += " and pending = 0";
                     }
 
-                    cmd.CommandText = string.Format("select * from (select ordername,ordercount,orderprice,userid,orderdate,pending,id,row_number() over (order by orderdate desc) as rn from wishlist where userid=@userid {0}) a where a.rn between @start and @end", pendingClause);
+                    cmd.CommandText = string.Format("select * from (select ordername,ordercount,orderprice,userid,orderdate,pending,id,sitename,row_number() over (order by orderdate desc) as rn from wishlist where userid=@userid {0}) a where a.rn between @start and @end", pendingClause);
                     cmd.Parameters.Clear();
                     cmd.Parameters.AddWithValue("@start", ((page - 1) * itemperpage) + 1);
                     cmd.Parameters.AddWithValue("@end", page * itemperpage);
@@ -363,8 +364,9 @@ namespace core
                                 userid = !r.IsDBNull(3) ? r.GetInt32(3) : 0,
                                 orderdate = !r.IsDBNull(4) ? r.GetDateTime(4) : DateTime.Now,
                                 pending = !r.IsDBNull(5) ? r.GetInt32(5) : 0,
-                                id = !r.IsDBNull(6) ? r.GetInt32(6) : 0
-                                
+                                id = !r.IsDBNull(6) ? r.GetInt32(6) : 0,
+                                sitename = !r.IsDBNull(7) ? r.GetString(7) : "default"
+
                             });
                         }
                     }
@@ -1019,6 +1021,7 @@ namespace core
         public DateTime orderdate { get; set; }
         public int pending { get; set; }
         public int userid { get; set; }
+        public string  sitename { get; set; }
     }
 
     public class answerlist

@@ -14,9 +14,12 @@
             width: 600px;
             min-height: 500px;
             background: #fff;
+            max-height: 600px;
+            overflow-y:scroll;
         }
         #wishlist .item{
             padding:10px;
+            min-height:100px;
             width:90%;
             border-bottom:1px solid;
             @apply(--layout-horizontal);
@@ -89,23 +92,29 @@
                   <paper-material id="wishlist" elevation="1">
                       <template is="dom-repeat" items="{{response}}" as="item">
                           <div class="item">
-                              <div class="layout vertical flex">
-                                  <div class="item-column">
-                                      <h1 class="ordername">[[item.ordername]]</h1>
+                              <div class="layout horizontal flex">
+                                  <div>
+                                      <iron-image style="width:70px; height:60px; background-color: lightgray;"
+                                                  sizing="cover" preload fade src="{{_remakeBanner(item.sitename)}}"></iron-image>
                                   </div>
-                                  <div class="item-column">
-                                      <div class="layout vertical leftside">
-                                          <div class="orderprice">Fiyat: <i>{{_remakePrice(item.orderprice)}}</i> TL</div>
-                                          <div class="ordercount">Adet: <i>[[item.ordercount]]</i></div>
+                                  <div class="layout flex">
+                                      <div class="item-column">
+                                          <h1 class="ordername">[[item.ordername]]</h1>
                                       </div>
-                                      <div class="flex centerside">
-                                          <span class="orderdate">{{_remakeDate(item.orderdate)}}</span>
+                                      <div class="item-column">
+                                          <div class="layout vertical leftside">
+                                              <div class="orderprice">Fiyat: <i>{{_remakePrice(item.orderprice)}}</i> TL</div>
+                                              <div class="ordercount">Adet: <i>[[item.ordercount]]</i></div>
+                                          </div>
+                                          <div class="flex centerside">
+                                              <span class="orderdate">{{_remakeDate(item.orderdate)}}</span>
+                                          </div>
+                                          <div class="layout horizontal rightside">
+                                              <paper-icon-button id="pibDone" icon="check" on-tap="_pibDone"></paper-icon-button>
+                                              <paper-icon-button id="pibDelete" icon="delete" on-tap="_pibDelete"></paper-icon-button>
+                                          </div>
                                       </div>
-                                      <div class="layout horizontal rightside">
-                                          <paper-icon-button id="pibDone" icon="check" on-tap="_pibDone"></paper-icon-button>
-                                          <paper-icon-button id="pibDelete" icon="delete" on-tap="_pibDelete"></paper-icon-button>
-                                      </div>
-                                  </div>
+                                  </div>                                  
                               </div>
                           </div>
                       </template>
@@ -189,8 +198,6 @@
                   <paper-button dialog-confirm autofocus on-tap="_savePendingToCompleted">Tamamla</paper-button>
               </div>
           </paper-dialog>
-
-       
 
     </template>
     <script>
@@ -297,6 +304,21 @@
             }
             else {
                 return 'Yeterli Limit Var';
+            }
+        },
+        _remakeBanner: function(sitename){
+
+            if (sitename == 'gittigidiyor') {
+                return 'assets/img/banner/gittigidiyor.png'
+            }
+            else if (sitename == 'n11') {
+                return 'assets/img/banner/n11.png'
+            }
+            else if (sitename == 'mediamarkt') {
+                return 'assets/img/banner/mediamarkt.png'
+            }
+            else {
+                return 'assets/img/logo.png'
             }
         },
         _pibDelete: function (event) {
