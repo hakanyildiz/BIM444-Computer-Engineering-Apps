@@ -1073,9 +1073,11 @@
     <Content Include="assets\css\master-footer.css" />
     <Content Include="assets\css\default.min.css" />
     <Content Include="assets\duyarliol\do-app.html" />
+    <Content Include="assets\duyarliol\do-firstinit.html" />
     <Content Include="assets\duyarliol\do-home.html" />
     <Content Include="assets\duyarliol\do-completed-wishlist.html" />
     <Content Include="assets\duyarliol\do-answerlist.html" />
+    <Content Include="assets\duyarliol\do-interactions.html" />
     <Content Include="assets\duyarliol\do-pending-wishlist.html" />
     <Content Include="assets\duyarliol\do-profile.html" />
     <Content Include="assets\duyarliol\do-registration.html" />
@@ -1187,6 +1189,7 @@
     <Content Include="assets\components\swiper\sc-swiper.css" />
     <Content Include="assets\components\swiper\sc-swiper.html" />
     <Content Include="authenticate.aspx" />
+    <Content Include="firstinit.aspx" />
     <Content Include="Global.asax" />
     <Content Include="packages.config" />
     <Content Include="main.Master" />
@@ -2764,6 +2767,13 @@
     </Compile>
     <Compile Include="default.aspx.designer.cs">
       <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="firstinit.aspx.cs">
+      <DependentUpon>firstinit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="firstinit.aspx.designer.cs">
+      <DependentUpon>firstinit.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

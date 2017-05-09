@@ -224,6 +224,10 @@
                 color: white;
                 margin: 5px 15px;
            }
+
+           #profilepages neon-animatable.selected{
+               position: static !important;
+           }
         </style>        
 
         <iron-ajax
@@ -612,18 +616,24 @@
                     this.$.iaGetUserCreditCards.lastRequest.abort();
                 }
                 this.$.iaGetUserCreditCards.generateRequest();
+
+                this.fire('home-update', { data: null });
             },
             _generateIncomeRequest: function () {
                 if (this.$.iaGetUserIncome.lastRequest) {
                     this.$.iaGetUserIncome.lastRequest.abort();
                 }
                 this.$.iaGetUserIncome.generateRequest();
+
+                this.fire('home-update', { data: null });
             },
             _generateOutcomeRequest: function () {
                 if (this.$.iaGetUserOutcome.lastRequest) {
                     this.$.iaGetUserOutcome.lastRequest.abort();
                 }
                 this.$.iaGetUserOutcome.generateRequest();
+
+                this.fire('home-update', { data: null });
             }
         });
     </script>

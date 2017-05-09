@@ -448,6 +448,70 @@ namespace core
             return total;
         }
 
+        public List<interactions> getuserinteractions(int userid, string query, string orderby, int itemperpage, int page, string criter, string classtype)
+        {
+
+            try
+            {
+                List<interactions> list = new List<interactions>();
+                string titleClass = "";
+                using (conn)
+                {
+
+                    
+                        if (classtype.Contains("all"))
+                        {
+                            cmd.CommandText = string.Format("select * from (select id,userid,status,title,subtitle,date,row_number() over (order by {0} {1}) as rn from userinteractions {2}) a where a.rn between @start and @end", orderby, criter, !string.IsNullOrEmpty(query) ? "where (name like '%'+@term+'%')" : "");
+                        }
+                        else
+                        {
+                             titleClass = string.Format("(title like'%'+@titleClass+'%')", classtype);
+                            //query boş ise
+                            if (string.IsNullOrEmpty(query))
+                            {
+                              titleClass = string.Format("where {0}", titleClass);
+                            }
+                            else
+                            {
+                                //query boş değilse
+                                titleClass = string.Format(" and {0}", titleClass);
+                            }
+                            cmd.CommandText = string.Format("select * from (select id,userid,status,title,subtitle,date,row_number() over (order by {0} {1}) as rn from userinteractions {2} {3}) a where a.rn between @start and @end", orderby, criter, !string.IsNullOrEmpty(query) ? "where (name like '%'+@term+'%')" : "", titleClass);
+
+                        }
+
+                        cmd.Parameters.AddWithValue("@start", ((page - 1) * itemperpage) + 1);
+                        cmd.Parameters.AddWithValue("@end", page * itemperpage);
+                        if (!string.IsNullOrEmpty(query)) cmd.Parameters.AddWithValue("@term", query);
+                        if (!classtype.Contains("all") && !string.IsNullOrEmpty(classtype)) cmd.Parameters.AddWithValue("@titleClass", classtype);
+                        if (conn.State == ConnectionState.Open) conn.Close();
+                        if (conn.State == ConnectionState.Closed) { conn.ConnectionString = connstr; conn.Open(); }
+                        using (SqlDataReader r = cmd.ExecuteReader())
+                        {
+                            while (r.Read())
+                            {
+                                list.Add(new interactions()
+                                {
+                                    id = !r.IsDBNull(0) ? r.GetInt32(0) : 0,
+                                    userid = !r.IsDBNull(1) ? r.GetInt32(1) : 0,
+                                    status = !r.IsDBNull(2) ? r.GetInt32(2) : 0,
+                                    title = !r.IsDBNull(3) ? r.GetString(3) : "",
+                                    subtitle = !r.IsDBNull(4) ? r.GetString(4) : "",
+                                    date = !r.IsDBNull(5) ? r.GetDateTime(5) : DateTime.Now
+                                });
+                            }
+                        }
+                    }
+                
+                return list;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+        }
+
         #endregion
         #region api functions
 
@@ -1034,5 +1098,15 @@ namespace core
 
         public int userid { get; set; }
 
+    }
+
+    public class interactions
+    {
+        public int id { get; set; }
+        public int userid { get; set; }
+        public int status { get; set; }
+        public string title { get; set; }
+        public string subtitle { get; set; }
+        public DateTime date { get; set; }
     }
 }

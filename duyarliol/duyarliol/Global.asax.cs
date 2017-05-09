@@ -21,7 +21,7 @@ namespace duyarliol
 
             routes.MapPageRoute("main", "", "~/default.aspx");
             routes.MapPageRoute("registration", "registration", "~/registration.aspx");
-
+            routes.MapPageRoute("welcome", "welcome", "~/firstinit.aspx");
 
             routes.MapPageRoute("search", "ara", "~/search.aspx");
             routes.MapPageRoute("games-view", "oyun/{url}", "~/game.aspx");

@@ -96,6 +96,16 @@ namespace duyarliol.handlers
                                       new core.db() { column = "userid", value = ((core.user)context.Session["user"]).id }
                                 }))
                             {
+
+                                string subtitle = string.Format("Gelir Bilgilerini Güncelledin. Net Gelir: {0} TL - Ek Gelir: {1} TL", income , additionalincome);
+                                data.insertdb("userinteractions", new List<core.db>() {
+                                    new core.db() { column = "title", value = "Gelir"},
+                                    new core.db() { column = "subtitle", value =  subtitle },
+                                    new core.db() { column = "status", value = 1 },
+                                    new core.db() { column = "date", value = DateTime.Now },
+                                    new core.db() { column = "userid", value = ((core.user)context.Session["user"]).id }
+                                });
+
                                 context.Response.Write(jss.Serialize(new response() { success = true, message = "Gelir Bilgilerin Güncellendi." }));
                                 context.Response.End();
                             }
@@ -148,6 +158,20 @@ namespace duyarliol.handlers
                                       new core.db() { column = "userid", value = ((core.user)context.Session["user"]).id }
                                 }))
                             {
+                                string subtitle = string.Format("Gider Bilgilerini Güncelledin. Kira: {0} TL - Faturalar: {1} TL - Bireysel Harcamalar: {2} TL - Market Harcamalar: {3} TL",
+                                                                house,
+                                                                 (electric+water+gas+gsm+others+internet),
+                                                                 individual,
+                                                                 market);
+
+                                data.insertdb("userinteractions", new List<core.db>() {
+                                    new core.db() { column = "title", value = "Gider"},
+                                    new core.db() { column = "subtitle", value =  subtitle },
+                                    new core.db() { column = "status", value = 1 },
+                                    new core.db() { column = "date", value = DateTime.Now },
+                                    new core.db() { column = "userid", value = ((core.user)context.Session["user"]).id }
+                                });
+
                                 context.Response.Write(jss.Serialize(new response() { success = true, message = "Gider Bilgilerin Güncellendi." }));
                                 context.Response.End();
                             }
@@ -199,6 +223,15 @@ namespace duyarliol.handlers
                                            new core.db() { column = "userid", value = ((core.user)context.Session["user"]).id }
                             }))
                             {
+                                string subtitle = string.Format("Yeni Kredi Kartı Ekledin. Banka Adı: {0} - Limit: {1} TL - Anlık Borç: {2} TL", bankname, cardlimit, carddebt);
+                                data.insertdb("userinteractions", new List<core.db>() {
+                                        new core.db() { column = "title", value = "Kredi Kartı"},
+                                        new core.db() { column = "subtitle", value =  subtitle },
+                                        new core.db() { column = "status", value = 0 },
+                                        new core.db() { column = "date", value = DateTime.Now },
+                                        new core.db() { column = "userid", value = ((core.user)context.Session["user"]).id }
+                                });
+
                                 context.Response.Write(jss.Serialize(new response() { success = true, message = string.Format("{0} İsimli Kredi Kartın Başarıyla Eklendi!", bankname) }));
                                 context.Response.End();
                             }
@@ -253,6 +286,15 @@ namespace duyarliol.handlers
                                       new core.db() { column = "id", value = creditcardid}
                                 }))
                             {
+                                string subtitle = string.Format("Kredi Kartı Bilgilerini Güncelledin. Banka Adı: {0} - Limit: {1} TL - Anlık Borç: {2} TL", bankname, cardlimit, carddebt);
+                                data.insertdb("userinteractions", new List<core.db>() {
+                                        new core.db() { column = "title", value = "Kredi Kartı"},
+                                        new core.db() { column = "subtitle", value =  subtitle },
+                                        new core.db() { column = "status", value = 1 },
+                                        new core.db() { column = "date", value = DateTime.Now },
+                                        new core.db() { column = "userid", value = ((core.user)context.Session["user"]).id }
+                                });
+
                                 context.Response.Write(jss.Serialize(new response() { success = true, message = "Kredi Kartı Bilgilerin Güncellendi." }));
                                 context.Response.End();
                             }
@@ -272,10 +314,25 @@ namespace duyarliol.handlers
                             int creditcardid = 0;
                             if (!string.IsNullOrEmpty(a)) int.TryParse(a, out creditcardid);
 
+                            string deletingcardname = Convert.ToString(data.getsinglecolumndb("usercreditcards", "bankname", new List<core.db>() {
+                                  new core.db() { column = "id", value = creditcardid}
+                            }));
+
+
                             if(data.removedb("usercreditcards", new List<core.db>() {
                                   new core.db() { column = "id", value = creditcardid}
                             }))
                             {
+                                string subtitle = string.Format("{0} isimli Kredi Kartını Sildin", deletingcardname);
+
+                                data.insertdb("userinteractions", new List<core.db>() {
+                                        new core.db() { column = "title", value = "Kredi Kartı"},
+                                        new core.db() { column = "subtitle", value =  subtitle },
+                                        new core.db() { column = "status", value = 2 },
+                                        new core.db() { column = "date", value = DateTime.Now },
+                                        new core.db() { column = "userid", value = ((core.user)context.Session["user"]).id }
+                                });
+
                                 context.Response.Write(jss.Serialize(new response() { success = true, message = "Seçmiş Olduğun Kredi Kartı Silindi." }));
                                 context.Response.End();
                             }
@@ -577,83 +634,162 @@ namespace duyarliol.handlers
                             }
 
                             //adding income
-                            data.insertdb("userincome", new List<core.db>() {
+                            if(data.insertdb("userincome", new List<core.db>() {
                                 new core.db() { column = "jobtype", value = jobtype },
-                                new core.db() { column = "monthlyincome", value = income },
-                                new core.db() { column = "monthlyadditionalincome", value = additionalincome },
+                                new core.db() { column = "monthlyincome", value = income / 100 },
+                                new core.db() { column = "monthlyadditionalincome", value = additionalincome / 100 },
                                 new core.db() { column = "createddate", value = DateTime.Now },
                                 new core.db() { column = "userid", value = userid }
-                            });
+                            }))
+                            {
+                                string subtitle = string.Format("Gelir Bilgileri Eklendi. Net Gelir: {0} TL - Ek Gelir: {1} TL", income/100, additionalincome/100);
+                                data.insertdb("userinteractions", new List<core.db>() {
+                                    new core.db() { column = "title", value = "Gelir"},
+                                    new core.db() { column = "subtitle", value =  subtitle },
+                                    new core.db() { column = "status", value = 0 },
+                                    new core.db() { column = "date", value = DateTime.Now },
+                                    new core.db() { column = "userid", value = userid }
+                                });
+                            }
+
 
                             //adding outcome
-                            data.insertdb("useroutcome", new List<core.db>() {
-                                new core.db() { column = "houserent", value = houseRent },
-                                new core.db() { column = "electricbill", value = electricbill },
-                                new core.db() { column = "waterbill", value = waterbill },
-                                new core.db() { column = "gasbill", value = gasbill }, 
-                                new core.db() { column = "internetbill", value = internetbill},
-                                new core.db() { column = "gsmbill", value = gsmbill },
-                                new core.db() { column = "otherbills", value = otherbills},
-                                new core.db() { column = "individualexpense", value = individualexpense},
-                                new core.db() { column = "marketexpense", value = marketexpense},
+                            if (data.insertdb("useroutcome", new List<core.db>() {
+                                new core.db() { column = "houserent", value = houseRent / 100 },
+                                new core.db() { column = "electricbill", value = electricbill / 100 },
+                                new core.db() { column = "waterbill", value = waterbill/ 100  },
+                                new core.db() { column = "gasbill", value = gasbill/ 100  },
+                                new core.db() { column = "internetbill", value = internetbill/ 100 },
+                                new core.db() { column = "gsmbill", value = gsmbill/ 100  },
+                                new core.db() { column = "otherbills", value = otherbills/ 100 },
+                                new core.db() { column = "individualexpense", value = individualexpense/ 100 },
+                                new core.db() { column = "marketexpense", value = marketexpense/ 100 },
                                 new core.db() { column = "createddate", value = DateTime.Now },
                                 new core.db() { column = "userid", value = userid }
-                            });
+                            }))
+                            {
+                                string subtitle = string.Format("Gider Bilgileri Eklendi. Kira: {0} TL - Faturalar: {1} TL - Bireysel Harcamalar: {2} TL - Market Harcamalar: {3} TL",
+                                    houseRent / 100 , 
+                                    (electricbill / 100 + waterbill / 100 + gasbill / 100 + internetbill / 100 + gsmbill / 100 + otherbills / 100) , 
+                                    individualexpense/100,
+                                    marketexpense / 100);
+
+                                data.insertdb("userinteractions", new List<core.db>() {
+                                    new core.db() { column = "title", value = "Gider"},
+                                    new core.db() { column = "subtitle", value =  subtitle },
+                                    new core.db() { column = "status", value = 0 },
+                                    new core.db() { column = "date", value = DateTime.Now },
+                                    new core.db() { column = "userid", value = userid }
+                                });
+
+                            }
 
                             //card1
                             if(bankNameOne != "" && cardLimit1 != 0 && cardDebt1 != 0)
                             {
-                                data.insertdb("usercreditcards", new List<core.db>() {
+                                if (data.insertdb("usercreditcards", new List<core.db>() {
                                     new core.db() { column = "bankname", value = bankNameOne},
-                                    new core.db() { column = "cardlimit", value = cardLimit1 },
-                                    new core.db() { column = "carddebt", value = cardDebt1},
+                                    new core.db() { column = "cardlimit", value = cardLimit1 / 100 },
+                                    new core.db() { column = "carddebt", value = cardDebt1/ 100 },
                                     new core.db() { column = "createddate", value = DateTime.Now },
                                     new core.db() { column = "userid", value = userid }
+                                }))
+                                {
+                                    string subtitle = string.Format("Kredi Kartı Eklendi. Banka Adı: {0} - Limit: {1} TL - Anlık Borç: {2} TL", bankNameOne, cardLimit1 / 100, cardDebt1 / 100);
+                                    data.insertdb("userinteractions", new List<core.db>() {
+                                    new core.db() { column = "title", value = "Kredi Kartı"},
+                                    new core.db() { column = "subtitle", value =  subtitle },
+                                    new core.db() { column = "status", value = 0 },
+                                    new core.db() { column = "date", value = DateTime.Now },
+                                    new core.db() { column = "userid", value = userid }
                                 });
+                                }
                             }
                             //card2
                             if (bankNameTwo != "" && cardLimit2 != 0 && cardDebt2 != 0)
                             {
-                                data.insertdb("usercreditcards", new List<core.db>() {
+                                if(data.insertdb("usercreditcards", new List<core.db>() {
                                     new core.db() { column = "bankname", value = bankNameTwo},
-                                    new core.db() { column = "cardlimit", value = cardLimit2},
-                                    new core.db() { column = "carddebt", value = cardDebt2 },
+                                    new core.db() { column = "cardlimit", value = cardLimit2/ 100 },
+                                    new core.db() { column = "carddebt", value = cardDebt2 / 100 },
                                     new core.db() { column = "createddate", value = DateTime.Now },
                                     new core.db() { column = "userid", value = userid }
-                                });
+                                }))
+                                {
+                                    string subtitle = string.Format("Kredi Kartı Eklendi. Banka Adı: {0} - Limit: {1} TL - Anlık Borç: {2} TL", bankNameTwo, cardLimit2 / 100, cardDebt2 / 100);
+                                        data.insertdb("userinteractions", new List<core.db>() {
+                                        new core.db() { column = "title", value = "Kredi Kartı"},
+                                        new core.db() { column = "subtitle", value =  subtitle },
+                                        new core.db() { column = "status", value = 0 },
+                                        new core.db() { column = "date", value = DateTime.Now },
+                                        new core.db() { column = "userid", value = userid }
+                                    });
+                                }
                             }
                             //card3
                             if (bankNameThree != "" && cardLimit3 != 0 && cardDebt3 != 0)
                             {
-                                data.insertdb("usercreditcards", new List<core.db>() {
+                                if(data.insertdb("usercreditcards", new List<core.db>() {
                                     new core.db() { column = "bankname", value = bankNameThree},
-                                    new core.db() { column = "cardlimit", value = cardLimit3},
-                                    new core.db() { column = "carddebt", value = cardDebt3 },
+                                    new core.db() { column = "cardlimit", value = cardLimit3/ 100 },
+                                    new core.db() { column = "carddebt", value = cardDebt3 / 100 },
                                     new core.db() { column = "createddate", value = DateTime.Now },
                                     new core.db() { column = "userid", value = userid }
+                                }))
+                                {
+                                    string subtitle = string.Format("Kredi Kartı Eklendi. Banka Adı: {0} - Limit: {1} TL - Anlık Borç: {2} TL", bankNameThree, cardLimit3 / 100, cardDebt3 / 100);
+                                    data.insertdb("userinteractions", new List<core.db>() {
+                                    new core.db() { column = "title", value = "Kredi Kartı"},
+                                    new core.db() { column = "subtitle", value =  subtitle },
+                                    new core.db() { column = "status", value = 0 },
+                                    new core.db() { column = "date", value = DateTime.Now },
+                                    new core.db() { column = "userid", value = userid }
                                 });
+                                }
                             }
                             //card4
                             if (bankNameFour != "" && cardLimit4 != 0 && cardDebt4 != 0)
                             {
-                                data.insertdb("usercreditcards", new List<core.db>() {
+                                if(data.insertdb("usercreditcards", new List<core.db>() {
                                     new core.db() { column = "bankname", value = bankNameFour},
-                                    new core.db() { column = "cardlimit", value = cardLimit4 },
-                                    new core.db() { column = "carddebt", value = cardDebt4 },
+                                    new core.db() { column = "cardlimit", value = cardLimit4/ 100  },
+                                    new core.db() { column = "carddebt", value = cardDebt4 / 100 },
                                     new core.db() { column = "createddate", value = DateTime.Now },
                                     new core.db() { column = "userid", value = userid }
-                                });
+                                }))
+                                {
+                                    string subtitle = string.Format("Kredi Kartı Eklendi. Banka Adı: {0} - Limit: {1} TL - Anlık Borç: {2} TL", bankNameFour, cardLimit4 / 100, cardDebt4 / 100);
+                                    data.insertdb("userinteractions", new List<core.db>() {
+                                        new core.db() { column = "title", value = "Kredi Kartı"},
+                                        new core.db() { column = "subtitle", value =  subtitle },
+                                        new core.db() { column = "status", value = 0 },
+                                        new core.db() { column = "date", value = DateTime.Now },
+                                        new core.db() { column = "userid", value = userid }
+                                    });
+                                }
                             }
                             //card5
                             if (bankNameFive != "" && cardLimit5 != 0 && cardDebt5 != 0)
                             {
-                                data.insertdb("usercreditcards", new List<core.db>() {
+                                if(data.insertdb("usercreditcards", new List<core.db>() {
                                     new core.db() { column = "bankname", value = bankNameFive},
-                                    new core.db() { column = "cardlimit", value = cardLimit5 },
-                                    new core.db() { column = "carddebt", value = cardDebt5 },
+                                    new core.db() { column = "cardlimit", value = cardLimit5/ 100  },
+                                    new core.db() { column = "carddebt", value = cardDebt5 / 100 },
                                     new core.db() { column = "createddate", value = DateTime.Now },
                                     new core.db() { column = "userid", value = userid }
-                                });
+                                }))
+                               
+                                    {
+                                        string subtitle = string.Format("Kredi Kartı Eklendi. Banka Adı: {0} - Limit: {1} TL - Anlık Borç: {2} TL", bankNameFive, cardLimit5 / 100, cardDebt5 / 100);
+                                        data.insertdb("userinteractions", new List<core.db>() {
+                                        new core.db() { column = "title", value = "Kredi Kartı"},
+                                        new core.db() { column = "subtitle", value =  subtitle },
+                                        new core.db() { column = "status", value = 0 },
+                                        new core.db() { column = "date", value = DateTime.Now },
+                                        new core.db() { column = "userid", value = userid }
+                                    });
+                                    }
+                                
                             }
 
                             context.Response.Write(jss.Serialize(new response() { success = true, message = "Girmiş Olduğunuz Bilgileriniz Sisteme Yüklendi!" }));
@@ -709,6 +845,17 @@ namespace duyarliol.handlers
                                         new core.db() { column = "question", value = "question" + (i+1)}
                                     });
                             }
+
+
+                            string subtitle = string.Format("Duyarlılık Test Sorularındaki Cevaplarını Güncelledin.");
+                            data.insertdb("userinteractions", new List<core.db>() {
+                                    new core.db() { column = "title", value = "Test"},
+                                    new core.db() { column = "subtitle", value =  subtitle },
+                                    new core.db() { column = "status", value = 1 },
+                                    new core.db() { column = "date", value = DateTime.Now },
+                                    new core.db() { column = "userid", value = uid }
+                            });
+
                             context.Response.Write(jss.Serialize(new response() {
                                 message = "Cevapların Başarıyla Güncellendi!",
                                 success = true }));
@@ -749,8 +896,9 @@ namespace duyarliol.handlers
                                     new core.db() { column = "userid", value = uid },
                                 }
                             );
+                           
 
-                            data.updatedb(
+                            if(data.updatedb(
                               "usercreditcards",
                               new List<core.db>()
                               {
@@ -760,7 +908,28 @@ namespace duyarliol.handlers
                                     new core.db() { column = "userid", value = uid },
                                     new core.db() { column = "id", value = cardid },
                               }
-                            );
+                            ))
+                             {
+                                
+                                string bankname = Convert.ToString(data.getsinglecolumndb("usercreditcards", "bankname", new List<core.db>() {
+                                    new core.db() { column = "id", value = cardid },
+                                    new core.db() { column = "userid", value = uid }
+                                }));
+
+                                string ordername = Convert.ToString(data.getsinglecolumndb("wishlist", "ordername", new List<core.db>() {
+                                    new core.db() { column = "id", value = wishid },
+                                    new core.db() { column = "userid", value = uid },
+                                }));
+
+                                string subtitle = string.Format("Bekleyen Listesindeki {0} adlı ürünü satın aldığını onayladın. Kullanılan Kredi Kartı: {1} - Anlık Borç {2} TL'ye yükselti.", ordername, bankname, (carddebt + orderprice));
+                                data.insertdb("userinteractions", new List<core.db>() {
+                                        new core.db() { column = "title", value = "Alışveriş"},
+                                        new core.db() { column = "subtitle", value =  subtitle },
+                                        new core.db() { column = "status", value = 1 },
+                                        new core.db() { column = "date", value = DateTime.Now },
+                                        new core.db() { column = "userid", value = uid }
+                                });
+                            }
 
                             context.Response.Write(jss.Serialize(new response()
                             {
@@ -783,11 +952,25 @@ namespace duyarliol.handlers
                             if (!string.IsNullOrEmpty(a1)) int.TryParse(a1, out uid);
                             if (!string.IsNullOrEmpty(a2)) int.TryParse(a2, out wishid);
 
-                            if(data.removedb("wishlist", new List<core.db>() {
+                            string ordername = Convert.ToString(data.getsinglecolumndb("wishlist", "ordername", new List<core.db>() {
+                                    new core.db() { column = "id", value = wishid },
+                                    new core.db() { column = "userid", value = uid },
+                                }));
+
+                            if (data.removedb("wishlist", new List<core.db>() {
                                 new core.db() { column = "id", value = wishid },
                                 new core.db() { column = "userid", value = uid },
                             }))
                             {
+                                string subtitle = string.Format("Bekleyen Listesindeki {0} adlı ürünü kaldırdın.", ordername);
+                                data.insertdb("userinteractions", new List<core.db>() {
+                                        new core.db() { column = "title", value = "Alışveriş"},
+                                        new core.db() { column = "subtitle", value =  subtitle },
+                                        new core.db() { column = "status", value = 2 },
+                                        new core.db() { column = "date", value = DateTime.Now },
+                                        new core.db() { column = "userid", value = uid }
+                                });
+
                                 context.Response.Write(jss.Serialize(new response()
                                 {
                                     message = "Bekleyen İstek Listeden Silindi!",
@@ -855,108 +1038,6 @@ namespace duyarliol.handlers
 
                             context.Response.Write(jss.Serialize(new response() { success = true, message = "Giriş başarılı. Yönlendiriliyorsun. Lütfen bekle." }));
                             context.Response.End();
-
-                            #endregion
-                        }
-                        else if (method == "post-kleine-container-news")
-                        {
-                            #region post - when user access the news - viewcount increase +1
-
-                            string _id = context.Request.Form["container"];
-                            string _viewcount = context.Request.Form["kleine"];
-
-                            int id = 0, viewcount = 0;
-
-                            if (!string.IsNullOrEmpty(_id)) int.TryParse(_id, out id);
-                            if (!string.IsNullOrEmpty(_viewcount)) int.TryParse(_viewcount, out viewcount);
-
-                            viewcount = viewcount + 1;
-
-                            if (data.updatedb("kalnews", new List<core.db>() {
-                  new core.db() { column = "viewcount", value = viewcount }
-                }, new List<core.db>() {
-                  new core.db() { column = "id", value = id}
-                }))
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = true, message = "Viewcount arttırıldı" }));
-                                context.Response.End();
-                            }
-                            else
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Bağlantı hatası." }));
-                                context.Response.End();
-                            }
-
-                            #endregion
-                        }
-                        else if (method == "post-kleine-container-reviews")
-                        {
-                            #region post - when user access the reviews - viewcount increase +1
-
-                            string _id = context.Request.Form["container"];
-                            string _viewcount = context.Request.Form["kleine"];
-
-                            int id = 0, viewcount = 0;
-
-                            if (!string.IsNullOrEmpty(_id)) int.TryParse(_id, out id);
-                            if (!string.IsNullOrEmpty(_viewcount)) int.TryParse(_viewcount, out viewcount);
-
-                            viewcount = viewcount + 1;
-
-                            if (data.updatedb("kalreviews", new List<core.db>() {
-                  new core.db() { column = "viewcount", value = viewcount }
-                }, new List<core.db>() {
-                  new core.db() { column = "id", value = id}
-                }))
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = true, message = "Viewcount arttırıldı" }));
-                                context.Response.End();
-                            }
-                            else
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Bağlantı hatası." }));
-                                context.Response.End();
-                            }
-
-                            #endregion
-                        }
-                        else if (method == "game-add-color")
-                        {
-                            #region game-add-color  in game.aspx
-                            string a = context.Request.Form["backcolor"],
-                              b = context.Request.Form["backcoloropacity"],
-                              c = context.Request.Form["maincolor"],
-                              d = context.Request.Form["gameid"],
-                              backcolor = "",
-                              backcoloropacity = "",
-                              maincolor = "";
-                            int id = 0;
-                            if (!string.IsNullOrEmpty(a)) backcolor = a.Trim();
-                            if (!string.IsNullOrEmpty(b)) backcoloropacity = b.Trim();
-                            if (!string.IsNullOrEmpty(c)) maincolor = c.Trim();
-                            if (!string.IsNullOrEmpty(d)) int.TryParse(d, out id);
-
-
-                            if (data.updatedb("kalgame", new List<core.db>() {
-                                   new core.db() { column = "bc", value = backcolor},
-                                   new core.db() { column = "bca", value = backcoloropacity},
-                                   new core.db() { column = "mc", value = maincolor }
-
-                               }, new List<core.db>() {
-                                      new core.db() { column = "id", value = id},
-
-                               }))
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = true, message = "Renk işlendi" }));
-                                context.Response.End();
-
-                            }
-                            else
-                            {
-                                context.Response.Write(jss.Serialize(new response() { success = false, message = "Bağlantı hatası." }));
-                                context.Response.End();
-                            }
-
 
                             #endregion
                         }
@@ -1227,6 +1308,17 @@ namespace duyarliol.handlers
                                     new core.db() { column = "userid", value = Convert.ToInt32(userid) },
                                     new core.db() { column = "sitename", value = sitename }
                                 });
+
+                                string subtitle = string.Format("{0} Sitesindeki {1} Adlı Ürün Bekleyen Listesine Eklendi.", sitename, wish.name);
+                                data.insertdb("userinteractions", new List<core.db>() {
+                                        new core.db() { column = "title", value = "Alışveriş"},
+                                        new core.db() { column = "subtitle", value =  subtitle },
+                                        new core.db() { column = "status", value = 0 },
+                                        new core.db() { column = "date", value = DateTime.Now },
+                                        new core.db() { column = "userid", value = Convert.ToInt32(userid) }
+                                });
+
+
                                 wishTotal += Convert.ToDouble(wish.price) / 100;
                             }
                             #endregion
@@ -1270,6 +1362,15 @@ namespace duyarliol.handlers
                                     });
                                     counter++;
                                 }
+
+                                string subtitle = string.Format("Duyarlılık Testini Cevapladın.");
+                                data.insertdb("userinteractions", new List<core.db>() {
+                                        new core.db() { column = "title", value = "Test"},
+                                        new core.db() { column = "subtitle", value =  subtitle },
+                                        new core.db() { column = "status", value = 0 },
+                                        new core.db() { column = "date", value = DateTime.Now },
+                                        new core.db() { column = "userid", value = Convert.ToInt32(userid) }
+                                });
                             }
                             //else
                             //{
@@ -1334,7 +1435,35 @@ namespace duyarliol.handlers
 
                             #endregion
                         }
-                      
+                        else if (method == "get-user-interactions")
+                        {
+                            #region get user interactions
+
+                            string a = context.Request.QueryString["a"],
+                               b = context.Request.QueryString["b"],
+                               c = context.Request.QueryString["c"],
+                               d = context.Request.QueryString["d"],
+                               e = context.Request.QueryString["e"],
+                               f = context.Request.QueryString["f"],
+                               g = context.Request.QueryString["g"];
+
+                            int itemperpage = 20, page = 1, uid = 0;
+                            string query = "", order = "date", criter = "desc", classtype = "all";
+
+                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out uid);
+                            if (!string.IsNullOrEmpty(b)) query = b.Trim();
+                            if (!string.IsNullOrEmpty(c)) order = c.Trim();
+                            if (!string.IsNullOrEmpty(d)) int.TryParse(d, out itemperpage);
+                            if (!string.IsNullOrEmpty(e)) int.TryParse(e, out page);
+                            if (!string.IsNullOrEmpty(f)) criter = f.Trim();
+                            if (!string.IsNullOrEmpty(g)) classtype = g.Trim();
+
+                            context.Response.Write(jss.Serialize(data.getuserinteractions(uid, query, order, itemperpage, page, criter, classtype)));
+                            context.Response.End();
+
+                            #endregion
+                        }
+
 
                         #endregion
                     }
@@ -1342,21 +1471,7 @@ namespace duyarliol.handlers
                     {
                         #region site get methods
 
-                        if (method == "search-game")
-                        {
-                            #region search game
-
-                            int page = 1, itemperpage = 5;
-                            string query = context.Request.QueryString["query"];
-
-                            if (!string.IsNullOrEmpty(query)) query = query.Trim();
-
-                            //context.Response.Write(jss.Serialize(data.getgames(query, page, itemperpage)));
-                            context.Response.End();
-
-                            #endregion
-                        }
-                        else if(method == "get-user-info")
+                        if(method == "get-user-info")
                         {
                             #region get user info  FOR Chrome Extension
                             string a = context.Request.QueryString["id"];
@@ -1460,8 +1575,18 @@ namespace duyarliol.handlers
                                     new core.db() { column = "pending", value = 1 },
                                     new core.db() { column = "userid", value = Convert.ToInt32(userid) },
                                     new core.db() { column = "sitename", value = sitename }
-
                                 });
+
+                                string subtitle = string.Format("{0} Sitesindeki {1} Adlı Ürün Bekleyen Listesine Eklendi.", sitename, wish.name);
+                                data.insertdb("userinteractions", new List<core.db>() {
+                                        new core.db() { column = "title", value = "Alışveriş"},
+                                        new core.db() { column = "subtitle", value =  subtitle },
+                                        new core.db() { column = "status", value = 0 },
+                                        new core.db() { column = "date", value = DateTime.Now },
+                                        new core.db() { column = "userid", value = Convert.ToInt32(userid) }
+                                });
+
+
                                 wishTotal += Convert.ToDouble(wish.price) / 100;
                             }
                             #endregion
@@ -1505,30 +1630,19 @@ namespace duyarliol.handlers
                                     });
                                     counter++;
                                 }
+
+                                string subtitle = string.Format("Duyarlılık Testini Cevapladın.");
+                                data.insertdb("userinteractions", new List<core.db>() {
+                                        new core.db() { column = "title", value = "Test"},
+                                        new core.db() { column = "subtitle", value =  subtitle },
+                                        new core.db() { column = "status", value = 0 },
+                                        new core.db() { column = "date", value = DateTime.Now },
+                                        new core.db() { column = "userid", value = Convert.ToInt32(userid) }
+                                });
                             }
-                            //else
-                            //{
-                            //    foreach (var answerobject in answerlist)
-                            //    {
-                            //        data.updatedb(
-                            //            "answerlist",
-                            //            new List<core.db>()
-                            //            {
-                            //                new core.db() { column = "answer", value = answerobject.answer  },
-                            //                new core.db() { column = "date", value = DateTime.Now }
-                            //            },
-                            //            new List<core.db>()
-                            //            {
-                            //                new core.db() { column = "question", value = "question"+counter  },
-                            //                new core.db() { column = "userid", value = Convert.ToInt32(userid) }
-                            //            }
-                            //        );
-                            //        counter++;
-                            //    }
-                            //}
                             #endregion
 
-                            
+
                             bool wishHigherThanAllCard = true;
 
                             foreach (var card in creditcardlist)
