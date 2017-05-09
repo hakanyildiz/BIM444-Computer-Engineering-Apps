@@ -3,7 +3,7 @@
         <style is="custom-style">
             :root {
                 /* Label and underline color when the input is not focused */
-                --paper-input-container-color: #171059;
+                --paper-input-container-color: #3949AB;
                 /* Label and underline color when the input is focused */
                 --paper-input-container-focus-color: blue;
                 /* Label and underline color when the input is invalid */
@@ -32,14 +32,14 @@
                     background: #fff;
                     /*border-bottom: 10px solid #222;*/
                     /*box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 11px 15px -7px rgba(0, 0, 0, 0.4);*/
-                    --paper-tabs-selection-bar-color: #171059;
+                    --paper-tabs-selection-bar-color: #3949AB;
                     /*--paper-tabs-selection-bar:{
                                                height: 100%;
                                                background: #ff7800;
                                            }*/
                 }
                     #hardware-container #navigation-tabs .iron-selected {
-                        color: #171059 !important;
+                        color: #3949AB !important;
                         font-size: 1.5em;
                         font-weight: bold;
                     }
@@ -67,7 +67,7 @@
                     }
                     
                     .materialContainer paper-item[heading]{
-                            background: #171059;
+                            background: #3949AB;
                             color: white;
                             font-size: 22px;
                             padding: 0.25em;
@@ -113,7 +113,7 @@
                                 --paper-input-container-input: {
                                        font-size: 22px;
                                 };
-                                 --paper-input-container-focus-color: #171059;
+                                 --paper-input-container-focus-color: #3949AB;
                     }
 
             .outcome-title{
@@ -157,12 +157,12 @@
                     font-size: 18px;
             }
             .credit-card-container iron-icon{
-                width:30px;height:30px; padding-right:5px;color:#171059;
+                width:30px;height:30px; padding-right:5px;color:#3949AB;
             }
             .credit-card-container .cc-name{
                    font-size: 20px;
                     font-weight: bold;
-                    color: #171059;
+                    color: #3949AB;
                     letter-spacing: 0.55px;
                     padding: 5px 0px;
                     text-align: center;
@@ -220,9 +220,13 @@
                font-size: 20px !important;
            }
            .addcardbutton{
-                background: #171059;
+                background: #3949AB;
                 color: white;
                 margin: 5px 15px;
+           }
+
+           #profilepages neon-animatable.selected{
+               position: static !important;
            }
         </style>        
 
@@ -270,7 +274,7 @@
                             <div hidden$=[[loadingincome]] class="formContainer">
                                 <form id="userincomeform" is="iron-form" action="/h/main" method="post" on-iron-form-response="_ironFormResponseUserIncome">
                                     <paper-dropdown-menu class="pdmHeader" label="Durum">
-                                        <paper-listbox style="background-color:#171059; color:white" class="dropdown-content"
+                                        <paper-listbox style="background-color:#3949AB; color:white" class="dropdown-content"
                                                        attr-for-selected="value"
                                                        selected="{{jobtype}}">
                                             <paper-item value="student">Öğrenci</paper-item>
@@ -612,18 +616,24 @@
                     this.$.iaGetUserCreditCards.lastRequest.abort();
                 }
                 this.$.iaGetUserCreditCards.generateRequest();
+
+                this.fire('home-update', { data: null });
             },
             _generateIncomeRequest: function () {
                 if (this.$.iaGetUserIncome.lastRequest) {
                     this.$.iaGetUserIncome.lastRequest.abort();
                 }
                 this.$.iaGetUserIncome.generateRequest();
+
+                this.fire('home-update', { data: null });
             },
             _generateOutcomeRequest: function () {
                 if (this.$.iaGetUserOutcome.lastRequest) {
                     this.$.iaGetUserOutcome.lastRequest.abort();
                 }
                 this.$.iaGetUserOutcome.generateRequest();
+
+                this.fire('home-update', { data: null });
             }
         });
     </script>

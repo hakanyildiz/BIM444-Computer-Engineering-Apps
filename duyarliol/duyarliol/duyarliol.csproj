@@ -1148,7 +1148,9 @@
     <Content Include="assets\img\banner\gittigidiyor.png" />
     <Content Include="assets\img\banner\mediamarkt.png" />
     <Content Include="assets\img\banner\n11.png" />
+    <Content Include="assets\img\favicon.ico" />
     <Content Include="assets\img\logo.png" />
+    <Content Include="assets\img\logo.svg" />
     <Content Include="assets\js\jquery-3.1.1.min.js" />
     <Content Include="assets\js\js.cookie.js" />
     <Content Include="assets\js\masterpage.js" />
@@ -2723,10 +2725,7 @@
     <Content Include="robots.txt" />
     <Content Include="Scripts\jquery.signalR-2.2.1.js" />
     <Content Include="Scripts\jquery.signalR-2.2.1.min.js" />
-    <Content Include="user\add-system.aspx" />
     <Content Include="user\logout.aspx" />
-    <Content Include="user\moderator.aspx" />
-    <Content Include="user\profile.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -2797,33 +2796,12 @@
       <DependentUpon>registration.aspx</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />
-    <Compile Include="user\add-system.aspx.cs">
-      <DependentUpon>add-system.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="user\add-system.aspx.designer.cs">
-      <DependentUpon>add-system.aspx</DependentUpon>
-    </Compile>
     <Compile Include="user\logout.aspx.cs">
       <DependentUpon>logout.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="user\logout.aspx.designer.cs">
       <DependentUpon>logout.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="user\moderator.aspx.cs">
-      <DependentUpon>moderator.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="user\moderator.aspx.designer.cs">
-      <DependentUpon>moderator.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="user\profile.aspx.cs">
-      <DependentUpon>profile.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="user\profile.aspx.designer.cs">
-      <DependentUpon>profile.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

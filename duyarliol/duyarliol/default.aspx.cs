@@ -32,7 +32,7 @@ namespace duyarliol
                 if (cookie == null)
                 {
                     HttpCookie userCookie = new HttpCookie("duyarliol");
-                    userCookie["auth"] = uid.ToString();
+                    userCookie["auth"] = ((core.user)Session["user"]).apikey.ToString();
                     userCookie.Expires = DateTime.Now.AddDays(30);
                     Response.Cookies.Add(userCookie);
                     

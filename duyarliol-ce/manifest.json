@@ -54,6 +54,6 @@
       "run_at": "document_start"
     }
   ],
-  "web_accessible_resources": [ "icons/icon48.png", "content/loading.gif", "content/loading2.gif", "content/ok.png", "content/error.png" ]
+  "web_accessible_resources": ["icons/icon128.png" , "icons/icon48.png", "content/loading.gif", "content/loading2.gif", "content/ok.png", "content/error.png" ]
 
 }

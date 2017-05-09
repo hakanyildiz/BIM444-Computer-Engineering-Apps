@@ -31,7 +31,9 @@
     }
 
     paper-toolbar[first] {
-      background-color: #232323;
+     background-color: #171059;
+                  color: #fff;
+                  box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.4);
     }
 
       paper-toolbar[first] .logo {
@@ -48,8 +50,8 @@
         }
 
       paper-toolbar[first] paper-icon-button {
-        --paper-icon-button-ink-color: #ff7800;
-        color: #ff7800;
+        --paper-icon-button-ink-color: #171059;
+        color: #171059;
       }
 
     paper-material {
@@ -61,7 +63,7 @@
 
       paper-material paper-tabs {
         color: white;
-        background: #ff7800;
+        background: #171059;
         --paper-tabs-selection-bar-color: white;
         font-size: 17px;
       }
@@ -80,7 +82,7 @@
           }
 
             paper-material iron-pages form p a {
-              color: #ff7800;
+              color: #171059;
               text-decoration: none;
             }
 
@@ -91,21 +93,21 @@
           }
 
             paper-material iron-pages form .buttons paper-button:last-child {
-              background: #ff7800;
+              background: #171059;
               color: white;
             }
   </style>
 
-    <script src="assets/js/masterpage.js"></script>
-    <link rel="import" href="assets/components/kaldirirmi/do-all-imports.html"/>
-
+   <script src="assets/js/masterpage.js"></script>
+    <link rel="import" href="assets/components/kaldirirmi/vulcanized/do-all-imports.html"/>
 </head>
 <body class="fullbleed layout vertical">
   <paper-header-panel class="flex">
     <paper-toolbar first>
-      <div class="logo">
+    <%--  <div class="logo">
         <iron-image id="mainlogo" src="/assets/img/logo.png" sizing="cover"></iron-image>
-      </div>
+      </div>--%>
+        <div>Duyarlı.Ol</div>
     </paper-toolbar>
     <div id="app" class="fit">
       <paper-material id="authform" elevation="1">

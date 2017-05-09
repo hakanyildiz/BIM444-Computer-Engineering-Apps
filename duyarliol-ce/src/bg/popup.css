@@ -27,7 +27,24 @@
     background-color: #eee !important;
   
 }
-
+.MyQuotesformFail {
+    display: flex !important;
+    flex-direction: column !important;
+    font-family: Verdana, Geneva, sans-serif !important;
+    z-index: 1 !important;
+    margin: 0 !important;
+    padding: 10px !important;
+    text-align: center !important;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24) !important;
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    z-index: 100000000000 !important;
+    background-color: #eee !important;
+      display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
 
 @media only screen and (max-width : 1650px) { /* zoom %110*/
  .MyQuotesform{
@@ -56,6 +73,7 @@
     flex-direction: row !important;
     justify-content: space-between !important;
     margin: 5px 0px;
+    align-items:center !important;
 }
 
     .MyQuotesform div[do-toolbar] #hakkebtn {

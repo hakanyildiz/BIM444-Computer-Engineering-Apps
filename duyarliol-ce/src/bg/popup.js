@@ -2,14 +2,13 @@
 var save = "Kaydet";
 var cancel = "İptal";
 
-
 var placeholder = "not için etiket belirle";
 var icon = chrome.extension.getURL('icons/icon48.png');
 $("#Quotesheader").attr("src", icon);
 
-var oldhtml = '<div id="MyQuotes" class="reset-this MyQuotesform"><div do-toolbar><span>Duyarlı Ol</span><span id="hakkebtn"></span></div>  <div id="usercreditcards"></div> <div id="userwishlist"></div>  <div id="do-questions"></div>  <div class="reset_this"><img src="' + icon + '" id="QuotesheaderIcon" class="reset-this"/><h3 class="reset-this">' + header + '</h3></div>  <form class="reset-this login-form">  <div class="reset-this"> <textarea  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" class="reset-this" id="myQuotesText"></textarea></div> <div class="reset-this" id="MyQuotesOwnerWrapper"> <img class="reset-this" id="MyQuotesOwnerLoading" /> <input class="reset-this" placeHolder="' + placeholder + '" type="text" id="MyQuotesOwner" /> </div> <div class="reset-this"> <button class="reset-this" id="MyQuotesSave" type="button">' + save + '</button> <button id="MyQuotesCancel" class="reset-this" type="button">' + cancel + '</button> </div> <p class="reset-this MyQuotesmessage"></p> </form> </div>';
+var oldhtml = '<div id="MyQuotes" class="reset-this MyQuotesform"><div do-toolbar><img style="width:64px;" src="' + chrome.extension.getURL('icons/icon128.png') + '" /><span id="hakkebtn"></span></div>  <div id="usercreditcards"></div> <div id="userwishlist"></div>  <div id="do-questions"></div>  <div class="reset_this"><img src="' + icon + '" id="QuotesheaderIcon" class="reset-this"/><h3 class="reset-this">' + header + '</h3></div>  <form class="reset-this login-form">  <div class="reset-this"> <textarea  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" class="reset-this" id="myQuotesText"></textarea></div> <div class="reset-this" id="MyQuotesOwnerWrapper"> <img class="reset-this" id="MyQuotesOwnerLoading" /> <input class="reset-this" placeHolder="' + placeholder + '" type="text" id="MyQuotesOwner" /> </div> <div class="reset-this"> <button class="reset-this" id="MyQuotesSave" type="button">' + save + '</button> <button id="MyQuotesCancel" class="reset-this" type="button">' + cancel + '</button> </div> <p class="reset-this MyQuotesmessage"></p> </form> </div>';
 
-var html = '<div id="MyQuotes" class="reset-this MyQuotesform"><div do-toolbar><span>Duyarlı Ol</span><span id="hakkebtn"></span></div>  <div id="usercreditcards"></div> <div id="userwishlist"></div>  <div id="do-questions"></div> ' +
+var html = '<div id="MyQuotes" class="reset-this MyQuotesform"><div do-toolbar><img style="width:80px;height:80px;" src="' + chrome.extension.getURL('icons/icon128.png') + '" /><span id="hakkebtn"></span></div>  <div id="usercreditcards"></div> <div id="userwishlist"></div>  <div id="do-questions"></div> ' +
     '<form class="reset-this login-form"><div class="reset-this"> <button class="reset-this" id="btnDoRun" type="button">Duyarlı Ol</button> <button id="btnDoCancel" class="reset-this" type="button">Iptal</button></div><p class="reset-this MyQuotesmessage"></p> </form> </div>';
 var navbuttons = '<div class="reset-this"> <button class="reset-this" id="btnDoRun" type="button">Duyarlı Ol</button> <button id="btnDoCancel" class="reset-this" type="button">Iptal</button></div><p class="reset-this MyQuotesmessage"></p>';
 
@@ -72,7 +71,7 @@ $(function () {
    
     //get user info
     $.ajax({
-        url: azureUrl + handlerClause + '?fm=get-user-info&id=' + userid,
+        url: azureUrl + handlerClause + '?fm=get-user-info-ce&id=' + userid,
         dataType: 'json',
         success: function (userdata) {
             //console.log('success');

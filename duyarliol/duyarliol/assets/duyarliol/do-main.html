@@ -1,4 +1,6 @@
-﻿<dom-module id="do-main">
+﻿<link rel="import" href="/assets/duyarliol/do-interactions.html" async/>
+
+<dom-module id="do-main">
     <template>
         <style is="custom-style">
             a{
@@ -71,18 +73,18 @@
                   width: 10px !important;
               }
               ::-webkit-scrollbar-thumb {
-                  background-color: #171059;
+                  background-color: #1A237E;
                   border-radius: 5px;
-                  border: 2px solid #171059;
+                  border: 2px solid #1A237E;
                   min-height: 50px;
               }
 
               ::-webkit-scrollbar-track {
-                  background-color: #171059;
+                  background-color: #1A237E;
               }*/
 
               app-drawer-layout {
-                  background-color: #171059;
+                  background-color: #1A237E;
               }
 
               app-drawer {
@@ -100,7 +102,7 @@
                   app-drawer .dodrawer .dologo, app-drawer .dodrawer .donavigation {
                       @apply(--layout-vertical);
                       @apply(--layout-center-center);
-                      margin:10px 0px;
+                      /*margin:10px 0px;*/
                   }
 
                   app-drawer .dodrawer .dologo{
@@ -135,7 +137,7 @@
                   /*width: 100%;*/
               }
               app-drawer .dodrawer .donavigation #doNavigationMenu paper-item:hover{
-                  color: #171059 !important;
+                  color: #1A237E !important;
               }
 
                app-drawer .dodrawer .donavigation #doNavigationMenu paper-item iron-icon{
@@ -152,7 +154,7 @@
                   height: calc(100vh - 64px) !important;
               }
               app-toolbar {
-                  background-color: #171059;
+                  background-color: #1A237E;
                   color: #fff;
                   box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.4);
               }
@@ -216,7 +218,7 @@
                                 <iron-icon icon="account-box"></iron-icon> Profil
                             </paper-item>
                             <paper-item id="navInteractions">
-                                <iron-icon icon="icons:group-work"></iron-icon> Aktivite
+                                <iron-icon icon="icons:group-work"></iron-icon> Aktiviteler
                             </paper-item>
                         </paper-menu>
                      </div>
@@ -225,7 +227,7 @@
             <app-toolbar id="toolbar">
                     <div class="header-title">{{_remakeUsername(user.username)}}</div>
                     <div class="header-total"><span>{{_remakeUserTotal(usertotal)}}</span></div>     
-                    <a href="/assets/duyarliol-ce.rar" target="_blank">
+                    <a href="/assets/duyarliol-ce.rar">
                         <paper-button raised class="btnDownloadExtension">Chrome Eklenti İndir</paper-button>
                     </a>
                     <a class="header-logout" href="/uye/cikis">
@@ -241,6 +243,7 @@
                                  homeupdater="{{homeupdater}}"
                                  usertotal="{{usertotal}}"
                                  ></do-home>
+                     
                     </div>
                     <div id="naProfile">
                         <do-profile uid="[[uid]]" 
@@ -307,7 +310,7 @@
                 }
                 if (selection == 2) {
                     if (!this._isAlreadyInstance(this.$.naProfile)) {
-                        Polymer.Base.importHref('assets/duyarliol/do-interactions.html');
+                        //Polymer.Base.importHref('assets/duyarliol/do-interactions.html');
                     }
                 }
             },

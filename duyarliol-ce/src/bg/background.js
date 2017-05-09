@@ -43,7 +43,11 @@ function Success(profilId, wishlist,sitename,redirecturl) {
         console.log("jquery-ui.js load")
     });
 
-    var sendingdata = 'var userid=' + profilId + ';var sitename = "' + sitename + '";var redirecturl = "'+redirecturl+'";var wisharray = [';
+    var sendingdata = 'var userid="' + profilId + '";var sitename = "' + sitename + '";var redirecturl = "'+redirecturl+'";var wisharray = [';
+
+    console.log('sending data');
+    console.log(sendingdata);
+
     for (var ll = 0; ll < wishlist.length; ll++) {
         sendingdata += '{ name: "' + wishlist[ll].name + '", count: "' + wishlist[ll].count + '", price: "' + wishlist[ll].price + '" },';
     }
@@ -122,7 +126,6 @@ function creation(wishlist, sitename, redirecturl) {
                     console.log(c);
                     if (c != null) {
                         var id = c.value.split("=")[1];
-
                         if (id != null) {
                             Success(id,wishlist,sitename,redirecturl);
                         }

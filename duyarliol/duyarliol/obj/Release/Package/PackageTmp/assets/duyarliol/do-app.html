@@ -7,6 +7,7 @@
                 <div>
                     <do-registration></do-registration>
                 </div>
+
                 <div>
                     <do-main uid=[[uid]]></do-main>
                 </div>
@@ -27,6 +28,7 @@
                     value: false,
                     notify: true
                 },
+                checkgo:{ type: Boolean, value: false, notify: true},
             },
             ready: function (e) {
                 console.log('do-app ready');
@@ -49,6 +51,11 @@
                 if (selection == 1) {
                     if (!this._isAlreadyInstance(this.$.ipUserAccounts)) {
                         Polymer.Base.importHref('assets/duyarliol/do-main.html');
+                    }
+                }
+                if (selection == 2) {
+                    if (!this._isAlreadyInstance(this.$.ipUserAccounts)) {
+                        Polymer.Base.importHref('assets/duyarliol/do-firstinit.html');
                     }
                 }
             },

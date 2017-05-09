@@ -8,12 +8,13 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="robots" content="index, follow" />
+    <link rel="shortcut icon" type="image/png" href="assets/img/favicon.ico"/>
 
     <title>Duyarlı Ol</title>
     <asp:ContentPlaceHolder ID="seo" runat="server"></asp:ContentPlaceHolder>
     <script src="assets/js/masterpage.js"></script>
+    <script src="assets/components/moment-element/hakke/hakke-moment-with-locales.min.js"></script>
     <link rel="import" href="assets/components/kaldirirmi/vulcanized/do-all-imports.html"/>
-
     <link rel="import" href="assets/components/money-input/money-input.html" async/>
     <link href="assets/css/animate.css" rel="stylesheet" />
   

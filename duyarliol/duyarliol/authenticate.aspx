@@ -50,8 +50,8 @@
         }
 
       paper-toolbar[first] paper-icon-button {
-        --paper-icon-button-ink-color: #ff7800;
-        color: #ff7800;
+        --paper-icon-button-ink-color: #171059;
+        color: #171059;
       }
 
     paper-material {
@@ -63,7 +63,7 @@
 
       paper-material paper-tabs {
         color: white;
-        background: #ff7800;
+        background: #171059;
         --paper-tabs-selection-bar-color: white;
         font-size: 17px;
       }
@@ -82,7 +82,7 @@
           }
 
             paper-material iron-pages form p a {
-              color: #ff7800;
+              color: #171059;
               text-decoration: none;
             }
 
@@ -93,7 +93,7 @@
           }
 
             paper-material iron-pages form .buttons paper-button:last-child {
-              background: #ff7800;
+              background: #171059;
               color: white;
             }
   </style>

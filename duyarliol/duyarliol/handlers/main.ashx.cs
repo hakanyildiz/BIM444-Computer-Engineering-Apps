@@ -1214,12 +1214,25 @@ namespace duyarliol.handlers
                             context.Response.End();
                             #endregion
                         }
+                        else if (method == "get-user-info-ce")
+                        {
+                            #region get user info  FOR Chrome Extension
+                            string a = context.Request.QueryString["id"];
+                            string apikey = "";
+                            if (!string.IsNullOrEmpty(a)) apikey = a.Trim();
+
+                            context.Response.Write(jss.Serialize(data.getuserinfoviaapikey(apikey)));
+                            context.Response.End();
+                            #endregion
+                        }
                         else if (method == "get-credit-cards-ce")
                         {
                             #region get credit cards FOR Chrome Extension 
                             string a = context.Request.QueryString["id"];
-                            int userid = 0;
-                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out userid);
+                            string apikey = "";
+                            if (!string.IsNullOrEmpty(a)) apikey = a.Trim();
+
+                            int userid = Convert.ToInt32(data.getsinglecolumndb("users", "id", new List<core.db>() { new core.db() { column = "apikey", value = apikey } }));
 
                             context.Response.Write(jss.Serialize(data.getcreditcards(userid)));
                             context.Response.End();
@@ -1229,8 +1242,10 @@ namespace duyarliol.handlers
                         {
                             #region check answer list FOR Chrome Extension 
                             string a = context.Request.QueryString["id"];
-                            int userid = 0;
-                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out userid);
+                            string apikey = "";
+                            if (!string.IsNullOrEmpty(a)) apikey = a.Trim();
+
+                            int userid = Convert.ToInt32(data.getsinglecolumndb("users", "id",new List<core.db>() { new core.db() { column = "apikey", value = apikey } }));
 
                             context.Response.Write(jss.Serialize(data.getsinglecolumndbcount("answerlist", new List<core.db>() { new core.db() { column = "userid", value = userid } })));
                             context.Response.End();
@@ -1240,14 +1255,20 @@ namespace duyarliol.handlers
                         {
                             #region run chrome extension control
 
-                            string userid = context.Request.QueryString["userid"],
+                            string a = context.Request.QueryString["userid"],
                              wl = context.Request.QueryString["wishlist"],
                              sitename = context.Request.QueryString["sitename"],
                               al = context.Request.QueryString["answerlist"];
 
+                            string apikey = "";
+                            if (!string.IsNullOrEmpty(a)) apikey = a.Trim();
+
+                            int userid = Convert.ToInt32(data.getsinglecolumndb("users", "id", new List<core.db>() { new core.db() { column = "apikey", value = apikey } }));
+
+
                             if (context.Session["user"] != null)
                             {
-                                if (((core.user)context.Session["user"]).id != Convert.ToInt32(userid))
+                                if (((core.user)context.Session["user"]).id != userid)
                                 {
                                     context.Response.Write(jss.Serialize(new response() { success = false, message = "Duyarlı.ol Sitesine Tekrar Giriş Yapmalısın!" }));
                                     context.Response.End();
@@ -1260,14 +1281,14 @@ namespace duyarliol.handlers
 
                             #region first check income / outcome
 
-                            double userincometotal = data.getuserincometotal(Convert.ToInt32(userid));
+                            double userincometotal = data.getuserincometotal(userid);
 
                             if (userincometotal == 0)
                             {
                                 context.Response.Write(jss.Serialize(new response() { success = false, message = "Sistemde Kayıtlı Gelir Bilgilerin Bulunmamakta! \n Lütfen Gelir Bilgilerini Doldurup Tekrar Deneyiniz!" }));
                                 context.Response.End();
                             }
-                            double useroutcometotal = data.getuseroutcometotal(Convert.ToInt32(userid));
+                            double useroutcometotal = data.getuseroutcometotal(userid);
 
                             if (useroutcometotal == 0)
                             {
@@ -1287,7 +1308,7 @@ namespace duyarliol.handlers
                             double interestrate = 0;
 
                             double usercreditdebtstotal = 0;
-                            var creditcardlist = data.getusercreditcards(Convert.ToInt32(userid));
+                            var creditcardlist = data.getusercreditcards(userid);
 
                             if (creditcardlist.Count == 0)
                             {
@@ -1305,7 +1326,7 @@ namespace duyarliol.handlers
                                     new core.db() { column = "orderprice", value = (float)Convert.ToDouble(wish.price) / 100 },
                                     new core.db() { column = "orderdate", value = DateTime.Now },
                                     new core.db() { column = "pending", value = 1 },
-                                    new core.db() { column = "userid", value = Convert.ToInt32(userid) },
+                                    new core.db() { column = "userid", value = userid },
                                     new core.db() { column = "sitename", value = sitename }
                                 });
 
@@ -1315,7 +1336,7 @@ namespace duyarliol.handlers
                                         new core.db() { column = "subtitle", value =  subtitle },
                                         new core.db() { column = "status", value = 0 },
                                         new core.db() { column = "date", value = DateTime.Now },
-                                        new core.db() { column = "userid", value = Convert.ToInt32(userid) }
+                                        new core.db() { column = "userid", value = userid }
                                 });
 
 
@@ -1346,7 +1367,7 @@ namespace duyarliol.handlers
 
 
                             /* cevaplar kontrol edilir */
-                            int checkanswers = Convert.ToInt32(data.getsinglecolumndbcount("answerlist", new List<core.db>() { new core.db() { column = "userid", value = Convert.ToInt32(userid) } }));
+                            int checkanswers = Convert.ToInt32(data.getsinglecolumndbcount("answerlist", new List<core.db>() { new core.db() { column = "userid", value = userid } }));
                             var counter = 1;
                             if (checkanswers == 0)
                             {
@@ -1358,40 +1379,19 @@ namespace duyarliol.handlers
                                         new core.db() { column = "question", value = "question"+counter  },
                                         new core.db() { column = "answer", value = answerobject.answer  },
                                         new core.db() { column = "date", value = DateTime.Now },
-                                        new core.db() { column = "userid", value = Convert.ToInt32(userid) }
+                                        new core.db() { column = "userid", value = userid }
                                     });
                                     counter++;
                                 }
-
                                 string subtitle = string.Format("Duyarlılık Testini Cevapladın.");
                                 data.insertdb("userinteractions", new List<core.db>() {
                                         new core.db() { column = "title", value = "Test"},
                                         new core.db() { column = "subtitle", value =  subtitle },
                                         new core.db() { column = "status", value = 0 },
                                         new core.db() { column = "date", value = DateTime.Now },
-                                        new core.db() { column = "userid", value = Convert.ToInt32(userid) }
+                                        new core.db() { column = "userid", value = userid }
                                 });
                             }
-                            //else
-                            //{
-                            //    foreach (var answerobject in answerlist)
-                            //    {
-                            //        data.updatedb(
-                            //            "answerlist",
-                            //            new List<core.db>()
-                            //            {
-                            //                new core.db() { column = "answer", value = answerobject.answer  },
-                            //                new core.db() { column = "date", value = DateTime.Now }
-                            //            },
-                            //            new List<core.db>()
-                            //            {
-                            //                new core.db() { column = "question", value = "question"+counter  },
-                            //                new core.db() { column = "userid", value = Convert.ToInt32(userid) }
-                            //            }
-                            //        );
-                            //        counter++;
-                            //    }
-                            //}
                             #endregion
 
 
@@ -1463,8 +1463,6 @@ namespace duyarliol.handlers
 
                             #endregion
                         }
-
-
                         #endregion
                     }
                     else
@@ -1482,25 +1480,40 @@ namespace duyarliol.handlers
                             context.Response.End();
                             #endregion
                         }
-                        else if(method == "get-credit-cards-ce")
+                        else if (method == "get-user-info-ce")
+                        {
+                            #region get user info  FOR Chrome Extension
+                            string a = context.Request.QueryString["id"];
+                            string apikey = "";
+                            if (!string.IsNullOrEmpty(a)) apikey = a.Trim();
+
+                            context.Response.Write(jss.Serialize(data.getuserinfoviaapikey(apikey)));
+                            context.Response.End();
+                            #endregion
+                        }
+                        else if (method == "get-credit-cards-ce")
                         {
                             #region get credit cards FOR Chrome Extension 
                             string a = context.Request.QueryString["id"];
-                            int userid = 0;
-                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out userid);
+                            string apikey = "";
+                            if (!string.IsNullOrEmpty(a)) apikey = a.Trim();
+
+                            int userid = Convert.ToInt32(data.getsinglecolumndb("users", "id", new List<core.db>() { new core.db() { column = "apikey", value = apikey } }));
 
                             context.Response.Write(jss.Serialize(data.getcreditcards(userid)));
                             context.Response.End();
                             #endregion
                         }
-                        else if(method == "check-answer-list-ce")
+                        else if (method == "check-answer-list-ce")
                         {
                             #region check answer list FOR Chrome Extension 
                             string a = context.Request.QueryString["id"];
-                            int userid = 0;
-                            if (!string.IsNullOrEmpty(a)) int.TryParse(a, out userid);
+                            string apikey = "";
+                            if (!string.IsNullOrEmpty(a)) apikey = a.Trim();
 
-                            context.Response.Write(jss.Serialize(data.getsinglecolumndbcount("answerlist", new List<core.db>() { new core.db() {  column = "userid", value = userid} })));
+                            int userid = Convert.ToInt32(data.getsinglecolumndb("users", "id", new List<core.db>() { new core.db() { column = "apikey", value = apikey } }));
+
+                            context.Response.Write(jss.Serialize(data.getsinglecolumndbcount("answerlist", new List<core.db>() { new core.db() { column = "userid", value = userid } })));
                             context.Response.End();
                             #endregion
                         }
@@ -1508,14 +1521,20 @@ namespace duyarliol.handlers
                         {
                             #region run chrome extension control
 
-                            string userid = context.Request.QueryString["userid"],
+                            string a = context.Request.QueryString["userid"],
                              wl = context.Request.QueryString["wishlist"],
                              sitename = context.Request.QueryString["sitename"],
                               al = context.Request.QueryString["answerlist"];
 
+                            string apikey = "";
+                            if (!string.IsNullOrEmpty(a)) apikey = a.Trim();
+
+                            int userid = Convert.ToInt32(data.getsinglecolumndb("users", "id", new List<core.db>() { new core.db() { column = "apikey", value = apikey } }));
+
+
                             if (context.Session["user"] != null)
                             {
-                                if (((core.user)context.Session["user"]).id != Convert.ToInt32(userid))
+                                if (((core.user)context.Session["user"]).id != userid)
                                 {
                                     context.Response.Write(jss.Serialize(new response() { success = false, message = "Duyarlı.ol Sitesine Tekrar Giriş Yapmalısın!" }));
                                     context.Response.End();
@@ -1528,14 +1547,14 @@ namespace duyarliol.handlers
 
                             #region first check income / outcome
 
-                            double userincometotal = data.getuserincometotal(Convert.ToInt32(userid));
+                            double userincometotal = data.getuserincometotal(userid);
 
                             if (userincometotal == 0)
                             {
                                 context.Response.Write(jss.Serialize(new response() { success = false, message = "Sistemde Kayıtlı Gelir Bilgilerin Bulunmamakta! \n Lütfen Gelir Bilgilerini Doldurup Tekrar Deneyiniz!" }));
                                 context.Response.End();
                             }
-                            double useroutcometotal = data.getuseroutcometotal(Convert.ToInt32(userid));
+                            double useroutcometotal = data.getuseroutcometotal(userid);
 
                             if (useroutcometotal == 0)
                             {
@@ -1555,7 +1574,7 @@ namespace duyarliol.handlers
                             double interestrate = 0;
 
                             double usercreditdebtstotal = 0;
-                            var creditcardlist = data.getusercreditcards(Convert.ToInt32(userid));
+                            var creditcardlist = data.getusercreditcards(userid);
 
                             if (creditcardlist.Count == 0)
                             {
@@ -1573,7 +1592,7 @@ namespace duyarliol.handlers
                                     new core.db() { column = "orderprice", value = (float)Convert.ToDouble(wish.price) / 100 },
                                     new core.db() { column = "orderdate", value = DateTime.Now },
                                     new core.db() { column = "pending", value = 1 },
-                                    new core.db() { column = "userid", value = Convert.ToInt32(userid) },
+                                    new core.db() { column = "userid", value = userid },
                                     new core.db() { column = "sitename", value = sitename }
                                 });
 
@@ -1583,7 +1602,7 @@ namespace duyarliol.handlers
                                         new core.db() { column = "subtitle", value =  subtitle },
                                         new core.db() { column = "status", value = 0 },
                                         new core.db() { column = "date", value = DateTime.Now },
-                                        new core.db() { column = "userid", value = Convert.ToInt32(userid) }
+                                        new core.db() { column = "userid", value = userid }
                                 });
 
 
@@ -1614,7 +1633,7 @@ namespace duyarliol.handlers
 
 
                             /* cevaplar kontrol edilir */
-                            int checkanswers = Convert.ToInt32(data.getsinglecolumndbcount("answerlist", new List<core.db>() { new core.db() { column = "userid", value = Convert.ToInt32(userid) } }));
+                            int checkanswers = Convert.ToInt32(data.getsinglecolumndbcount("answerlist", new List<core.db>() { new core.db() { column = "userid", value = userid } }));
                             var counter = 1;
                             if (checkanswers == 0)
                             {
@@ -1626,18 +1645,17 @@ namespace duyarliol.handlers
                                         new core.db() { column = "question", value = "question"+counter  },
                                         new core.db() { column = "answer", value = answerobject.answer  },
                                         new core.db() { column = "date", value = DateTime.Now },
-                                        new core.db() { column = "userid", value = Convert.ToInt32(userid) }
+                                        new core.db() { column = "userid", value = userid }
                                     });
                                     counter++;
                                 }
-
                                 string subtitle = string.Format("Duyarlılık Testini Cevapladın.");
                                 data.insertdb("userinteractions", new List<core.db>() {
                                         new core.db() { column = "title", value = "Test"},
                                         new core.db() { column = "subtitle", value =  subtitle },
                                         new core.db() { column = "status", value = 0 },
                                         new core.db() { column = "date", value = DateTime.Now },
-                                        new core.db() { column = "userid", value = Convert.ToInt32(userid) }
+                                        new core.db() { column = "userid", value = userid }
                                 });
                             }
                             #endregion

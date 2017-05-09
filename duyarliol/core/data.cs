@@ -63,7 +63,49 @@ namespace core
                 return null;
             }
         }
+        public user getuserinfoviaapikey(string apikey)
+        {
+            try
+            {
+                using (conn)
+                {
 
+                    cmd.CommandText = "select id,fullname,apisecret,status,password,url,namesurname,birthday,avatar,background,registerdate,lastlogindate from users where apikey=@a";
+                    cmd.Parameters.Clear();
+                    cmd.Parameters.AddWithValue("@a", apikey);
+                    if (conn.State == ConnectionState.Open) conn.Close();
+                    if (conn.State == ConnectionState.Closed) { conn.ConnectionString = connstr; conn.Open(); }
+                    using (SqlDataReader r = cmd.ExecuteReader())
+                    {
+                        while (r.Read())
+                        {
+                            return new user()
+                            {
+                                apikey = apikey, 
+                                id = !r.IsDBNull(0) ? r.GetInt32(0) : 0,
+                                username = !r.IsDBNull(1) ? r.GetString(1) : "",
+                                apisecret = !r.IsDBNull(2) ? r.GetString(2) : "",
+                                status = !r.IsDBNull(3) ? r.GetInt32(3) : 0,
+                                password = !r.IsDBNull(4) ? r.GetString(4) : "",
+                                url = !r.IsDBNull(5) ? r.GetString(5) : "",
+                                namesurname = !r.IsDBNull(6) ? r.GetString(6) : "",
+                                birthday = !r.IsDBNull(7) ? r.GetDateTime(7).ToString("dd/MM/yyyy") : "",
+                                avatar = !r.IsDBNull(8) ? r.GetString(8) : "",
+                                background = !r.IsDBNull(9) ? r.GetString(9) : "",
+                                registerdate = !r.IsDBNull(10) ? r.GetDateTime(10) : DateTime.Now,
+                                lastlogindate = !r.IsDBNull(11) ? r.GetDateTime(11) : DateTime.Now
+
+                            };
+                        }
+                    }
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
         public List<creditcard> getcreditcards(int userid)
         {
             try
@@ -461,7 +503,7 @@ namespace core
                     
                         if (classtype.Contains("all"))
                         {
-                            cmd.CommandText = string.Format("select * from (select id,userid,status,title,subtitle,date,row_number() over (order by {0} {1}) as rn from userinteractions {2}) a where a.rn between @start and @end", orderby, criter, !string.IsNullOrEmpty(query) ? "where (name like '%'+@term+'%')" : "");
+                            cmd.CommandText = string.Format("select * from (select id,userid,status,title,subtitle,date,row_number() over (order by {0} {1}) as rn from userinteractions {2}) a where a.rn between @start and @end", orderby, criter, !string.IsNullOrEmpty(query) ? "where (subtitle like '%'+@term+'%') and userid="+userid : "where userid="+userid);
                         }
                         else
                         {
@@ -469,14 +511,14 @@ namespace core
                             //query boş ise
                             if (string.IsNullOrEmpty(query))
                             {
-                              titleClass = string.Format("where {0}", titleClass);
+                              titleClass = string.Format("where {0} and userid="+userid, titleClass);
                             }
                             else
                             {
                                 //query boş değilse
-                                titleClass = string.Format(" and {0}", titleClass);
+                                titleClass = string.Format(" and {0} and userid="+userid, titleClass);
                             }
-                            cmd.CommandText = string.Format("select * from (select id,userid,status,title,subtitle,date,row_number() over (order by {0} {1}) as rn from userinteractions {2} {3}) a where a.rn between @start and @end", orderby, criter, !string.IsNullOrEmpty(query) ? "where (name like '%'+@term+'%')" : "", titleClass);
+                            cmd.CommandText = string.Format("select * from (select id,userid,status,title,subtitle,date,row_number() over (order by {0} {1}) as rn from userinteractions {2} {3}) a where a.rn between @start and @end", orderby, criter, !string.IsNullOrEmpty(query) ? "where (subtitle like '%'+@term+'%')" : "", titleClass);
 
                         }
 
