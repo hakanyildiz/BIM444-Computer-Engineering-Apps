@@ -233,7 +233,8 @@
 
     </style>
     <template>
-        <iron-ajax id="getuserinteractions"
+        <iron-ajax auto="{{go}}"
+                   id="getuserinteractions"
                    debounce="3000"
                    url="/h/main?fm=get-user-interactions&a=[[uid]]&b=[[query]]&c=[[order]]&d=[[itemperpage]]&e=[[page]]&f=[[criter]]&g=[[classtype]]"
                    handle-as="json"
@@ -367,10 +368,20 @@
                 mobileSearchIcon: {
                     type: String,
                     value: 'search'
-                }
+                },
+                go: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+                firsttime:{ type: Boolean, value: true, notify: true}
             },
             ready: function(){
                 console.log('do-interactions run!');
+
+                this.async(function () {
+                    //this.go = false;
+                }, 2222);
             },
             observers: [
             '_resetListForQuery(query)'
@@ -383,10 +394,16 @@
                     this.$.getuserinteractions.lastRequest.abort();
                 }
                 this.page++;
-                this.async(function () {
-                    this.$.getuserinteractions.generateRequest();
-                }, this.timeout);
-                this.timeout = 1111;
+
+                if (this.firsttime) {
+                    this.firsttime = false;
+                }
+                else {
+                    this.async(function () {
+                        this.$.getuserinteractions.generateRequest();
+                    }, this.timeout);
+                    this.timeout = 1111;
+                }
 
                 console.log('page => ' + this.page);
 

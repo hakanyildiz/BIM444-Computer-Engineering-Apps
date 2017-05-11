@@ -187,7 +187,7 @@
 
                                             <paper-button class="mastercolor btnWidth33" raised on-tap="_togglePaymentMenu"><iron-icon icon="add"></iron-icon>Fatura Panelini Göster</paper-button>
                                             <template is="dom-if" if="[[visiblePayments]]">
-                                                <div class="paymentcatalogtitle">Faturalar</div>
+                                                <div class="paymentcatalogtitle">Ortalama Faturalar</div>
                                                 <div class="layout horizontal">
                                                     <!-- elektrik-->
                                                     <div class="layout vertical payment-subcatalog">
@@ -377,7 +377,7 @@
                             <input type="hidden" name="waterbill" value="{{waterbill}}" />
                             <input type="hidden" name="gasbill" value="{{gasbill}}" />
                             <input type="hidden" name="internetbill" value="{{internetbill}}" />
-                            <input type="hidden" name="gsmbills" value="{{gsmbills}}" />
+                            <input type="hidden" name="gsmbills" value="{{gsmbill}}" />
                             <input type="hidden" name="otherbills" value="{{otherbills}}" />
                             <input type="hidden" name="individualexpense" value="{{individualexpense}}" />
                             <input type="hidden" name="marketexpense" value="{{marketexpense}}" />

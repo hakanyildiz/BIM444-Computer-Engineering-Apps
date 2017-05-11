@@ -592,7 +592,7 @@ namespace duyarliol.handlers
                             if (!string.IsNullOrEmpty(b1)) double.TryParse(b1, out studentmonthlyincome);
                             if (!string.IsNullOrEmpty(b2)) double.TryParse(b2, out studentmonthlyadditionalincome);
                             if (!string.IsNullOrEmpty(c1)) double.TryParse(c1, out workermonthlyincome);
-                            if (!string.IsNullOrEmpty(c2)) double.TryParse(c2, out studentmonthlyadditionalincome);
+                            if (!string.IsNullOrEmpty(c2)) double.TryParse(c2, out workermonthlyadditionalincome);
 
                             if (!string.IsNullOrEmpty(e)) double.TryParse(e, out houseRent);
                             if (!string.IsNullOrEmpty(f)) double.TryParse(f, out electricbill);
@@ -636,13 +636,13 @@ namespace duyarliol.handlers
                             //adding income
                             if(data.insertdb("userincome", new List<core.db>() {
                                 new core.db() { column = "jobtype", value = jobtype },
-                                new core.db() { column = "monthlyincome", value = income / 100 },
-                                new core.db() { column = "monthlyadditionalincome", value = additionalincome / 100 },
+                                new core.db() { column = "monthlyincome", value = income },
+                                new core.db() { column = "monthlyadditionalincome", value = additionalincome },
                                 new core.db() { column = "createddate", value = DateTime.Now },
                                 new core.db() { column = "userid", value = userid }
                             }))
                             {
-                                string subtitle = string.Format("Gelir Bilgileri Eklendi. Net Gelir: {0} TL - Ek Gelir: {1} TL", income/100, additionalincome/100);
+                                string subtitle = string.Format("Gelir Bilgileri Eklendi. Net Gelir: {0} TL - Ek Gelir: {1} TL", income, additionalincome);
                                 data.insertdb("userinteractions", new List<core.db>() {
                                     new core.db() { column = "title", value = "Gelir"},
                                     new core.db() { column = "subtitle", value =  subtitle },
@@ -655,24 +655,24 @@ namespace duyarliol.handlers
 
                             //adding outcome
                             if (data.insertdb("useroutcome", new List<core.db>() {
-                                new core.db() { column = "houserent", value = houseRent / 100 },
-                                new core.db() { column = "electricbill", value = electricbill / 100 },
-                                new core.db() { column = "waterbill", value = waterbill/ 100  },
-                                new core.db() { column = "gasbill", value = gasbill/ 100  },
-                                new core.db() { column = "internetbill", value = internetbill/ 100 },
-                                new core.db() { column = "gsmbill", value = gsmbill/ 100  },
-                                new core.db() { column = "otherbills", value = otherbills/ 100 },
-                                new core.db() { column = "individualexpense", value = individualexpense/ 100 },
-                                new core.db() { column = "marketexpense", value = marketexpense/ 100 },
+                                new core.db() { column = "houserent", value = houseRent },
+                                new core.db() { column = "electricbill", value = electricbill },
+                                new core.db() { column = "waterbill", value = waterbill  },
+                                new core.db() { column = "gasbill", value = gasbill  },
+                                new core.db() { column = "internetbill", value = internetbill },
+                                new core.db() { column = "gsmbill", value = gsmbill  },
+                                new core.db() { column = "otherbills", value = otherbills },
+                                new core.db() { column = "individualexpense", value = individualexpense },
+                                new core.db() { column = "marketexpense", value = marketexpense },
                                 new core.db() { column = "createddate", value = DateTime.Now },
                                 new core.db() { column = "userid", value = userid }
                             }))
                             {
                                 string subtitle = string.Format("Gider Bilgileri Eklendi. Kira: {0} TL - Faturalar: {1} TL - Bireysel Harcamalar: {2} TL - Market Harcamalar: {3} TL",
-                                    houseRent / 100 , 
-                                    (electricbill / 100 + waterbill / 100 + gasbill / 100 + internetbill / 100 + gsmbill / 100 + otherbills / 100) , 
-                                    individualexpense/100,
-                                    marketexpense / 100);
+                                    houseRent  , 
+                                    (electricbill  + waterbill + gasbill + internetbill  + gsmbill + otherbills) , 
+                                    individualexpense,
+                                    marketexpense);
 
                                 data.insertdb("userinteractions", new List<core.db>() {
                                     new core.db() { column = "title", value = "Gider"},
@@ -689,13 +689,13 @@ namespace duyarliol.handlers
                             {
                                 if (data.insertdb("usercreditcards", new List<core.db>() {
                                     new core.db() { column = "bankname", value = bankNameOne},
-                                    new core.db() { column = "cardlimit", value = cardLimit1 / 100 },
-                                    new core.db() { column = "carddebt", value = cardDebt1/ 100 },
+                                    new core.db() { column = "cardlimit", value = cardLimit1 },
+                                    new core.db() { column = "carddebt", value = cardDebt1 },
                                     new core.db() { column = "createddate", value = DateTime.Now },
                                     new core.db() { column = "userid", value = userid }
                                 }))
                                 {
-                                    string subtitle = string.Format("Kredi Kartı Eklendi. Banka Adı: {0} - Limit: {1} TL - Anlık Borç: {2} TL", bankNameOne, cardLimit1 / 100, cardDebt1 / 100);
+                                    string subtitle = string.Format("Kredi Kartı Eklendi. Banka Adı: {0} - Limit: {1} TL - Anlık Borç: {2} TL", bankNameOne, cardLimit1 , cardDebt1 );
                                     data.insertdb("userinteractions", new List<core.db>() {
                                     new core.db() { column = "title", value = "Kredi Kartı"},
                                     new core.db() { column = "subtitle", value =  subtitle },
@@ -710,13 +710,13 @@ namespace duyarliol.handlers
                             {
                                 if(data.insertdb("usercreditcards", new List<core.db>() {
                                     new core.db() { column = "bankname", value = bankNameTwo},
-                                    new core.db() { column = "cardlimit", value = cardLimit2/ 100 },
-                                    new core.db() { column = "carddebt", value = cardDebt2 / 100 },
+                                    new core.db() { column = "cardlimit", value = cardLimit2 },
+                                    new core.db() { column = "carddebt", value = cardDebt2  },
                                     new core.db() { column = "createddate", value = DateTime.Now },
                                     new core.db() { column = "userid", value = userid }
                                 }))
                                 {
-                                    string subtitle = string.Format("Kredi Kartı Eklendi. Banka Adı: {0} - Limit: {1} TL - Anlık Borç: {2} TL", bankNameTwo, cardLimit2 / 100, cardDebt2 / 100);
+                                    string subtitle = string.Format("Kredi Kartı Eklendi. Banka Adı: {0} - Limit: {1} TL - Anlık Borç: {2} TL", bankNameTwo, cardLimit2 , cardDebt2 );
                                         data.insertdb("userinteractions", new List<core.db>() {
                                         new core.db() { column = "title", value = "Kredi Kartı"},
                                         new core.db() { column = "subtitle", value =  subtitle },
@@ -731,13 +731,13 @@ namespace duyarliol.handlers
                             {
                                 if(data.insertdb("usercreditcards", new List<core.db>() {
                                     new core.db() { column = "bankname", value = bankNameThree},
-                                    new core.db() { column = "cardlimit", value = cardLimit3/ 100 },
-                                    new core.db() { column = "carddebt", value = cardDebt3 / 100 },
+                                    new core.db() { column = "cardlimit", value = cardLimit3 },
+                                    new core.db() { column = "carddebt", value = cardDebt3 },
                                     new core.db() { column = "createddate", value = DateTime.Now },
                                     new core.db() { column = "userid", value = userid }
                                 }))
                                 {
-                                    string subtitle = string.Format("Kredi Kartı Eklendi. Banka Adı: {0} - Limit: {1} TL - Anlık Borç: {2} TL", bankNameThree, cardLimit3 / 100, cardDebt3 / 100);
+                                    string subtitle = string.Format("Kredi Kartı Eklendi. Banka Adı: {0} - Limit: {1} TL - Anlık Borç: {2} TL", bankNameThree, cardLimit3 , cardDebt3 );
                                     data.insertdb("userinteractions", new List<core.db>() {
                                     new core.db() { column = "title", value = "Kredi Kartı"},
                                     new core.db() { column = "subtitle", value =  subtitle },
@@ -752,13 +752,13 @@ namespace duyarliol.handlers
                             {
                                 if(data.insertdb("usercreditcards", new List<core.db>() {
                                     new core.db() { column = "bankname", value = bankNameFour},
-                                    new core.db() { column = "cardlimit", value = cardLimit4/ 100  },
-                                    new core.db() { column = "carddebt", value = cardDebt4 / 100 },
+                                    new core.db() { column = "cardlimit", value = cardLimit4  },
+                                    new core.db() { column = "carddebt", value = cardDebt4 },
                                     new core.db() { column = "createddate", value = DateTime.Now },
                                     new core.db() { column = "userid", value = userid }
                                 }))
                                 {
-                                    string subtitle = string.Format("Kredi Kartı Eklendi. Banka Adı: {0} - Limit: {1} TL - Anlık Borç: {2} TL", bankNameFour, cardLimit4 / 100, cardDebt4 / 100);
+                                    string subtitle = string.Format("Kredi Kartı Eklendi. Banka Adı: {0} - Limit: {1} TL - Anlık Borç: {2} TL", bankNameFour, cardLimit4 , cardDebt4 );
                                     data.insertdb("userinteractions", new List<core.db>() {
                                         new core.db() { column = "title", value = "Kredi Kartı"},
                                         new core.db() { column = "subtitle", value =  subtitle },
@@ -773,14 +773,14 @@ namespace duyarliol.handlers
                             {
                                 if(data.insertdb("usercreditcards", new List<core.db>() {
                                     new core.db() { column = "bankname", value = bankNameFive},
-                                    new core.db() { column = "cardlimit", value = cardLimit5/ 100  },
-                                    new core.db() { column = "carddebt", value = cardDebt5 / 100 },
+                                    new core.db() { column = "cardlimit", value = cardLimit5  },
+                                    new core.db() { column = "carddebt", value = cardDebt5 },
                                     new core.db() { column = "createddate", value = DateTime.Now },
                                     new core.db() { column = "userid", value = userid }
                                 }))
                                
                                     {
-                                        string subtitle = string.Format("Kredi Kartı Eklendi. Banka Adı: {0} - Limit: {1} TL - Anlık Borç: {2} TL", bankNameFive, cardLimit5 / 100, cardDebt5 / 100);
+                                        string subtitle = string.Format("Kredi Kartı Eklendi. Banka Adı: {0} - Limit: {1} TL - Anlık Borç: {2} TL", bankNameFive, cardLimit5 , cardDebt5 );
                                         data.insertdb("userinteractions", new List<core.db>() {
                                         new core.db() { column = "title", value = "Kredi Kartı"},
                                         new core.db() { column = "subtitle", value =  subtitle },

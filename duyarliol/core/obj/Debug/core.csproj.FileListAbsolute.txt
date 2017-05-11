@@ -12,4 +12,3 @@ C:\Users\hakan\Documents\GitHub\BIM444-Computer-Engineering-Apps\duyarliol\core\
 C:\Users\hakan\Documents\GitHub\BIM444-Computer-Engineering-Apps\duyarliol\core\bin\Debug\core.pdb
 C:\Users\hakan\Documents\GitHub\BIM444-Computer-Engineering-Apps\duyarliol\core\obj\Debug\core.dll
 C:\Users\hakan\Documents\GitHub\BIM444-Computer-Engineering-Apps\duyarliol\core\obj\Debug\core.pdb
-C:\Users\hakan\Documents\GitHub\BIM444-Computer-Engineering-Apps\duyarliol\core\obj\Debug\core.csprojResolveAssemblyReference.cache
